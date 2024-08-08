@@ -5,7 +5,7 @@ const HireHubImg = () => {
     <div className="flext items-center">
       <img src={HireHubLogo} alt="HireHubLogo" />
       <h1 className="font-bold">
-        <HireHub/>
+        <HireHub />
       </h1>
     </div>
   );

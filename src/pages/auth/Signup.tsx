@@ -1,14 +1,30 @@
 import React from "react";
-import HireHub from "../../components/HireHub";
-import HireHubImg from "../../components/HireHubImg";
+import HireHub from "../../components/common/HireHub";
+import HireHubImg from "../../components/common/HireHubImg";
 import Header from "../../components/common/users/Header";
-
+import Logo from "../../assets/logos/HireHub-r.png";
 const Signup = () => {
   return (
     <div>
       <Header />
-      <HireHubImg />
-      <HireHub />
+      {/* <HireHubImg />
+      <HireHub /> */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 md-5">
+        <div className="px-5 pt-20 lg:p-20 flex items-center">
+          <div className="w-full lg:px-20">
+            <div className="flex items-center gap-4 py-10">
+              <img
+                src={Logo}
+                alt="HireHubLogo"
+                className="w-10 lg:w-16 h-10 lg:h-16"
+              />
+              <h1 className="font-bold text-5xl">
+                <HireHub />
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

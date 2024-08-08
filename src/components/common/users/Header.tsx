@@ -1,7 +1,8 @@
-import HireHub from "../../HireHub";
+import HireHub from "../HireHub";
 import HireHubLogo from "../../../assets/logos/HireHub-r.png";
 import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "../../ui/mode-toggle";
+import { Button } from "../../ui/button";
 
 const Header = () => {
   return (
@@ -23,11 +24,14 @@ const Header = () => {
           <div className="hover-text font-bold">Blog</div>
 
           <div className="hover-text font-bold">Login</div>
-          <button className="border border-primary text-white bg-primary text-sm px-4 py-2 rounded-md">
+          {/* <button className="border border-primary text-white bg-primary text-sm px-4 py-2 rounded-md">
             Sign Up
-          </button>
+          </button> */}
+          <Button>
+            <div>Signup</div>
+          </Button>
         </div>
-        <ModeToggle/>
+        <ModeToggle />
       </div>
     </nav>
   );
