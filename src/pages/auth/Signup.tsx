@@ -3,6 +3,9 @@ import HireHub from "../../components/common/HireHub";
 import HireHubImg from "../../components/common/HireHubImg";
 import Header from "../../components/common/users/Header";
 import Logo from "../../assets/logos/HireHub-r.png";
+import SignupForm from "./SignupForm";
+import GoogleAuth from "../../components/common/GoogleAuth";
+import SignupImg from "../../assets/auth/Signup.jpg";
 const Signup = () => {
   return (
     <div>
@@ -22,7 +25,27 @@ const Signup = () => {
                 <HireHub />
               </h1>
             </div>
+            <div className="text-2xl font-bold py-3">Sign Up</div>
+            <SignupForm />
+            <div className="flex items-center gap-3 mt-10">
+              <div className="h-[2px] w-full bg-backgroundAccent rounded-full"></div>
+
+              <p>or</p>
+              <div className="h-[2px] w-full bg-backgroundAccent rounded-full"></div>
+            </div>
+            <GoogleAuth />
+            <p className="py-5">
+              Alredy have an Account?
+              <span className="text-primary hover:text-blue-400">Login</span>
+            </p>
           </div>
+        </div>
+        <div className="w-full">
+          <img
+            src={SignupImg}
+            alt="Bg Image"
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
     </div>

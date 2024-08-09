@@ -1,8 +1,10 @@
 import { Form, FormField } from "../../components/ui/form";
-import {zodResolver} from '@hookform/resolvers/zod'
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../components/ui/button";
-import * as z from 'zod'
-import {useForm} from 'react-hook-form'
+import { FiUser, FiMail, FiKey } from "react-icons/fi";
+import FormInputWithIcon from "../../components/common/FormInuprWithIcon";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
 
 const strongPassword =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -34,20 +36,19 @@ const formSchema = z
   });
 
 const SignupForm = () => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
 
-    const form=useForm<z.infer<typeof formSchema>>({
-        resolver:zodResolver(formSchema),
-        defaultValues:{
-            username:"",
-            email:"",
-            password:"",
-            confirmpassword:""
-        }
-    })
-
-    async function onsubmit(values:z.infer<typeof formSchema>){
-        console.log("first")
-    }
+  async function onsubmit(values: z.infer<typeof formSchema>) {
+    console.log("first");
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onsubmit)} className="space-y-4">
@@ -63,6 +64,47 @@ const SignupForm = () => {
             />
           )}
         />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormInputWithIcon
+              field={field}
+              icon={<FiMail />}
+              placeholder="Your Email"
+              showTitle={false}
+            />
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormInputWithIcon
+              field={field}
+              icon={<FiKey />}
+              placeholder="Your Password"
+              type="password"
+              showTitle={false}
+            />
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormInputWithIcon
+              field={field}
+              icon={<FiKey />}
+              placeholder="Again password"
+              type="password"
+              showTitle={false}
+            />
+          )}
+        />
+        <Button type="submit" className="w-full">
+          {`Sign UP`}
+        </Button>
       </form>
     </Form>
   );
