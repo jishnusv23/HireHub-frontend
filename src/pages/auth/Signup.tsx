@@ -1,17 +1,18 @@
 import React from "react";
 import HireHub from "../../components/common/HireHub";
-import HireHubImg from "../../components/common/HireHubImg";
+
 import Header from "../../components/common/users/Header";
 import Logo from "../../assets/logos/HireHub-r.png";
-import SignupForm from "./SignupForm";
+
 import GoogleAuth from "../../components/common/GoogleAuth";
 import SignupImg from "../../assets/auth/Signup.jpg";
+import Footer from "@/components/common/Footer";
+import SignupForm from "@/components/common/auth/SignupForm";
 const Signup = () => {
   return (
     <div>
       <Header />
-      {/* <HireHubImg />
-      <HireHub /> */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 md-5">
         <div className="px-5 pt-20 lg:p-20 flex items-center">
           <div className="w-full lg:px-20">
@@ -26,7 +27,8 @@ const Signup = () => {
               </h1>
             </div>
             <div className="text-2xl font-bold py-3">Sign Up</div>
-            <SignupForm />
+            
+            <SignupForm/>
             <div className="flex items-center gap-3 mt-10">
               <div className="h-[2px] w-full bg-backgroundAccent rounded-full"></div>
 
@@ -48,6 +50,7 @@ const Signup = () => {
           />
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

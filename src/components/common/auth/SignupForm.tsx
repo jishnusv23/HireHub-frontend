@@ -1,8 +1,8 @@
-import { Form, FormField } from "../../components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import { FiUser, FiMail, FiKey } from "react-icons/fi";
-import FormInputWithIcon from "../../components/common/FormInuprWithIcon";
+import FormInputWithIcon from "@/components/common/FormInuprWithIcon";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 
