@@ -6,7 +6,7 @@ import { Button } from "../../ui/button";
 
 const Header = () => {
   return (
-    <nav className="flex justify-between lg:px-40 py-3">
+    <nav className="flex justify-between lg:px-40 py-3 bg-backgroundAccent shadow-md fixed w-full z-50">
       <div className=" gap-5 flex items-center ">
         <img src={HireHubLogo} alt="HireHubLogo" width={30} height={30} />
         <h1 className="font-bold text-2xl">

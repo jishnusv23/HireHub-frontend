@@ -1,11 +1,11 @@
-import { Login } from "./pages/auth/Login";
-// import Signup from "./pages/auth/Signup";
+// import { Login } from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
 
 function App() {
   return (
     <>
-      {/* <Signup /> */}
-      <Login />
+      <Signup />
+      {/* <Login /> */}
     </>
   );
 }

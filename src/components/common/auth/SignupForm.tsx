@@ -5,6 +5,13 @@ import { FiUser, FiMail, FiKey } from "react-icons/fi";
 import FormInputWithIcon from "@/components/common/FormInuprWithIcon";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { signupAction } from "@/redux/store/actions/auth";
+import { useAppDispatch } from "@/hooks/hooks";
+import { CLIENT_API } from "@/utils/axios";
+import { config } from "@/common/configuration";
+import { findEmailAction } from "@/redux/store/actions/auth/findEmailAction";
+import { useState } from "react";
 
 const strongPassword =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -36,6 +43,8 @@ const formSchema = z
   });
 
 const SignupForm = () => {
+  const [error, setError] = useState("");
+  const dispatch = useAppDispatch();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,7 +56,22 @@ const SignupForm = () => {
   });
 
   async function onsubmit(values: z.infer<typeof formSchema>) {
-    console.log("first");
+    const allData = {
+      username: values.username,
+      email: values.email,
+      password: values.password,
+      confirmpassword: values.confirmPassword,
+    };
+
+    // console.log(allData)
+    const result = await dispatch(findEmailAction(allData.email));
+    console.log("🚀 ~ file: SignupForm.tsx:68 ~ onsubmit ~ result:", result);
+    if (!result.payload || !result.payload.success) {
+      setError(result?.payload?.message);
+      return;
+    }
+
+    const response = await dispatch(signupAction(allData));
   }
   return (
     <Form {...form}>
@@ -102,6 +126,7 @@ const SignupForm = () => {
             />
           )}
         />
+        {error && <p className="text-sm text-red-500">{error}</p>}
         <Button type="submit" className="w-full">
           {`Sign UP`}
         </Button>
