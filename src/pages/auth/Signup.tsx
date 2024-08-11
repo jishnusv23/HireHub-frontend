@@ -8,7 +8,9 @@ import GoogleAuth from "../../components/common/GoogleAuth";
 import SignupImg from "../../assets/auth/Signup.jpg";
 import Footer from "@/components/common/Footer";
 import SignupForm from "@/components/common/auth/SignupForm";
+import { useNavigate } from "react-router-dom";
 const Signup = () => {
+  const navigate=useNavigate()
   return (
     <div>
       <Header />
@@ -38,7 +40,7 @@ const Signup = () => {
             <GoogleAuth />
             <p className="py-5">
               Alredy have an Account?
-              <span className="text-primary hover:text-blue-400">Login</span>
+              <span className="text-primary hover:text-blue-400" onClick={()=>navigate('/login')}>Login</span>
             </p>
           </div>
         </div>
