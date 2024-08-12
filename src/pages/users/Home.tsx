@@ -2,11 +2,15 @@ import Header from "@/components/common/users/Header";
 import { Homesection } from "@/components/common/users/Homesection";
 import React from "react";
 import HomeImg from "@/assets/home/userHome.jpg";
+import { Button } from "@/components/ui/button";
+import { Contentsection } from "@/components/common/users/Contentsection";
+import { Featuressection } from "@/components/common/users/Featuressection";
+import Footer from "@/components/common/Footer";
 export const Home = () => {
   return (
     <>
       <Header />
-      
+
       <main className="flex min-h-screen flex-col pt-20 md:pt-30 px-5 lg:px-40">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-16">
           <div className="gap-2">
@@ -28,11 +32,18 @@ export const Home = () => {
             </p>
           </div>
           <div>
-            <img src={HomeImg} alt="HomeImg" />
+            <img src={HomeImg} alt="HomeImg" className="rounded-md" />
           </div>
         </div>
-      <Homesection />
+        <Homesection />
+        <div className="flex justify-center pt-6 ">
+          <Button className="w-48 h-14 rounded-full">Join a Meeting</Button>
+        </div>
+        <Contentsection />
+        <Featuressection />
+        {/* <br></br> */}
       </main>
+      <Footer />
     </>
   );
 };

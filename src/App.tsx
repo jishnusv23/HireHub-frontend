@@ -73,6 +73,7 @@ import { Login } from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import { Landingpage } from "./pages/common/Landingpage";
 import { Home } from "./pages/users/Home";
+import { Otp } from "./pages/auth/Otp";
 // Import other pages as needed
 
 // Higher-Order Components for Route Protection
@@ -127,7 +128,9 @@ function App() {
         {/* Public Landing Page */}
         {/* <Route path="/" element={<Landingpage />} />
          */}
-         <Route path="/" element={<Home/>}/>
+         {/* <Route path="/" element={<Home/>}/>
+          */}
+          <Route path="/" element={<Otp/>}/>
 
         {/* Protected Routes */}
         <Route path="/dashboard" element={<ProtectedLandingPage />} />

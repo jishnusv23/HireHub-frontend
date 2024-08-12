@@ -2,9 +2,11 @@ import React from "react";
 import Logo from "@/assets/logos/HireHub-r.png";
 import InputWithIcon from "../customs/InputWithIcon";
 import { FiMail } from "react-icons/fi";
+import { FaArrowRight } from "react-icons/fa";
 import HireHub from "./HireHub";
 
 import { FooterForm } from "./FooterForm";
+import { Input } from "../ui/Input";
 
 export default function Footer() {
   return (
@@ -30,38 +32,64 @@ export default function Footer() {
         <FooterForm />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 lg:py-20 py-5">
-        <div className="py-5 col-span-2 grid grid-rows-3 gap-2">
+        <div className="py-5 col-span-2 grid grid-rows-3 gap-2 items-center justify-center lg:justify-start">
           <div className="flex items-center gap-4">
             <img src={Logo} alt="HireHubLogo" width={30} height={30} />
             <h1 className="font-bold text-2xl">
               <HireHub />
             </h1>
           </div>
-          <p>Get Started</p>
-          <InputWithIcon icon={<FiMail />} placeholder="Enter your Mail" />
+          <p className="text-center lg:text-left">Get Started</p>
+          <div className="flex items-center space-x-2 justify-center lg:justify-start">
+            <span>
+              <Input
+                type="text"
+                placeholder="Enter your Mail"
+                
+                className="rounded-full text-muted-foreground border border-foreground w-60"
+                />
+            </span>
+            <span>
+              <FaArrowRight className="text-white bg-primary text-2xl font-bold rounded-full w-10 h-10" />
+            </span>
+          </div>
         </div>
-        <div className="col-span-2 lg:col-span-1 grid grid-rows-5">
-          <h5 className="font-bold">Support</h5>
-          <p className="hover-text">Help Center</p>
-          <p className="hover-text">Account Information</p>
-          <p className="hover-text">About</p>
-          <p className="hover-text">Call</p>
+
+        {/* Support and Company Sections Side by Side on Mobile */}
+        <div className="col-span-2 lg:col-span-1 grid grid-cols-2 lg:grid-cols-1 text-center lg:text-left gap-2">
+          <div>
+            <h5 className="font-bold">Support</h5>
+            <p className="hover-text">Help Center</p>
+            <p className="hover-text">Account Information</p>
+            <p className="hover-text">About</p>
+            <p className="hover-text">Call</p>
+          </div>
+          <div className="lg:hidden">
+            <h5 className="font-bold">Company</h5>
+            <p className="hover-text">Our Story</p>
+            <p className="hover-text">Careers</p>
+            <p className="hover-text">Blog</p>
+            <p className="hover-text">Contact Us</p>
+          </div>
         </div>
-        <div className="col-span-2 lg:col-span-1 grid grid-rows-5">
-          <h5 className="font-bold">Support</h5>
-          <p className="hover-text">Help Center</p>
-          <p className="hover-text">Account Information</p>
-          <p className="hover-text">About</p>
-          <p className="hover-text">Call</p>
+
+        {/* Other Sections */}
+        <div className="col-span-2 lg:col-span-1 text-center lg:text-left">
+          <h5 className="font-bold">Company</h5>
+          <p className="hover-text">Our Story</p>
+          <p className="hover-text">Careers</p>
+          <p className="hover-text">Blog</p>
+          <p className="hover-text">Contact Us</p>
         </div>
-        <div className="col-span-2 lg:col-span-1 grid grid-rows-5">
-          <h5 className="font-bold">Support</h5>
-          <p className="hover-text">Help Center</p>
-          <p className="hover-text">Account Information</p>
-          <p className="hover-text">About</p>
-          <p className="hover-text">Call</p>
+        <div className=" hidden lg:block col-span-2 lg:col-span-1 text-center lg:text-left">
+          <h5 className="font-bold">Resources</h5>
+          <p className="hover-text">Documentation</p>
+          <p className="hover-text">Community</p>
+          <p className="hover-text">Developers</p>
+          <p className="hover-text">Security</p>
         </div>
       </div>
+
       <div className="lg:flex justify-between pb-5">
         <p> © 2022 HireHub PVT LT. Copyright and rights reserved</p>
         <p>
