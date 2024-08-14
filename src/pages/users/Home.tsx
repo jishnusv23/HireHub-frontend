@@ -1,6 +1,5 @@
 import Header from "@/components/common/users/Header";
 import { Homesection } from "@/components/common/users/Homesection";
-import React from "react";
 import HomeImg from "@/assets/home/userHome.jpg";
 import { Button } from "@/components/ui/button";
 import { Contentsection } from "@/components/common/users/Contentsection";

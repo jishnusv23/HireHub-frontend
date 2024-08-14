@@ -14,6 +14,13 @@ export interface SignupFormData {
   email?:string,
   password?:string
   role:Role
+  isBlocked?:false,
+
   profile?:Profile,
   
+}
+
+export interface LoginFormData{
+  email:string,
+  password:string
 }

@@ -8,7 +8,7 @@ import LoginImg from "@/assets/auth/Login.png";
 import Footer from "@/components/common/Footer";
 import { useNavigate } from "react-router-dom";
 export const Login = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   return (
     <>
       <Header />
@@ -38,12 +38,18 @@ export const Login = () => {
             <GoogleAuth />
             <p className="py-5">
               Don&apos;t Have an Account?{" "}
-              <span className="text-primary hover:text-primary" onClick={()=>navigate('/signup')}>Signup</span>
+              <span
+                className="text-primary hover:text-primary"
+                onClick={() => navigate("/signup")}
+              >
+                Signup
+              </span>
             </p>
           </div>
         </div>
         <div className="w-full h-screen overflow-clip relative">
-          {/* <div className="absolute top-1/3 text-center">
+          <img src={LoginImg} alt="" />
+          {/* <div className="absolute  top-1/3 text-center">
             <p className="text-2xl">Nice see you </p>
             <h1 className="text-6xl py-5 font-black">Welcome Back</h1>
             <div className="flex items-center justify-center pb-5">
@@ -55,7 +61,6 @@ export const Login = () => {
               work every day.
             </p>
           </div> */}
-          <img src={LoginImg} alt="" />
         </div>
       </div>
       <Footer />

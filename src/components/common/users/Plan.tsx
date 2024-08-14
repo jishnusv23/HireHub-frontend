@@ -128,7 +128,7 @@ export const Plan = () => {
               value="Business"
             >
               <p className="text-lg text-center mb-4 font-bold">
-                Unveil new superpowers and join the Design Leaque
+                Unveil new superpowers and join the<br></br> Design Leaque
               </p>
               <p className="text-6xl font-bold text-center mb-6">₹4999</p>
               <div className="flex flex-col gap-3  px-5 py-10 rounded-xl text-left">

@@ -5,11 +5,21 @@ import { AxiosError } from "axios";
 
 export const googleAuthAction = createAsyncThunk(
   "user/google-auth",
-  async (Credential: any, { rejectWithValue }) => {
+  async (credential: any, { rejectWithValue }) => {
     try {
-      console.log(Credential, "google");
+      console.log(credential, "google");
+      const response = await CLIENT_API.post(
+        "/api/auth/googleAuth",
+        credential,
+        config
+      );
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data);
+      }
     } catch (error: any) {
-        console.log('Error showing in google ',error)
+      console.log("Error showing in google ", error);
     }
   }
 );

@@ -93,6 +93,12 @@ export const Landingpage = () => {
                 <span>Brightfuture</span>
               </span>
             </p>
+            <p className="flex items-center space-x-2">
+              <span className="flex items-center">
+                <GrTechnology className="inline-block" />
+                <span>Wipro</span>
+              </span>
+            </p>
           </div>
         </div>
         {/* supports */}
@@ -181,7 +187,7 @@ export const Landingpage = () => {
               productivity and streamline your interview process effortlessly.
             </p>
             <div className="flex items-center justify-center">
-              <Button>Get Started</Button>
+              <Button className="rounded-2xl w-32 h-10">Get Started</Button>
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">

@@ -9,7 +9,7 @@ type RoleRoutes = {
 interface RoleBasedRedirectProps {
   roles: RoleRoutes;
 }
-export const RoleBasedRedirect: React.FC<RoleBasedRedirectProps> = ({
+export const RoleBasedRedirecto: React.FC<RoleBasedRedirectProps> = ({
   roles,
 }) => {
   const { data } = useAppSelector((state: RooteState) => state.user);

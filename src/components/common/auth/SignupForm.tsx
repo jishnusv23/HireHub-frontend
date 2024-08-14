@@ -8,10 +8,11 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { signupAction } from "@/redux/store/actions/auth";
 import { useAppDispatch } from "@/hooks/hooks";
-import { CLIENT_API } from "@/utils/axios";
-import { config } from "@/common/configuration";
+import { toast } from "sonner";
 import { findEmailAction } from "@/redux/store/actions/auth/findEmailAction";
 import { useState } from "react";
+import { storeUserData } from "@/redux/store/slices/users";
+import { useNavigate } from "react-router-dom";
 
 const strongPassword =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -44,7 +45,9 @@ const formSchema = z
 
 const SignupForm = () => {
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,13 +68,22 @@ const SignupForm = () => {
 
     // console.log(allData)
     const result = await dispatch(findEmailAction(allData.email));
+
     console.log("🚀 ~ file: SignupForm.tsx:68 ~ onsubmit ~ result:", result);
     if (!result.payload || !result.payload.success) {
-      setError(result?.payload?.message);
+      toast.error(result?.payload?.message);
       return;
     }
 
     const response = await dispatch(signupAction(allData));
+    console.log(
+      "🚀 ~ file: SignupForm.tsx:76 ~ onsubmit ~ response:",
+      response
+    );
+    if (response.payload && response.payload.success) {
+      dispatch(storeUserData(response.payload.data));
+      navigate("/signup");
+    }
   }
   return (
     <Form {...form}>
@@ -126,7 +138,7 @@ const SignupForm = () => {
             />
           )}
         />
-        {error && <p className="text-sm text-red-500">{error}</p>}
+
         <Button type="submit" className="w-full">
           {`Sign UP`}
         </Button>

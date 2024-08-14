@@ -16,6 +16,8 @@ export const signupAction = createAsyncThunk(
       }
     } catch (error: any) {
       console.log("Something wrong in singupaction", error);
+        const e: AxiosError = error as AxiosError;
+        return rejectWithValue(e.response?.data || e.message);
     }
   }
 );
