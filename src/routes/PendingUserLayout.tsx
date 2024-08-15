@@ -1,18 +1,12 @@
-
-import { Outlet, Navigate } from "react-router-dom";
-import { useGetUserRole } from "@/hooks/authHook";
+import React from "react";
+import { Outlet } from "react-router-dom";
 
 const PendingUserLayout = () => {
-  const userRole = useGetUserRole();
-
-  if (userRole !== "pending") {
-    return <Navigate to="/unauthorized" replace />;
-  }
-
   return (
     <div>
       {/* <h1>Pending User Dashboard</h1> */}
-      <Outlet /> 
+      {/* Add pending user-specific navigation here */}
+      <Outlet />
     </div>
   );
 };

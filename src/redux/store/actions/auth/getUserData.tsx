@@ -7,16 +7,16 @@ export const getUserData = createAsyncThunk(
   "user/getUserData",
   async (_, { rejectWithValue }) => {
     try {
-  const response = await CLIENT_API.get("/api/auth/getUser", config);
-      console.log("🚀 ~ file: getUserData.tsx:11 ~ response:", response)  
+      const response = await CLIENT_API.get("/api/auth/getUser", config);
       if (response.data.success) {
-        console.log(response.data,'getuser')
-        return response.data;
+        console.log(response.data, "getuser");
+        return response.data.data;
       } else {
-        return rejectWithValue(response.data)
+        return rejectWithValue(response.data); // Rejecting with the error message from the server
       }
     } catch (error: any) {
-      console.log("Something wrong in getuserdata", error);
+      console.log("Something went wrong in getUserData", error);
+      return rejectWithValue(error.response?.data || error.message); // Properly reject with error
     }
   }
 );

@@ -1,24 +1,23 @@
-import React, { FC } from "react";
-import { Navigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { RooteState } from "@/redux/store";
+// ProtectedRoute.tsx
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAppSelector } from "../hooks/hooks";
 
-interface ProtectedRoutesProps {
-  element: React.ReactElement;
-  allowedRoles: string[];
-}
-
-export const ProtectedRoutes: FC<ProtectedRoutesProps> = ({
-  element,
-  allowedRoles,
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
+  children,
 }) => {
-  const { data } = useAppSelector((state: RooteState) => state.user);
-  const dispatch = useAppDispatch();
+  const { data, loading } = useAppSelector((state) => state.user);
+  const location = useLocation();
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+
   if (!data) {
-    return <Navigate to={"/signup"} />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
-  const userRole = data?.role || "";
-  if (allowedRoles.includes(userRole)) {
-    return element;
-  }
+
+  return <>{children}</>;
 };
+
+export default ProtectedRoute;

@@ -56,7 +56,7 @@ export const Plan = () => {
               value="Free"
             >
               <p className="text-lg  text-center mb-4 font-bold">
-                Have a go and test your superpowers
+                Have a go and test your <br></br> superpowers
               </p>
               <p className="text-6xl font-bold text-center mb-6">0</p>
               <div className="flex flex-col gap-3  px-5 py-10 rounded-xl text-left">
@@ -92,7 +92,7 @@ export const Plan = () => {
               value="Pro"
             >
               <p className="text-lg  text-center mb-4 font-bold">
-                Experiment the power of infinite possibilities
+                Experiment the power of infinite<br></br> possibilities
               </p>
               <p className="text-6xl  font-bold text-center mb-6">₹499</p>
               <div className="flex flex-col gap-3 bg-backgroundAccent px-5 py-10 rounded-xl text-left">
@@ -128,7 +128,8 @@ export const Plan = () => {
               value="Business"
             >
               <p className="text-lg text-center mb-4 font-bold">
-                Unveil new superpowers and join the<br></br> Design Leaque
+                Unveil new superpowers<br></br> and join the<br></br> Design
+                Leaque
               </p>
               <p className="text-6xl font-bold text-center mb-6">₹4999</p>
               <div className="flex flex-col gap-3  px-5 py-10 rounded-xl text-left">

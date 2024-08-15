@@ -3,7 +3,7 @@ import { signupAction } from "../actions/auth/signupAction";
 import { getUserData, loginAction } from "../actions/auth";
 import { LoginFormData, SignupFormData } from "@/types/IForm";
 import { logoutAction } from "../actions/auth/logoutAction";
-
+import { SerializedError } from "@reduxjs/toolkit";
 export interface UserState {
   loading: boolean;
   data: SignupFormData | null;
@@ -24,7 +24,11 @@ const userSlice = createSlice({
       action: PayloadAction<SignupFormData>
     ) => {
       state.data = action.payload;
+      
     },
+    makeErrorDisable:(state)=>{
+      state.error=null
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -48,19 +52,28 @@ const userSlice = createSlice({
 
       //*get user data
       .addCase(getUserData.pending, (state: UserState) => {
-        (state.loading = true), (state.error = null);
+        state.loading = true;
+        state.error = null;
       })
       .addCase(
         getUserData.fulfilled,
         (state: UserState, action: PayloadAction<SignupFormData>) => {
+          console.log('herer reached',action.payload);
+          
           state.loading = false;
           state.data = action.payload;
           state.error = null;
           console.log(action.payload, "-ioioioioi--");
         }
       )
-      .addCase(getUserData.rejected, (state: UserState) => {
-        (state.loading = false), (state.data = null), (state.error = null);
+      .addCase(getUserData.rejected, (state, action) => {
+        state.loading = false;
+        state.data = null;
+        if (typeof action.error.message === "string") {
+          state.error = action.error.message;
+        } else {
+          state.error = "Failed to load user data";
+        }
       })
       //*login action
       .addCase(loginAction.pending, (state: UserState) => {
@@ -93,5 +106,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { storeUserData } = userSlice.actions;
+export const { storeUserData,makeErrorDisable } = userSlice.actions;
 export const userReducer = userSlice.reducer;

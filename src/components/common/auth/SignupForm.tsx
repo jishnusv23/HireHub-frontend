@@ -82,7 +82,7 @@ const SignupForm = () => {
     );
     if (response.payload && response.payload.success) {
       dispatch(storeUserData(response.payload.data));
-      navigate("/signup");
+      navigate("/userhome");
     }
   }
   return (

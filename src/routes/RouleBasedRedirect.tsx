@@ -1,20 +1,31 @@
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAppSelector } from "@/hooks/hooks";
 import { RooteState } from "@/redux/store";
-import { Navigate } from "react-router-dom";
-
-type RoleRoutes = {
-  [key: string]: string;
-};
 
 interface RoleBasedRedirectProps {
-  roles: RoleRoutes;
+  roles: { [key: string]: string };
 }
-export const RoleBasedRedirecto: React.FC<RoleBasedRedirectProps> = ({
+
+export const RoleBasedRedirect: React.FC<RoleBasedRedirectProps> = ({
   roles,
 }) => {
-  const { data } = useAppSelector((state: RooteState) => state.user);
-  if (!data || !data.role || !roles[data.role]) {
-    return <Navigate to={"/signup"} replace />;
+  const { data, loading } = useAppSelector((state: RooteState) => state.user);
+  const location = useLocation();
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  if (!data || !data.role) {
+    return <Navigate to="/signup" replace />;
   }
-  return <Navigate to={roles[data.role]} replace />;
+
+  const targetPath = roles[data.role];
+
+  if (!targetPath || location.pathname === targetPath) {
+    return null;
+  }
+
+  return <Navigate to={targetPath} replace />;
 };

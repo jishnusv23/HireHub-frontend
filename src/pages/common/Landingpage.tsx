@@ -13,17 +13,36 @@ import { GrAnalytics, GrTechnology } from "react-icons/gr";
 import { GiEngagementRing } from "react-icons/gi";
 import Footer from "@/components/common/Footer";
 import { Plan } from "@/components/common/users/Plan";
+import WavyText from "@/components/ui/wavyText";
 
 export const Landingpage = () => {
+  const loading = true;
   return (
     <>
       <Header />
       <main className="flex min-h-screen flex-col items-center pt-20 md:pt-30 px-5 lg:px-40">
-        <div className="grid grid-cols-1 lg:grid-cols-2 lg:mb-10">
-          <div>
-            <h1 className="text-4xl md:text-6xl font-bold">
+        <div className="grid grid-cols-1 lg:grid-cols-2 lg:mb-10 relative">
+          <div className="relative z-10">
+            {/* WavyText component for animated text */}
+            {/* <h1 className="text-4xl md:text-6xl font-bold"> */}
+            <WavyText
+              text="Where Interview's"
+              replay={loading}
+              className="text-4xl md:text-6xl font-bold"
+            />
+            <WavyText
+              text="Meet Innovation"
+              replay={loading}
+              className="text-4xl md:text-6xl font-bold"
+            />
+            {/* </h1> */}
+
+            {/* Static text as fallback or for non-animated text */}
+            {/* <h1 className="text-4xl md:text-6xl font-bold">
               Where Interview&apos;s Meet Innovation
-            </h1>
+            </h1> */}
+
+            {/* SVG for the underline */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="text-primary w-full h-20"
@@ -36,12 +55,16 @@ export const Landingpage = () => {
                 strokeLinecap="round"
               />
             </svg>
+
+            {/* Paragraph text */}
             <p className="text-lg font-semibold lg:w-4/5 pb-5">
               Let&apos;s make your hiring process more organized and efficient
               with InterviewInnovate, featuring the latest tools for seamless
               interviews and real-time collaboration.
             </p>
-            <div className="flex items-center ga-3">
+
+            {/* Buttons */}
+            <div className="flex items-center gap-3">
               <Button>Type for free</Button>
               <Button variant={"secondary"} className="hover:text-primary">
                 <span className="border border-black p-1 rounded-full mr-2">
@@ -51,10 +74,12 @@ export const Landingpage = () => {
               </Button>
             </div>
           </div>
-          <div className="pt-5">
-            <img src={BgImg} alt="" />
+
+          <div className="pt-5 z-0">
+            <img src={BgImg} alt="Background Image" />
           </div>
         </div>
+
         {/* companies */}
         <div className="text-center">
           <h1 className="font-bold text-xl lg:text-4xl pt-4">

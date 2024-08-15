@@ -6,50 +6,66 @@ import { Button } from "../../ui/button";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { RooteState } from "@/redux/store";
 import { logoutAction } from "@/redux/store/actions/auth/logoutAction";
+import { useState } from "react";
+import { FaBars } from "react-icons/fa"; // Install react-icons if not installed
+import { IoClose } from "react-icons/io5"; // Close icon
 
 const Header = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const { data } = useAppSelector((state: RooteState) => state.user);
   const dispatch = useAppDispatch();
 
-  const handleLogut = async () => {
+  const handleLogout = async () => {
     console.log("logout");
     dispatch(logoutAction()).then(() => {
-      // localStorage.removeItem("authToken");
-
-      // navigate("/");
+      localStorage.removeItem("authToken");
+      navigate("/");
       console.log("logout");
     });
   };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
     <nav className="flex justify-between lg:px-40 py-3 bg-backgroundAccent shadow-md fixed w-full z-50">
-      <div className=" gap-5 flex items-center ">
+      <div className="gap-5 flex items-center">
         <img src={HireHubLogo} alt="HireHubLogo" width={30} height={30} />
         <h1 className="font-bold text-2xl">
           <HireHub />
         </h1>
       </div>
-      <div className="gap-5  flex items-center">
-        <div className="hiden  lg:flex items-center gap-5">
-          <div className="hover-text font-bold" onClick={()=>navigate('/')}>Home</div>
+      <div className="flex items-center gap-5">
+        {/* ModeToggle for larger screens */}
 
-          <div className="hover-text font-bold">overview</div>
-
-          <div className="hover-text font-bold">Contact us</div>
-
+        {/* Feature list for large screens */}
+        <div className="hidden lg:flex items-center gap-5">
+          <div className="hover-text font-bold" onClick={() => navigate("/")}>
+            Home
+          </div>
+          <div className="hover-text font-bold">Overview</div>
+          <div className="hover-text font-bold">Contact Us</div>
           <div className="hover-text font-bold">Blog</div>
-
           {data ? (
-            <div className="hover-text font-bold">Profile</div>
+            <div
+              className="hover-text font-bold"
+              onClick={() => navigate("/profile")}
+            >
+              Profile
+            </div>
           ) : (
-            <div className="hover-text font-bold">Login</div>
+            <div
+              className="hover-text font-bold"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </div>
           )}
-          {/* <button className="border border-primary text-white bg-primary text-sm px-4 py-2 rounded-md">
-            Sign Up
-          </button> */}
           {data ? (
-            <Button onClick={handleLogut}>
+            <Button onClick={handleLogout}>
               <div>Logout</div>
             </Button>
           ) : (
@@ -58,8 +74,94 @@ const Header = () => {
             </Button>
           )}
         </div>
-        <ModeToggle />
+
+        {/* Menu Toggle Button for mobile screens */}
+        <div className="lg:hidden flex items-center gap-6">
+          <ModeToggle />
+          <button onClick={toggleMenu} className="text-xl">
+            <FaBars />
+          </button>
+        </div>
+        <div className="hidden md:block">
+          <ModeToggle />
+        </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {menuOpen && (
+        <div className="fixed inset-y-0 right-0 w-1/2 bg-backgroundAccent shadow-lg z-50 transition-transform transform duration-300 ease-in-out lg:hidden">
+          <div className="flex flex-col h-full">
+            <div className="flex justify-between items-center p-5">
+              <h1 className="font-bold text-2xl">
+                <HireHub />
+              </h1>
+              <button onClick={toggleMenu} className="text-2xl">
+                <IoClose />
+              </button>
+            </div>
+            <div className="flex flex-col justify-end flex-grow p-5 gap-5">
+              <div
+                className="hover-text font-bold"
+                onClick={() => {
+                  navigate("/");
+                  toggleMenu();
+                }}
+              >
+                Home
+              </div>
+              <div className="hover-text font-bold" onClick={toggleMenu}>
+                Overview
+              </div>
+              <div className="hover-text font-bold" onClick={toggleMenu}>
+                Contact Us
+              </div>
+              <div className="hover-text font-bold" onClick={toggleMenu}>
+                Blog
+              </div>
+              {data ? (
+                <div
+                  className="hover-text font-bold"
+                  onClick={() => {
+                    navigate("");
+                    toggleMenu();
+                  }}
+                >
+                  Profile
+                </div>
+              ) : (
+                <div
+                  className="hover-text font-bold"
+                  onClick={() => {
+                    navigate("/login");
+                    toggleMenu();
+                  }}
+                >
+                  Login
+                </div>
+              )}
+              {data ? (
+                <Button
+                  onClick={() => {
+                    handleLogout();
+                    toggleMenu();
+                  }}
+                >
+                  <div>Logout</div>
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    navigate("/signup");
+                    toggleMenu();
+                  }}
+                >
+                  <div>Signup</div>
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

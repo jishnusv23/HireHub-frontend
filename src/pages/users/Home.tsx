@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Contentsection } from "@/components/common/users/Contentsection";
 import { Featuressection } from "@/components/common/users/Featuressection";
 import Footer from "@/components/common/Footer";
+import WavyText from "@/components/ui/wavyText";
+import { useState } from "react";
 export const Home = () => {
+  const [loading, setLoading] = useState(true);
   return (
     <>
       <Header />
@@ -13,9 +16,19 @@ export const Home = () => {
       <main className="flex min-h-screen flex-col pt-20 md:pt-30 px-5 lg:px-40">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-16">
           <div className="gap-2">
-            <h4 className="text-4xl md:text-6xl font-bold">
+            {/* <h4 className="text-4xl md:text-6xl font-bold">
               Land Your Dream Job
-            </h4>
+            </h4> */}
+            <WavyText
+              text="Land Your Dream"
+              replay={loading}
+              className="text-4xl md:text-6xl font-bold"
+            />
+            <WavyText
+              text=" Job"
+              replay={loading}
+              className="text-4xl md:text-6xl font-bold"
+            />
 
             <h1 className="text-2xl pt-6 text-foregroundAccent font-semibold lg:w-4/5 pb-5">
               1-on-1 Interview Preparation Sessions

@@ -58,14 +58,13 @@ export const LoginForm = () => {
       console.log(response?.payload?.message, "kokokoko");
       toast.error(response?.payload?.message);
     } else {
-      console.log(response.payload.data.email, "lololololo");
-      
+      // console.log(response.payload.data.email, "lololololo");
+
       // localStorage.setItem("authToken", JSON.stringify(data));
       dispatch(storeUserData(response.payload.data));
       if (response.payload.data.role === "pending") {
         setLoading(false);
-        navigate("/login");
-        
+        navigate("/userhome");
       }
     }
   }
