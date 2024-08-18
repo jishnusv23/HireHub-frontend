@@ -65,24 +65,23 @@ const SignupForm = () => {
       password: values.password,
       confirmpassword: values.confirmPassword,
     };
-
+    setLoading(true);
     // console.log(allData)
     const result = await dispatch(findEmailAction(allData.email));
 
-    console.log("🚀 ~ file: SignupForm.tsx:68 ~ onsubmit ~ result:", result);
     if (!result.payload || !result.payload.success) {
       toast.error(result?.payload?.message);
       return;
     }
 
     const response = await dispatch(signupAction(allData));
-    console.log(
-      "🚀 ~ file: SignupForm.tsx:76 ~ onsubmit ~ response:",
-      response
-    );
+
     if (response.payload && response.payload.success) {
       dispatch(storeUserData(response.payload.data));
-      navigate("/userhome");
+      navigate("/otp-verification", {
+        state: { email: response.payload.data.email },
+      });
+      setLoading(false);
     }
   }
   return (
@@ -140,7 +139,7 @@ const SignupForm = () => {
         />
 
         <Button type="submit" className="w-full">
-          {`Sign UP`}
+          {loading ? "loading" : "Sign Up"}
         </Button>
       </form>
     </Form>

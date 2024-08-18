@@ -1,14 +1,40 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/Input"; // Assuming Input is a custom component
 import { Button } from "@/components/ui/button";
+import { OtpverficationAction } from "@/redux/store/actions/auth/OtpverificationAction";
+import { useAppDispatch } from "@/hooks/hooks";
+import { useLocation } from "react-router-dom";
+import { toast } from "sonner";
+import { sendVerificationMail } from "@/redux/store/actions/auth/sendVerificationMail";
 
 export const OtpField = () => {
+  const dispatch = useAppDispatch();
   const [otp, setOtp] = useState(["", "", "", ""]);
+  const [isComplete, setIsComplete] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [canResend, setCanResend] = useState(false);
+  const location = useLocation();
+  console.log("🚀 ~ file: OtpField.tsx:12 ~ OtpField ~ location:", location);
+
   const inputRef = useRef<(HTMLInputElement | null)[]>([]);
   useEffect(() => {
     inputRef.current[0]?.focus();
+    startTimer();
   }, []);
 
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setCanResend(true);
+    }
+  }, [timeLeft]);
+
+  const startTimer = () => {
+    setTimeLeft(60);
+    setCanResend(false);
+  };
   const handleChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
@@ -18,6 +44,7 @@ export const OtpField = () => {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
+    setIsComplete(newOtp.every((digit) => digit !== ""));
 
     // Move focus to the next input if the current input is filled
     if (value && index < otp.length - 1) {
@@ -34,11 +61,42 @@ export const OtpField = () => {
     }
   };
 
-  const handleTheOtp = () => {
+  const handleTheOtp = async () => {
     // Handle OTP submission
     console.log("OTP Submitted:", otp.join(""));
-  };
+    const mergeotp = otp.join("");
+    if (isComplete) {
+      // const response=await
+      // console.log(location.state)
 
+      const response = await dispatch(
+        OtpverficationAction({ otp: mergeotp, email: location.state.email })
+      );
+      console.log(
+        "🚀 ~ file: OtpField.tsx:55 ~ handleTheOtp ~ response:",
+        response
+      );
+      if (response.payload.success && !response.payload.error) {
+        console.log(response.payload.data);
+      }
+
+
+       setOtp(new Array(length).fill(""));
+       setIsComplete(false);
+       inputRef.current[0]?.focus();
+
+    }
+  };
+  const handleResend=async()=>{
+     startTimer();
+     
+     toast.success("OTP resend to your Email", {
+       duration: 4000,
+     });
+
+     await dispatch(sendVerificationMail(location.state.email));
+
+  }
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white text-primary p-8 rounded-lg shadow-lg text-center">
@@ -49,7 +107,7 @@ export const OtpField = () => {
         </p>
         <div className="flex justify-center mb-8 space-x-4">
           {otp.map((digit, index) => (
-            <input
+            <Input
               key={index}
               id={`otp-input-${index}`}
               ref={(input) => (inputRef.current[index] = input)}
@@ -69,7 +127,7 @@ export const OtpField = () => {
           >
             Submit
           </Button>
-          <Button className="bg-gray-600 text-white px-4 py-2 rounded">
+          <Button className="bg-gray-600 text-white px-4 py-2 rounded"  onClick={handleResend}>
             Resend
           </Button>
         </div>

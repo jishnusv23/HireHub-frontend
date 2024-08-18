@@ -7,7 +7,7 @@ export const getUserData = createAsyncThunk(
   "user/getUserData",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await CLIENT_API.get("/api/auth/getUser", config);
+      const response = await CLIENT_API.get("/api/user/getUser", config);
       if (response.data.success) {
         console.log(response.data, "getuser");
         return response.data.data;

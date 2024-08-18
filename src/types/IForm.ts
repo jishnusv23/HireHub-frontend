@@ -15,6 +15,8 @@ export interface SignupFormData {
   password?:string
   role:Role
   isBlocked?:false,
+  isVerified?:boolean,
+  
 
   profile?:Profile,
   

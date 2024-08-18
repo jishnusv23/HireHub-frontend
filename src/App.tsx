@@ -12,12 +12,12 @@
 // import { RooteState } from "./redux/store";
 // import { getUserData } from "./redux/store/actions/auth";
 
-// import PublicRoutes from "./routes/PublicRoutes";
-// import { ProtectedRoute } from "./routes/ProtectedRoutes";
-// import { UserRouter } from "./routes/UserRouter";
-// import { RoleBasedRedirect } from "./routes/RouleBasedRedirect";
+// // import PublicRoutes from "./routes/PublicRoutes";
+// // // import { ProtectedRoute } from "./routes/ProtectedRoutes";
+// // import { UserRouter } from "./routes/UserRouter";
+// // import { RoleBasedRedirect } from "./routes/RouleBasedRedirect";
 // import { Home } from "./pages/users/Home";
-// import { logoutAction } from "./redux/store/actions/auth/logoutAction";
+// // import { logoutAction } from "./redux/store/actions/auth/logoutAction";
 // import { makeErrorDisable } from "./redux/store/slices/users";
 
 // const App = () => {
@@ -58,19 +58,19 @@
 //             <Route path="/login" element={<Login />} />
 //             <Route path="/signup" element={<Signup />} />
 //             {/* <Route path="/theatre/signup" element={<TheatreSignup />} /> */}
-//             <Route path="/" element={<Navigate to="/login" />} />
+//             <Route path="/" element={<Landingpage/>} />
 //           </Routes>
 //         </Router>
 //       </>
 //     );
 //   }
-//   if (data.role === "pending" || !data.isBlocked) {
+//   if (data.role === "pending" || !data.isBlocked||data.isVerified) {
 //     // User is not authenticated
 //     return (
 //       <>
 //         <Router>
 //           <Routes>
-//             <Route path="/userHome" element={<Home />} />
+//             <Route path="/" element={<Navigate to={'/userHome'}/>} />
 //             <Route
 //               path="/login"
 //               element={!data ? <Login /> : <Navigate to={"/userHome"} />}
@@ -106,6 +106,7 @@ import { RoleBasedRedirect } from "./routes/newRolebased";
 import withRoleAuth from "./routes/WithRoleAuth";
 import ProtectedRoute from "./routes/ProtectedRoutes";
 import {UserRouter} from "./routes/UserRouter";
+import { Otp } from "./pages/auth/Otp";
 // import IntervieweeRouter from "./routes/IntervieweeRouter";
 // import InterviewerRouter from "./routes/InterviewerRouter";
 // import AdminRouter from "./routes/AdminRouter";
@@ -133,6 +134,7 @@ const App = () => {
         <Route path="/" element={<Landingpage />} />
         <Route path="/login" element={ <Login /> } />
         <Route path="/signup" element={<Signup /> } />
+        <Route path="/otp-verification" element={<Otp/>}/>
 
         <Route path="/userhome" element={
           <ProtectedRoute>
