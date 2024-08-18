@@ -13,6 +13,7 @@ import { findEmailAction } from "@/redux/store/actions/auth/findEmailAction";
 import { useState } from "react";
 import { storeUserData } from "@/redux/store/slices/users";
 import { useNavigate } from "react-router-dom";
+import { sendVerificationMail } from "@/redux/store/actions/auth/Verification";
 
 const strongPassword =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -78,10 +79,12 @@ const SignupForm = () => {
 
     if (response.payload && response.payload.success) {
       dispatch(storeUserData(response.payload.data));
-      navigate("/otp-verification", {
-        state: { email: response.payload.data.email },
-      });
+      console.log(response.payload.data.email);
+      dispatch(sendVerificationMail(response.payload.data.email));
       setLoading(false);
+      navigate("/otp-verification", {
+        state: { email: response.payload.data.emai },
+      });
     }
   }
   return (

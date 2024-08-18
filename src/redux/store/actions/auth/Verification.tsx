@@ -12,10 +12,9 @@ export const sendVerificationMail = createAsyncThunk(
       { withCredentials: true }
     );
     try {
-      const response = await CLIENT_API.post(
-        `${authservice}oneTime-pass`,
-        email
-      );
+      const response = await CLIENT_API.post(`${authservice}oneTime-pass`, {
+        email,
+      });
       if (response.data.success) {
         return response.data;
       } else {
