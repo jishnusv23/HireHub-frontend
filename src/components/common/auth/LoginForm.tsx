@@ -52,10 +52,10 @@ export const LoginForm = () => {
 
     const response = await dispatch(loginAction(values));
 
-    console.log("🚀 ~ file: LoginForm.tsx:46 ~ onSubmit ~ response:", response);
+    // console.log("🚀 ~ file: LoginForm.tsx:46 ~ onSubmit ~ response:", response);
     if (!response.payload || !response.payload.success) {
       setLoading(false);
-      console.log(response?.payload?.message, "kokokoko");
+      // console.log(response?.payload?.message, "kokokoko");
       toast.error(response?.payload?.message);
     } else {
       // console.log(response.payload.data.email, "lololololo");
@@ -64,7 +64,7 @@ export const LoginForm = () => {
       dispatch(storeUserData(response.payload.data));
       if (response.payload.data.role === "pending") {
         setLoading(false);
-        navigate("/userhome");
+        navigate("/pending");
       }
     }
   }

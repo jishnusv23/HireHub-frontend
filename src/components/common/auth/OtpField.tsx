@@ -3,27 +3,30 @@ import { Input } from "@/components/ui/Input"; // Assuming Input is a custom com
 import { Button } from "@/components/ui/button";
 import { OtpverficationAction } from "@/redux/store/actions/auth/OtpverificationAction";
 import { useAppDispatch } from "@/hooks/hooks";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { sendVerificationMail } from "@/redux/store/actions/auth/Verification";
 import LoadingPopUp from "../skeleton/LandingPoup";
+import { storeUserData } from "@/redux/store/slices/users";
 
 export const OtpField = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [isComplete, setIsComplete] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
   const [loading, setLoading] = useState(false);
   const [canResend, setCanResend] = useState(false);
   const location = useLocation();
-  console.log("🚀 ~ file: OtpField.tsx:12 ~ OtpField ~ location:", location);
-
   const inputRef = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Focus first input and start timer on component mount
   useEffect(() => {
     inputRef.current[0]?.focus();
     startTimer();
   }, []);
 
+  // Handle OTP field updates
   useEffect(() => {
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
@@ -37,18 +40,17 @@ export const OtpField = () => {
     setTimeLeft(60);
     setCanResend(false);
   };
+
   const handleChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const value = e.target?.value;
-    // Update the otp state with the new value
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
     setIsComplete(newOtp.every((digit) => digit !== ""));
 
-    // Move focus to the next input if the current input is filled
     if (value && index < otp.length - 1) {
       inputRef.current[index + 1]?.focus();
     }
@@ -64,39 +66,39 @@ export const OtpField = () => {
   };
 
   const handleTheOtp = async () => {
-    // Handle OTP submission
-    console.log("OTP Submitted:", otp.join(""));
-    const mergeotp = otp.join("");
     if (isComplete) {
-      // const response=await
-      setLoading(true)
-      // console.log(location.state)
+      setLoading(true);
+      const mergeOtp = otp.join("");
+      try {
+        const response = await dispatch(
+          OtpverficationAction({ otp: mergeOtp, email: location.state.email })
+        );
+        if (response.payload.success && !response.payload.error) {
+          // console.log(response.payload.data);
 
-      const response = await dispatch(
-        OtpverficationAction({ otp: mergeotp, email: location.state.email })
-      );
-      console.log(
-        "🚀 ~ file: OtpField.tsx:55 ~ handleTheOtp ~ response:",
-        response
-      );
-      if (response.payload.success && !response.payload.error) {
-        console.log(response.payload.data);
+          dispatch(storeUserData(response.payload.data));
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error during OTP verification:", error);
       }
-      setLoading(false)
-      setOtp(new Array(length).fill(""));
+      setLoading(false);
+      setOtp(new Array(otp.length).fill(""));
       setIsComplete(false);
       inputRef.current[0]?.focus();
     }
   };
+
   const handleResend = async () => {
-     startTimer();
-     toast.success("OTP resent to your Email", { duration: 4000 });
-     try {
-       await dispatch(sendVerificationMail(location.state?.email));
-     } catch (error) {
-       console.error("Error during OTP resend:", error);
-     }
+    startTimer();
+    toast.success("OTP resent to your Email", { duration: 4000 });
+    try {
+      await dispatch(sendVerificationMail(location.state?.email));
+    } catch (error) {
+      console.error("Error during OTP resend:", error);
+    }
   };
+
   return (
     <>
       <LoadingPopUp isLoading={loading} />
@@ -122,7 +124,7 @@ export const OtpField = () => {
               />
             ))}
           </div>
-          <div className={`text-sm font-semibold `}>
+          <div className="text-sm font-semibold">
             Resend OTP in {timeLeft} seconds
           </div>
           <div className="flex justify-center pt-3 space-x-4">
@@ -140,10 +142,7 @@ export const OtpField = () => {
                 Resend
               </Button>
             ) : (
-              // <div className={`text-sm font-semibold `}>
-              //   Resend OTP in {timeLeft} seconds
-              // </div>
-              <>{""}</>
+              <></>
             )}
           </div>
         </div>

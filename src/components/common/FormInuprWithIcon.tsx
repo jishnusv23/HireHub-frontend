@@ -31,7 +31,7 @@ const FormInputWithIcon: React.FC<InputWithIconProps> = ({
         <InputWithIcon
           icon={icon}
           placeholder={placeholder}
-          field={field}
+          field={field||''}
           type={type}
         />
       </FormControl>

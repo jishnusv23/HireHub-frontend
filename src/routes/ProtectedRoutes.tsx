@@ -1,23 +1,38 @@
-// ProtectedRoute.tsx
-import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAppSelector } from "../hooks/hooks";
+import React, { FC } from "react";
+import { Navigate } from "react-router-dom";
+import { RooteState } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { logoutAction } from "@/redux/store/actions/auth/logoutAction";
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
-  children,
+interface ProtectedRouteProps {
+  element: React.ReactElement;
+  allowedRoles: string[];
+}
+
+export const ProtectedRoute: FC<ProtectedRouteProps> = ({
+  element,
+  allowedRoles,
 }) => {
-  const { data, loading } = useAppSelector((state) => state.user);
-  const location = useLocation();
-
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+  const { data } = useAppSelector((state: RooteState) => state.user);
+  const dispatch = useAppDispatch();
 
   if (!data) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/home" />;
   }
 
-  return <>{children}</>;
-};
+  if (data.isBlocked) {
+    dispatch(logoutAction());
+    return <Navigate to="/login" />;
+  }
+  // if (!data.isVerified) {
+  //   return <Navigate to="/home" replace />;
+  // }
 
-export default ProtectedRoute;
+  const userRole = data.role || "";
+
+  if (allowedRoles.includes(userRole)) {
+    return element;
+  } else {
+    return <Navigate to="/unauthorized" />;
+  }
+};

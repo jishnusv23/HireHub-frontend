@@ -72,18 +72,23 @@ const SignupForm = () => {
 
     if (!result.payload || !result.payload.success) {
       toast.error(result?.payload?.message);
+      setLoading(false);
       return;
     }
 
     const response = await dispatch(signupAction(allData));
 
     if (response.payload && response.payload.success) {
-      dispatch(storeUserData(response.payload.data));
+      console.log(
+        "🚀 ~ file: SignupForm.tsx:79 ~ onsubmit ~ response:",
+        response
+      );
+      // dispatch(storeUserData(response.payload.data));
       console.log(response.payload.data.email);
       dispatch(sendVerificationMail(response.payload.data.email));
       setLoading(false);
       navigate("/otp-verification", {
-        state: { email: response.payload.data.emai },
+        state: { email: response.payload.data.email },
       });
     }
   }

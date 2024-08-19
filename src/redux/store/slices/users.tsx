@@ -4,6 +4,7 @@ import { getUserData, loginAction } from "../actions/auth";
 import { LoginFormData, SignupFormData } from "@/types/IForm";
 import { logoutAction } from "../actions/auth/logoutAction";
 import { SerializedError } from "@reduxjs/toolkit";
+import { OtpverficationAction } from "../actions/auth/OtpverificationAction";
 export interface UserState {
   loading: boolean;
   data: SignupFormData | null;
@@ -58,8 +59,8 @@ const userSlice = createSlice({
       .addCase(
         getUserData.fulfilled,
         (state: UserState, action: PayloadAction<SignupFormData>) => {
-          console.log('herer reached',action.payload);
-          
+          console.log("herer reached", action.payload);
+
           state.loading = false;
           state.data = action.payload;
           state.error = null;
@@ -102,6 +103,23 @@ const userSlice = createSlice({
       .addCase(logoutAction.fulfilled, (state: UserState, action) => {
         (state.loading = false), (state.data = null);
         state.error = null;
+      })
+      //*otp verification after
+
+      .addCase(OtpverficationAction.pending, (state: UserState) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(OtpverficationAction.fulfilled, (state: UserState, action) => {
+        (state.loading = false),
+          (state.data = action?.payload),
+          (state.error = null);
+      })
+      .addCase(OtpverficationAction.rejected, (state: UserState, action) => {
+        console.log("rejected");
+        state.loading = false;
+        state.data = null;
+        state.error = action.error?.message || "login failed";
       });
   },
 });

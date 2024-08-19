@@ -10,7 +10,7 @@ export const getUserData = createAsyncThunk(
       const response = await CLIENT_API.get("/api/user/getUser", config);
       if (response.data.success) {
         console.log(response.data, "getuser");
-        return response.data.data;
+        return response.data.data
       } else {
         return rejectWithValue(response.data); // Rejecting with the error message from the server
       }

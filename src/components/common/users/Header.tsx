@@ -12,9 +12,18 @@ import { IoClose } from "react-icons/io5"; // Close icon
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [verifyed, setVerifyed] = useState(false);
   const navigate = useNavigate();
 
   const { data } = useAppSelector((state: RooteState) => state.user);
+  const isVerified=useAppSelector((state:RooteState)=>state.user.data?.isVerified)
+  console.log("🚀 ~ file: Header.tsx:20 ~ Header ~ isVerified:", isVerified)
+  // if (data?.isVerified) {
+  //   setVerifyed(true);
+  // } else {
+  //   console.log("-------------------");
+  // }
+  console.log("🚀 ~ file: Header.tsx:18 ~ Header ~ data:", data);
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
