@@ -2,7 +2,7 @@ import Header from "@/components/common/users/Header";
 import React from "react";
 import Logo from "@/assets/logos/HireHub-r.png";
 import HireHub from "@/components/common/HireHub";
-import { LoginForm } from "@/components/common/auth/LoginForm";
+import { LoginForm } from "@/components/auth/LoginForm";
 import GoogleAuth from "@/components/common/GoogleAuth";
 import LoginImg from "@/assets/auth/Login.png";
 import Footer from "@/components/common/Footer";

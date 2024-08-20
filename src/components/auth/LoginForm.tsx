@@ -5,7 +5,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { FiUser, FiKey } from "react-icons/fi";
 import { Form, FormField } from "@/components/ui/form";
-import FormInputWithIcon from "../FormInuprWithIcon";
+import FormInputWithIcon from "../common/FormInuprWithIcon";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { loginAction } from "@/redux/store/actions/auth";
 import { RooteState } from "@/redux/store";

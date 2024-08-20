@@ -47,6 +47,7 @@ const formSchema = z
 const SignupForm = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+ 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -69,9 +70,11 @@ const SignupForm = () => {
     setLoading(true);
     // console.log(allData)
     const result = await dispatch(findEmailAction(allData.email));
+    // console.log("🚀 ~ file: SignupForm.tsx:72 ~ onsubmit ~ result:", result)
 
     if (!result.payload || !result.payload.success) {
       toast.error(result?.payload?.message);
+      
       setLoading(false);
       return;
     }

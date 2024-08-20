@@ -114,6 +114,8 @@ import { ProtectedRoute } from "./routes/ProtectedRoutes";
 import { AdminRoutes } from "./routes/AdminRoutes";
 import { PendingRouter } from "./routes/PendingRoute";
 import { logoutAction } from "./redux/store/actions/auth/logoutAction";
+import ForgotPasswrod from "./pages/auth/ForgotPasswrod";
+import { ForgotPassLogin } from "./pages/auth/ForgotPassLogin";
 
 const App = () => {
   const { data, loading } = useAppSelector((state: RooteState) => state.user);
@@ -123,18 +125,15 @@ const App = () => {
   useEffect(() => {
     if (!data) {
       dispatch(getUserData());
-    }else if(data.isBlocked){
-      dispatch(logoutAction())
+    } else if (data.isBlocked) {
+      dispatch(logoutAction());
     }
   }, [data, dispatch]);
-
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
 
   return (
     <Router>
       <Routes>
+        {/* Role based  */}
         <Route
           path="/"
           element={
@@ -148,6 +147,7 @@ const App = () => {
             />
           }
         />
+        {/* AdminProtect */}
         <Route
           path="/admin/*"
           element={
@@ -157,6 +157,7 @@ const App = () => {
             />
           }
         />
+        {/* common user */}
         <Route
           path="/user/*"
           element={
@@ -167,6 +168,7 @@ const App = () => {
           }
         />
 
+        {/* public */}
         <Route
           path="/home"
           element={<PublicRoute element={<Landingpage />} allowedRoles={[]} />}
@@ -182,6 +184,18 @@ const App = () => {
         <Route
           path="/otp-verification"
           element={<PublicRoute element={<Otp />} allowedRoles={[]} />}
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoute element={<ForgotPasswrod />} allowedRoles={[]} />
+          }
+        />
+        <Route
+          path="/verification"
+          element={
+            <PublicRoute element={<ForgotPassLogin />} allowedRoles={[]} />
+          }
         />
       </Routes>
     </Router>

@@ -7,7 +7,7 @@ import Logo from "../../assets/logos/HireHub-r.png";
 import GoogleAuth from "../../components/common/GoogleAuth";
 import SignupImg from "../../assets/auth/Signup.jpg";
 import Footer from "@/components/common/Footer";
-import SignupForm from "@/components/common/auth/SignupForm";
+import SignupForm from "@/components/auth/SignupForm";
 import { useNavigate } from "react-router-dom";
 const Signup = () => {
   const navigate=useNavigate()

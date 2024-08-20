@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { Toaster } from "sonner";
 import {
   Table,
@@ -50,12 +51,12 @@ export const AdminInterviewee: React.FC = () => {
           toast.error("Failed to update. Please try again.");
         }
       } catch (error: any) {
-         console.error("Error updating interviewee status", error);
+        console.error("Error updating interviewee status", error);
 
-         // Display error toast
-         throw new Error(
-           "An error occurred while updating the interviewee status."
-         );
+        // Display error toast
+        throw new Error(
+          "An error occurred while updating the interviewee status."
+        );
       }
     };
 
@@ -73,11 +74,11 @@ export const AdminInterviewee: React.FC = () => {
 
   const handleConfirm = async () => {
     if (selectedInterviewee) {
-      console.log(selectedInterviewee.isBlocked,'-------------------------')
+      console.log(selectedInterviewee.isBlocked, "-------------------------");
       const response = await dispatch(
         updateProfileAction({
-          id: selectedInterviewee.id, 
-          isBlocked: !selectedInterviewee.isBlocked, 
+          id: selectedInterviewee.id,
+          isBlocked: !selectedInterviewee.isBlocked,
         })
       );
       console.log(
@@ -114,7 +115,7 @@ export const AdminInterviewee: React.FC = () => {
   };
 
   return (
-    <div className="max-w-full mx-auto py-20 px-20 bg-backgroundAccent">
+    <div className="max-w-full mx-auto py-20 px-20 bg-background">
       <Toaster richColors position="top-center" />
 
       {isModalOpen && selectedInterviewee && (
@@ -137,7 +138,7 @@ export const AdminInterviewee: React.FC = () => {
       </div>
 
       {/* Table */}
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg  bg-backgroundAccent">
         <Table>
           <TableHeader>
             <TableRow className="text-xl">
@@ -162,7 +163,11 @@ export const AdminInterviewee: React.FC = () => {
                   )}
                 </TableCell>
                 <TableCell>
-                  <DoneOutlineIcon color="success" />
+                  {interviewee.isBlocked ? (
+                    <CancelIcon color="error" />
+                  ) : (
+                    <DoneOutlineIcon color="success" />
+                  )}
                 </TableCell>
                 <TableCell className=" text-xl font-bold">
                   {interviewee.isBlocked ? (

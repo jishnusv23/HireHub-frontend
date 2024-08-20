@@ -1,3 +1,10 @@
+// import React from 'react'
+
+// export const InterviewerNabar = () => {
+//   return (
+//     <div>InterviewerNabar</div>
+//   )
+// }
 import React, { useState } from "react";
 import { ModeToggle } from "../ui/mode-toggle";
 import { IoMdPerson } from "react-icons/io";
@@ -11,7 +18,7 @@ import InputWithIcon from "../customs/InputWithIcon";
 import LocationSearchingTwoToneIcon from "@mui/icons-material/LocationSearchingTwoTone";
 import ConfirmModal from "../common/users/ConfirmModal";
 
-const AdminNavbar: React.FC<{ toggleSidebar: () => void }> = ({
+const InterviewerNabar: React.FC<{ toggleSidebar: () => void }> = ({
   toggleSidebar,
 }) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -58,7 +65,7 @@ const AdminNavbar: React.FC<{ toggleSidebar: () => void }> = ({
         <div className="flex items-center space-x-6">
           <div className="hidden md:flex items-center space-x-3">
             <IoMdPerson className="text-xl " />
-            <span>ADMIN</span>
+            <span>INTERVIEWER</span>
             <Button onClick={handleLogout}>Logout</Button>
           </div>
           <ModeToggle />
@@ -69,7 +76,6 @@ const AdminNavbar: React.FC<{ toggleSidebar: () => void }> = ({
         <ConfirmModal
           onConfirm={handleLogo}
           onCancel={handleCancel}
-          
           message="Are you sure you want to log out?"
         />
       )}
@@ -77,4 +83,4 @@ const AdminNavbar: React.FC<{ toggleSidebar: () => void }> = ({
   );
 };
 
-export default AdminNavbar;
+export default InterviewerNabar;
