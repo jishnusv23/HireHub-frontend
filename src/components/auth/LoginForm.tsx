@@ -55,7 +55,8 @@ export const LoginForm = () => {
     // console.log("🚀 ~ file: LoginForm.tsx:46 ~ onSubmit ~ response:", response);
     if (!response.payload || !response.payload.success) {
       setLoading(false);
-      // console.log(response?.payload?.message, "kokokoko");
+      console.log(response.payload, "jfskfjskfjsf");
+
       toast.error(response?.payload?.message);
     } else {
       // console.log(response.payload.data.email, "lololololo");

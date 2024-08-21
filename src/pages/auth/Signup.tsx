@@ -6,11 +6,12 @@ import Logo from "../../assets/logos/HireHub-r.png";
 
 import GoogleAuth from "../../components/common/GoogleAuth";
 import SignupImg from "../../assets/auth/Signup.jpg";
+// import IMG from "@/assets/home/images.jpeg";
 import Footer from "@/components/common/Footer";
 import SignupForm from "@/components/auth/SignupForm";
 import { useNavigate } from "react-router-dom";
 const Signup = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   return (
     <div>
       <Header />
@@ -29,8 +30,8 @@ const Signup = () => {
               </h1>
             </div>
             <div className="text-2xl font-bold py-3">Sign Up</div>
-            
-            <SignupForm/>
+
+            <SignupForm />
             <div className="flex items-center gap-3 mt-10">
               <div className="h-[2px] w-full bg-backgroundAccent rounded-full"></div>
 
@@ -40,7 +41,12 @@ const Signup = () => {
             <GoogleAuth />
             <p className="py-5">
               Alredy have an Account?
-              <span className="text-primary hover:text-blue-400" onClick={()=>navigate('/login')}>Login</span>
+              <span
+                className="text-primary hover:text-blue-400"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </span>
             </p>
           </div>
         </div>
@@ -52,7 +58,7 @@ const Signup = () => {
           />
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

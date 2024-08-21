@@ -116,6 +116,8 @@ import { PendingRouter } from "./routes/PendingRoute";
 import { logoutAction } from "./redux/store/actions/auth/logoutAction";
 import ForgotPasswrod from "./pages/auth/ForgotPasswrod";
 import { ForgotPassLogin } from "./pages/auth/ForgotPassLogin";
+import { InterViewerRoutes } from "./routes/InterViewerRoutes";
+import { InterVieweScheduleForm } from "./components/User/InterVieweScheduleForm";
 
 const App = () => {
   const { data, loading } = useAppSelector((state: RooteState) => state.user);
@@ -141,12 +143,13 @@ const App = () => {
               roles={{
                 admin: "/admin",
                 pending: "/user",
-                intervewer: "/interviewer",
+                interviewer: "/interviewer",
                 interviewee: "/interviewee",
               }}
             />
           }
         />
+
         {/* AdminProtect */}
         <Route
           path="/admin/*"
@@ -154,6 +157,16 @@ const App = () => {
             <ProtectedRoute
               allowedRoles={["admin"]}
               element={<AdminRoutes />}
+            />
+          }
+        />
+        {/* Interviewer */}
+        <Route
+          path="/interviewer/*"
+          element={
+            <ProtectedRoute
+              allowedRoles={["interviewer"]}
+              element={<InterViewerRoutes />}
             />
           }
         />
@@ -195,6 +208,15 @@ const App = () => {
           path="/verification"
           element={
             <PublicRoute element={<ForgotPassLogin />} allowedRoles={[]} />
+          }
+        />
+        <Route
+          path="/UserInterviewSchedule"
+          element={
+            <PublicRoute
+              element={<InterVieweScheduleForm />}
+              allowedRoles={["pending"]}
+            />
           }
         />
       </Routes>

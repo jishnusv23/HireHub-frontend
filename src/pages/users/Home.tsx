@@ -7,8 +7,13 @@ import { Featuressection } from "@/components/common/users/Featuressection";
 import Footer from "@/components/common/Footer";
 import WavyText from "@/components/ui/wavyText";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 export const Home = () => {
   const [loading, setLoading] = useState(true);
+  const navigate=useNavigate()
+  const handleInterview=()=>{
+    navigate('/UserInterviewSchedule')
+  }
   return (
     <>
       <Header />
@@ -49,7 +54,7 @@ export const Home = () => {
         </div>
         <Homesection />
         <div className="flex justify-center pt-6 ">
-          <Button className="w-48 h-14 rounded-full">Join a Meeting</Button>
+          <Button className="w-48 h-14 rounded-full" onClick={handleInterview}>Join a Meeting</Button>
         </div>
         <Contentsection />
         <Featuressection />

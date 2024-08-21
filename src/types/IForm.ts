@@ -1,8 +1,8 @@
-enum Role{
-  pending='pending',
-  interviewer='interviewer',
-  interviewee='interviewee',
-  admin='admin'
+enum Role {
+  pending = "pending",
+  interviewer = "interviewer",
+  interviewee = "interviewee",
+  admin = "admin",
 }
 interface Profile{
   avatar:string

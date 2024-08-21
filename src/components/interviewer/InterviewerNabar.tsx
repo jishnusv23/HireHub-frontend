@@ -53,7 +53,9 @@ const InterviewerNabar: React.FC<{ toggleSidebar: () => void }> = ({
           >
             <FaBars />
           </button>
-          <span className="font-bold text-2xl text-primary">Admin Panel</span>
+          <span className="font-bold text-2xl text-primary">
+            Interviewer Panel
+          </span>
         </div>
         <div className="hidden lg:block">
           <InputWithIcon

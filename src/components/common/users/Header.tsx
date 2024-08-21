@@ -73,7 +73,7 @@ const Header = () => {
               Login
             </div>
           )}
-          {data?.isVerified ? (
+          {data? (
             <Button onClick={handleLogout}>
               <div>Logout</div>
             </Button>

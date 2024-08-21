@@ -33,23 +33,23 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(signupAction.pending, (state: UserState) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        signupAction.fulfilled,
-        (state: UserState, action: PayloadAction<SignupFormData>) => {
-          state.loading = false;
-          state.data = action.payload;
-          state.error = null;
-        }
-      )
-      .addCase(signupAction.rejected, (state: UserState, action) => {
-        (state.loading = false),
-          (state.error = action.error.message || "Signup Failed");
-        state.data = null;
-      })
+      // .addCase(signupAction.pending, (state: UserState) => {
+      //   state.loading = true;
+      //   state.error = null;
+      // })
+      // .addCase(
+      //   signupAction.fulfilled,
+      //   (state: UserState, action: PayloadAction<SignupFormData>) => {
+      //     state.loading = false;
+      //     state.data = action.payload;
+      //     state.error = null;
+      //   }
+      // )
+      // .addCase(signupAction.rejected, (state: UserState, action) => {
+      //   (state.loading = false),
+      //     (state.error = action.error.message || "Signup Failed");
+      //   state.data = null;
+      // })
 
       //*get user data
       .addCase(getUserData.pending, (state: UserState) => {

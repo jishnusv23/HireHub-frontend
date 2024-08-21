@@ -37,11 +37,11 @@ export const InterviewerSideBar = ({ open }: { open: boolean }) => {
   const location = useLocation();
 
   const adminMenuItems = [
-    { name: "Dashboard", icon: <FaTachometerAlt />, path: "/admin/dashboard" },
-    { name: "Interviewee", icon: <FaUsers />, path: "/admin/interviewee" },
-    { name: "Analytics", icon: <AutoStoriesIcon />, path: "/admin/analytics" },
-    { name: "Reports", icon: <FaFileAlt />, path: "/admin/reports" },
-    { name: "Settings", icon: <FaCog />, path: "/admin/settings" },
+    { name: "Dashboard", icon: <FaTachometerAlt />, path: "/interviewer/dashboard" },
+    { name: "My Interviews", icon: <FaUsers />, path: "/interviewer/interviewee" },
+    { name: "Analytics", icon: <AutoStoriesIcon />, path: "/interviewer/analytics" },
+    { name: "Question Bank", icon: <FaFileAlt />, path: "/interviewer/reports" },
+    { name: "profile", icon: <FaCog />, path: "/interviewer/profile" },
   ];
 
   return (

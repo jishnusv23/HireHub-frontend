@@ -73,11 +73,14 @@ export const OtpField = () => {
         const response = await dispatch(
           OtpverficationAction({ otp: mergeOtp, email: location.state.email })
         );
+        console.log("🚀 ~ file: OtpField.tsx:103 ~ handleTheOtp ~ response:", response)
         if (response.payload.success && !response.payload.error) {
           // console.log(response.payload.data);
 
           dispatch(storeUserData(response.payload.data));
           navigate("/");
+        }else{
+          toast.error(response.payload.message)
         }
       } catch (error) {
         console.error("Error during OTP verification:", error);

@@ -29,9 +29,9 @@ export const AdminSideBar = ({ open }: { open: boolean }) => {
   const adminMenuItems = [
     { name: "Dashboard", icon: <FaTachometerAlt />, path: "/admin/dashboard" },
     { name: "Interviewee", icon: <FaUsers />, path: "/admin/interviewee" },
-    { name: "Analytics", icon: <AutoStoriesIcon />, path: "/admin/analytics" },
-    { name: "Reports", icon: <FaFileAlt />, path: "/admin/reports" },
-    { name: "Settings", icon: <FaCog />, path: "/admin/settings" },
+    { name: "Analytics", icon: <AutoStoriesIcon />, path: "/admin/dashboard" },
+    { name: "Reports", icon: <FaFileAlt />, path: "/admin/dashboard" },
+    { name: "Settings", icon: <FaCog />, path: "/admin/dashboard" },
   ];
 
   return (

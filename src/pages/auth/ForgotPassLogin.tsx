@@ -2,7 +2,7 @@ import Header from "@/components/common/users/Header";
 import React from "react";
 import { motion } from "framer-motion";
 import { ForgotLoginField } from "@/components/common/auth/ForgotLoginField";
-import IMg from "@/assets/home/working-lapto-cartoon-1.png";
+import IMg from "@/assets/home/header.png";
 
 export const ForgotPassLogin = () => {
   return (

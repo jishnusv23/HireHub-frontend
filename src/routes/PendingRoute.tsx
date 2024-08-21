@@ -1,9 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Home } from "@/pages/users/Home";
-// import { PendingHome } from "../pages/pending/PendingHome";
-// import { PendingDetails } from "../pages/pending/PendingDetails";
-// import { PendingHelp } from "../pages/pending/PendingHelp";
+
 import { useAppSelector } from "../hooks/hooks";
 
  export const PendingRouter = () => {

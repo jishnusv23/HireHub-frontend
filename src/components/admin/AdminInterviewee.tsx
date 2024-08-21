@@ -20,6 +20,7 @@ import { Interviewee } from "@/types/IInterview";
 import ConfirmModal from "../common/users/ConfirmModal";
 import { updateProfileAction } from "@/redux/store/actions/user/updateProfileAction";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
 export const AdminInterviewee: React.FC = () => {
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -147,6 +148,7 @@ export const AdminInterviewee: React.FC = () => {
               <TableHead>Joined</TableHead>
               <TableHead>Verified</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>view</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -171,7 +173,7 @@ export const AdminInterviewee: React.FC = () => {
                 </TableCell>
                 <TableCell className=" text-xl font-bold">
                   {interviewee.isBlocked ? (
-                    <button
+                    <Button
                       className="btn  btn-outline rounded-2xl bg-primary"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -179,18 +181,21 @@ export const AdminInterviewee: React.FC = () => {
                       }}
                     >
                       Unblock
-                    </button>
+                    </Button>
                   ) : (
-                    <button
-                      className="btn text-xl w-24 btn-outline rounded-2xl bg-primary"
+                    <Button
+                      className="btn text-sm w-20 btn-outline rounded-2xl bg-primary"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleBlock(interviewee._id, interviewee.isBlocked);
                       }}
                     >
                       Block
-                    </button>
+                    </Button>
                   )}
+                </TableCell>
+                <TableCell>
+                  <Button>View</Button>
                 </TableCell>
               </TableRow>
             ))}

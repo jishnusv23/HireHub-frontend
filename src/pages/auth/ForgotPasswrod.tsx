@@ -2,16 +2,13 @@ import { ForgotField } from "@/components/common/auth/ForgotField";
 import Header from "@/components/common/users/Header";
 import React from "react";
 import { motion } from "framer-motion";
-import IMg from "@/assets/home/DSC_0918.jpg";
-
+import IMg from "@/assets/home/forget-pin2.png";
 
 const ForgotPassword = () => {
- 
-
   return (
     <>
       <Header />
-      <div className="min-h-screen h-screen flex flex-col lg:flex-row">
+      <div className="min-h-screen h-screen bg-backgroundAccent  flex flex-col lg:flex-row">
         <motion.div
           className="w-full lg:w-1/2 flex items-center justify-center p-0"
           initial={{ opacity: 0, x: -100 }}
@@ -21,7 +18,7 @@ const ForgotPassword = () => {
           <img
             src={IMg}
             alt="Forgot Password"
-            className="w-full h-full object-cover"
+            className="w-full h-max object-cover"
           />
         </motion.div>
 
