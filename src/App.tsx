@@ -117,7 +117,8 @@ import { logoutAction } from "./redux/store/actions/auth/logoutAction";
 import ForgotPasswrod from "./pages/auth/ForgotPasswrod";
 import { ForgotPassLogin } from "./pages/auth/ForgotPassLogin";
 import { InterViewerRoutes } from "./routes/InterViewerRoutes";
-import { InterVieweScheduleForm } from "./components/User/InterVieweScheduleForm";
+
+
 
 const App = () => {
   const { data, loading } = useAppSelector((state: RooteState) => state.user);
@@ -210,15 +211,7 @@ const App = () => {
             <PublicRoute element={<ForgotPassLogin />} allowedRoles={[]} />
           }
         />
-        <Route
-          path="/UserInterviewSchedule"
-          element={
-            <PublicRoute
-              element={<InterVieweScheduleForm />}
-              allowedRoles={["pending"]}
-            />
-          }
-        />
+       
       </Routes>
     </Router>
   );

@@ -8,10 +8,10 @@ export const updateProfileImgAction = createAsyncThunk(
   "user/updateProfileImg",
   async (data: { url: string; email: string }, { rejectWithValue }) => {
     console.log("🚀 ~ file: updateProfileImgAction.tsx:10 ~ data:", data)
-    // Corrected `emial` to `email`
+    
     try {
       const response = await CLIENT_API.post(
-        `${userService}updateImge`, // Make sure the endpoint URL is correct
+        `${userService}updateImge`,
         data,
         config
       );

@@ -1,13 +1,17 @@
 import IMg from "@/assets/home/cartoon-little-boy.jpg";
 import { RooteState } from "@/redux/store";
-import { useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/lib/cloudinary/ImageUpload";
 import { updateProfileAction } from "@/redux/store/actions/user/updateProfileAction";
+import { updateProfileImgAction } from "@/redux/store/actions/user/updateProfileImgAction";
+import { toast } from "sonner";
+import { storeUserData } from "@/redux/store/slices/users";
 
 export const ProfileImg = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
+  const dispatch=useAppDispatch()
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isEditing, setEditing] = useState(false);
@@ -29,8 +33,14 @@ export const ProfileImg = () => {
       );
       if (IMGUrl) {
         setLoading(false);
-        const response=await updateProfileAction({email:data?.email,url:IMGUrl})
+        const response=await dispatch(updateProfileImgAction({email:data?.email as string ,url:IMGUrl}))
         console.log("🚀 ~ file: ProfileImg.tsx:33 ~ ProfileImg ~ response:", response)
+        if(updateProfileImgAction.fulfilled.match(response)){
+          dispatch(storeUserData(response.payload.data))
+          toast.success(response.payload.message)
+        }else{
+          toast.error('Profile Imge updation failed')
+        }
       }
     }
   };
