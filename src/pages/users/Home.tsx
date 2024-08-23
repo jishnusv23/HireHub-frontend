@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { InterviewModal } from "@/components/User/InterviewModal";
 
-import { InterVieUserForm } from "@/components/User/InterVieUserForm";
+import { InterviewScheduleForm } from "@/components/User/InterVieweScheduleForm";
 export const Home = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,9 +30,7 @@ export const Home = () => {
       <main className="flex min-h-screen flex-col pt-20 md:pt-30 px-5 lg:px-40">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-16">
           <div className="gap-2">
-            {/* <h4 className="text-4xl md:text-6xl font-bold">
-              Land Your Dream Job
-            </h4> */}
+            
             <WavyText
               text="Land Your Dream"
               replay={loading}
@@ -70,13 +68,14 @@ export const Home = () => {
         <InterviewModal
           isOpen={isModalOpen}
           onClose={closeModal}
-          title=" Join a Meeting"
+          title="Create a Meeting"
         >
-          <InterVieUserForm />
+         
+          <InterviewScheduleForm />
         </InterviewModal>
         <Contentsection />
         <Featuressection />
-        {/* <br></br> */}
+      
       </main>
       <Footer />
     </>

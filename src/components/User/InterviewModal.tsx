@@ -47,24 +47,20 @@ export const InterviewModal: React.FC<InterviewModalProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <DialogPanel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <DialogPanel className="w-full max-w-6xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <DialogTitle
                   as="h3"
-                  className="text-xl font-bold leading-6 text-gray-900"
+                  className="text-2xl font-bold leading-6 text-center text-gray-900"
                 >
                   {title}
                 </DialogTitle>
 
-               
-                <div className="pt-3 w-full max-w-2xl mx-auto">
-                 
+                <div className="mt-4 w-full max-w-6xl p-4 rounded-md">
                   {children}
                 </div>
 
-                <div className="mt-4">
-                  <Button className="w-max" onClick={onClose}>
-                    Close
-                  </Button>
+                <div className="mt-6 flex justify-end">
+                  <Button onClick={onClose}>Close</Button>
                 </div>
               </DialogPanel>
             </TransitionChild>

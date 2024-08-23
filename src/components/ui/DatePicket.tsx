@@ -18,9 +18,10 @@ export default function BasicDatePicker({
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={["DatePicker"]}>
         <DatePicker
-          label="Basic date picker"
+          label=" date picker"
           value={value}
-          onChange={onChange} 
+          onChange={onChange}
+          className="w-full h-14 "
         />
       </DemoContainer>
     </LocalizationProvider>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import FormInputCustom from "../ui/FormInputCustoms";
 import BasicDatePicker from "../ui/DatePicket";
+import MultipleSelect from "../ui/MultipleSelect";
 
 const meetingSchema = z.object({
   title: z
@@ -19,8 +20,12 @@ const meetingSchema = z.object({
     .max(1000, {
       message: "Description should be less than 1000 characters.",
     }),
-  type: z.enum(["offline", "online"], { message: "Invalid meeting type." }),
-  location: z.string().optional(),
+  interviewTypes: z
+    .string()
+    .nonempty({ message: "Interview type is required." }),
+  JobPosition: z
+    .string()
+    .nonempty({ message: "JobPosition type is required." }),
   date: z.string().nonempty({ message: "Date is required." }),
   startTime: z.string().nonempty({ message: "Start time is required." }),
   endTime: z.string().nonempty({ message: "Ending time is required." }),
@@ -30,14 +35,23 @@ const meetingSchema = z.object({
     .nonempty({ message: "At least one participant is required." }),
 });
 
+const interviewTypes = [
+  "Technical",
+  "Behavioral",
+  "HR",
+  "Coding Challenge",
+  "Panel",
+  "Case Study",
+];
+
 export const InterviewScheduleForm = () => {
   const form = useForm<z.infer<typeof meetingSchema>>({
     resolver: zodResolver(meetingSchema),
     defaultValues: {
       title: "",
       description: "",
-      type: "online",
-      location: "",
+      interviewTypes: "",
+      JobPosition: "",
       date: "",
       startTime: "",
       endTime: "",
@@ -54,10 +68,10 @@ export const InterviewScheduleForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="grid grid-cols-8 gap-4 "
+          className="grid grid-cols-8 gap-6"
         >
-          {/* Column 1: Meeting Title, Type, Location */}
-          <div className="space-y-4 col-span-2">
+          {/* Column 1: Meeting Title, Interview Type, Job Position */}
+          <div className="space-y-6 col-span-2">
             <FormField
               control={form.control}
               name="title"
@@ -67,38 +81,41 @@ export const InterviewScheduleForm = () => {
                   field={field}
                   showTitle={true}
                   title="Meeting Title"
+                  className="w-full h-12"
                 />
               )}
             />
             <FormField
               control={form.control}
-              name="type"
+              name="JobPosition"
               render={({ field }) => (
                 <FormInputCustom
-                  placeholder="Enter type"
+                  placeholder="Soft Engin, Project Man, or Data Analyst"
                   field={field}
                   showTitle={true}
-                  title="Type"
-                  readOnly={true}
+                  title="Job Position"
+                  className="w-full h-12"
                 />
               )}
             />
             <FormField
               control={form.control}
-              name="location"
+              name="startTime"
               render={({ field }) => (
                 <FormInputCustom
-                  placeholder="Enter location"
                   field={field}
                   showTitle={true}
-                  title="Location"
+                  title="Start Time"
+                  type="time"
+                  placeholder="Select start time"
+                  className="w-full h-12"
                 />
               )}
             />
           </div>
 
           {/* Column 2: Date, Start Time, End Time */}
-          <div className="space-y-4 col-span-3 pt-6">
+          <div className="space-y-6 col-span-3 pt-8">
             <FormField
               control={form.control}
               name="date"
@@ -113,14 +130,38 @@ export const InterviewScheduleForm = () => {
             />
             <FormField
               control={form.control}
-              name="startTime"
+              name="interviewTypes"
+              render={({ field }) => (
+                <MultipleSelect field={field}  options={interviewTypes} />
+              )}
+            />
+          </div>
+
+          {/* Column 3: Participants, Description */}
+          <div className="space-y-6 col-span-3">
+            <FormField
+              control={form.control}
+              name="participants"
               render={({ field }) => (
                 <FormInputCustom
+                  placeholder="Enter participant email"
                   field={field}
                   showTitle={true}
-                  title="Start Time"
-                  type="time"
-                  placeholder="Select start time"
+                  title="Participants"
+                  className="w-full h-12"
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormInputCustom
+                  placeholder="Enter description"
+                  field={field}
+                  showTitle={true}
+                  title="Description"
+                  className="w-full h-14"
                 />
               )}
             />
@@ -134,34 +175,7 @@ export const InterviewScheduleForm = () => {
                   title="End Time"
                   type="time"
                   placeholder="Select end time"
-                />
-              )}
-            />
-          </div>
-
-          {/* Column 3: Participants, Description */}
-          <div className="space-y-4 col-span-3">
-            <FormField
-              control={form.control}
-              name="participants"
-              render={({ field }) => (
-                <FormInputCustom
-                  placeholder="Enter participant email"
-                  field={field}
-                  showTitle={true}
-                  title="Participants"
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormInputCustom
-                  placeholder="Enter description"
-                  field={field}
-                  showTitle={true}
-                  title="Description"
+                  className="w-full h-12"
                 />
               )}
             />
@@ -171,7 +185,7 @@ export const InterviewScheduleForm = () => {
           <div className="col-span-8 flex justify-end">
             <Button
               type="submit"
-              className="bg-primary text-white font-bold py-2"
+              className="bg-primary text-white font-bold py-2 px-4"
             >
               Create Link
             </Button>

@@ -15,6 +15,7 @@ interface InputProps {
   type?: string;
   readOnly?: boolean;
   showTitle: boolean;
+  className?: string;
 }
 
 const FormInputCustom: React.FC<InputProps> = ({
@@ -24,6 +25,7 @@ const FormInputCustom: React.FC<InputProps> = ({
   type,
   readOnly = false,
   showTitle,
+  className = "",
 }) => {
   const [showPassword, setShowPassword] = useState(type === "password");
 
@@ -39,7 +41,8 @@ const FormInputCustom: React.FC<InputProps> = ({
             }
             {...field}
             readOnly={readOnly}
-            className="bg-backgroundAccent"
+            className={`bg-backgroundAccent ${className}`}
+            
           />
           {type === "password" && (
             <div

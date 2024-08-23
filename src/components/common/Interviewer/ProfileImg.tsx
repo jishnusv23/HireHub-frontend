@@ -3,7 +3,7 @@ import { RooteState } from "@/redux/store";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ImageUpload } from "@/components/lib/cloudinary/ImageUpload";
+import { ImageUpload } from "@/utils/cloudinary/ImageUpload";
 import { updateProfileAction } from "@/redux/store/actions/user/updateProfileAction";
 import { updateProfileImgAction } from "@/redux/store/actions/user/updateProfileImgAction";
 import { toast } from "sonner";
