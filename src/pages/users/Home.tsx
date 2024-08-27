@@ -69,9 +69,10 @@ export const Home = () => {
           isOpen={isModalOpen}
           onClose={closeModal}
           title="Create a Meeting"
+          
         >
          
-          <InterviewScheduleForm />
+          <InterviewScheduleForm  />
         </InterviewModal>
         <Contentsection />
         <Featuressection />

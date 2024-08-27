@@ -120,6 +120,7 @@ import { InterViewerRoutes } from "./routes/InterViewerRoutes";
 
 
 
+
 const App = () => {
   const { data, loading } = useAppSelector((state: RooteState) => state.user);
   // console.log("🚀 ~ file: App.tsx:116 ~ App ~ data:", data);
@@ -211,6 +212,7 @@ const App = () => {
             <PublicRoute element={<ForgotPassLogin />} allowedRoles={[]} />
           }
         />
+       
        
       </Routes>
     </Router>

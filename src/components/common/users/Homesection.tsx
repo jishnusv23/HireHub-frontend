@@ -4,8 +4,8 @@ import Webcall from "@/assets/logos/web-conferencing-logo.png";
 import Mentor from "@/assets/logos/consulting-computer-icons.png";
 import Salary from "@/assets/logos/salary-transparency-logo.jpg";
 import Resume from "@/assets/logos/resume-blue-icons.png";
-import { FaFileCode } from "react-icons/fa";
-import { FaUserCog, FaRegSmile } from "react-icons/fa";
+// import { FaFileCode } from "react-icons/fa";
+import { FaUserCog, FaRegSmile, FaHeadSideVirus } from "react-icons/fa";
 import { SiFuturelearn } from "react-icons/si";
 import { GiMaterialsScience } from "react-icons/gi";
 import { FcManager } from "react-icons/fc";
@@ -51,7 +51,7 @@ export const Homesection = () => {
             <span className="text-sm">System Design</span>
           </div>
           <div className="flex flex-col items-center space-y-2">
-            <FcManager className="text-4xl" />
+            <FaHeadSideVirus className="text-4xl" />
             <span className="text-sm">Software Dev Manager</span>
           </div>
           <div className="flex flex-col items-center space-y-2">

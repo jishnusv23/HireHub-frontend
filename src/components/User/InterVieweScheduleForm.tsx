@@ -8,6 +8,11 @@ import { Form, FormField } from "@/components/ui/form";
 import FormInputCustom from "../ui/FormInputCustoms";
 import BasicDatePicker from "../ui/DatePicket";
 import MultipleSelect from "../ui/MultipleSelect";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { scheduleIntervieweActionAction } from "@/redux/store/actions/user/scheduleIntervieweAction";
+import InputTagComp from "../ui/InputTagComp";
+import MultipleSelectChip from "../ui/MultipleSelectChip";
+import { RooteState } from "@/redux/store";
 
 const meetingSchema = z.object({
   title: z
@@ -20,19 +25,21 @@ const meetingSchema = z.object({
     .max(1000, {
       message: "Description should be less than 1000 characters.",
     }),
-  interviewTypes: z
+  interviewType: z
     .string()
     .nonempty({ message: "Interview type is required." }),
-  JobPosition: z
+  jobPosition: z
     .string()
     .nonempty({ message: "JobPosition type is required." }),
-  date: z.string().nonempty({ message: "Date is required." }),
+  date: z.string().refine((val) => dayjs(val).isAfter(dayjs()), {
+    message: "Date must be today or later.",
+  }),
   startTime: z.string().nonempty({ message: "Start time is required." }),
-  endTime: z.string().nonempty({ message: "Ending time is required." }),
+  // endTime: z.string().nonempty({ message: "Ending time is required." }),
   participants: z
-    .string()
-    .email({ message: "Please enter a valid email address." })
-    .nonempty({ message: "At least one participant is required." }),
+    .array(z.string().email({ message: "Invalid email address." }))
+    .min(1, { message: "At least one participant is required." })
+    .max(4, { message: "Maximum 4 participants allowed." }),
 });
 
 const interviewTypes = [
@@ -45,22 +52,34 @@ const interviewTypes = [
 ];
 
 export const InterviewScheduleForm = () => {
+  const {data}=useAppSelector((state:RooteState)=>state.user)
+  const dispatch = useAppDispatch();
+
   const form = useForm<z.infer<typeof meetingSchema>>({
     resolver: zodResolver(meetingSchema),
     defaultValues: {
       title: "",
       description: "",
-      interviewTypes: "",
-      JobPosition: "",
+      interviewType: "",
+      jobPosition: "",
       date: "",
       startTime: "",
-      endTime: "",
-      participants: "",
+      // endTime: "",
+      participants: [],
     },
   });
 
   const onSubmit = async (values: z.infer<typeof meetingSchema>) => {
-    console.log(values);
+     const interviewData = {
+       ...values,
+       interviewerId: data?._id, 
+     };
+    console.log("🚀 ~ file: InterVieweScheduleForm.tsx:73 ~ onSubmit ~ values:", values,data?._id)
+    const response = await dispatch(scheduleIntervieweActionAction(interviewData));
+    console.log(
+      "🚀 ~ file: InterVieweScheduleForm.tsx:68 ~ onSubmit ~ response:",
+      response
+    );
   };
 
   return (
@@ -85,12 +104,13 @@ export const InterviewScheduleForm = () => {
                 />
               )}
             />
+            {/* <input type="text" name="InterviewerId" value={data?._id} className="hidden" /> */}
             <FormField
               control={form.control}
-              name="JobPosition"
+              name="jobPosition"
               render={({ field }) => (
                 <FormInputCustom
-                  placeholder="Soft Engin, Project Man, or Data Analyst"
+                  placeholder="Soft Engin, Project Man, or Data Analy"
                   field={field}
                   showTitle={true}
                   title="Job Position"
@@ -125,33 +145,25 @@ export const InterviewScheduleForm = () => {
                   onChange={(date) =>
                     field.onChange(date ? date.format("YYYY-MM-DD") : "")
                   }
+                  minDate={dayjs()}
                 />
               )}
             />
+
             <FormField
               control={form.control}
-              name="interviewTypes"
+              name="participants"
               render={({ field }) => (
-                <MultipleSelect field={field}  options={interviewTypes} />
+                <InputTagComp
+                  value={field.value}
+                  onChange={(email) => field.onChange(email)}
+                />
               )}
             />
           </div>
 
           {/* Column 3: Participants, Description */}
           <div className="space-y-6 col-span-3">
-            <FormField
-              control={form.control}
-              name="participants"
-              render={({ field }) => (
-                <FormInputCustom
-                  placeholder="Enter participant email"
-                  field={field}
-                  showTitle={true}
-                  title="Participants"
-                  className="w-full h-12"
-                />
-              )}
-            />
             <FormField
               control={form.control}
               name="description"
@@ -167,6 +179,15 @@ export const InterviewScheduleForm = () => {
             />
             <FormField
               control={form.control}
+              name="interviewType"
+              render={({ field }) => (
+                <MultipleSelect field={field} options={interviewTypes} />
+              )}
+            />
+            {/* <br></br>
+            <br></br> */}
+            {/* <FormField
+              control={form.control}
               name="endTime"
               render={({ field }) => (
                 <FormInputCustom
@@ -175,10 +196,11 @@ export const InterviewScheduleForm = () => {
                   title="End Time"
                   type="time"
                   placeholder="Select end time"
-                  className="w-full h-12"
+                  className="w-full h-12 "
                 />
               )}
             />
+          // </div> */}
           </div>
 
           {/* Submit Button: Full Width */}

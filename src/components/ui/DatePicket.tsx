@@ -1,29 +1,34 @@
 import * as React from "react";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs"; // Import Dayjs types
+import dayjs, { Dayjs } from "dayjs";
+
 
 interface BasicDatePickerProps {
   value: Dayjs | null;
   onChange: (value: Dayjs | null) => void;
+  minDate?: Dayjs;
+  error?: string;
+  helperText?: string;
 }
 
-export default function BasicDatePicker({
+const BasicDatePicker: React.FC<BasicDatePickerProps> = ({
   value,
   onChange,
-}: BasicDatePickerProps) {
+  minDate,
+
+}) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={["DatePicker"]}>
-        <DatePicker
-          label=" date picker"
-          value={value}
-          onChange={onChange}
-          className="w-full h-14 "
-        />
-      </DemoContainer>
+      <DatePicker
+        value={value}
+        onChange={onChange}
+        minDate={minDate}
+       
+      />
     </LocalizationProvider>
   );
-}
+};
+
+export default BasicDatePicker;

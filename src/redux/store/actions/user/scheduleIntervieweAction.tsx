@@ -8,7 +8,13 @@ export const scheduleIntervieweActionAction=createAsyncThunk(
     async(data:any,{rejectWithValue})=>{
         try{
             console.log(data,'scheduling data')
-            const responose=await CLIENT_API.post(`${interviewService}secheduleInterview`,data,config)
+            console.log(`${interviewService}scheduleInterview`);
+
+            const responose = await CLIENT_API.post(
+              `${interviewService}scheduleInterview`,
+              data,
+              config
+            );
             
             console.log("🚀 ~ file: scheduleIntervieweAction.tsx:13 ~ async ~ responose:", responose)
         }catch(error:any){
