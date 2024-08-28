@@ -41,7 +41,7 @@ export const SuccessPage: React.FC<SuccessPageProps> = ({ response }) => {
             className="bg-white text-black border border-gray-300 shadow-md hover:shadow-lg transition duration-200 w-full sm:w-auto mb-2 sm:mb-0"
             onClick={handlechanges}
           >
-            Back To Login
+            Back To Meet
           </Button>
           <Button
             className="bg-primary text-white shadow-md hover:shadow-lg transition duration-200 w-full sm:w-auto"

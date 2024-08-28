@@ -11,7 +11,10 @@ import { useNavigate } from "react-router-dom";
 import { InterviewModal } from "@/components/User/InterviewModal";
 
 import { InterviewScheduleForm } from "@/components/User/InterVieweScheduleForm";
+import { useAppDispatch } from "@/hooks/hooks";
+import { getUserData } from "@/redux/store/actions/auth";
 export const Home = () => {
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -20,8 +23,9 @@ export const Home = () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     setIsModalOpen(false);
+    await dispatch(getUserData())
   };
   return (
     <>
@@ -30,7 +34,6 @@ export const Home = () => {
       <main className="flex min-h-screen flex-col pt-20 md:pt-30 px-5 lg:px-40">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-16">
           <div className="gap-2">
-            
             <WavyText
               text="Land Your Dream"
               replay={loading}
@@ -69,14 +72,11 @@ export const Home = () => {
           isOpen={isModalOpen}
           onClose={closeModal}
           title="Create a Meeting"
-          
         >
-         
-          <InterviewScheduleForm  />
+          <InterviewScheduleForm />
         </InterviewModal>
         <Contentsection />
         <Featuressection />
-      
       </main>
       <Footer />
     </>

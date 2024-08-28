@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { InterviewModal } from "./InterviewModal";
 import { SuccessPage } from "../common/Interviewer/SuccessPage";
 import { getUserData } from "@/redux/store/actions/auth";
+import Loading from "../common/Loading/Loading";
 
 const meetingSchema = z.object({
   title: z
@@ -56,11 +57,9 @@ const interviewTypes = [
 
 export const InterviewScheduleForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [responsePayload, setResponsePayload] = useState<any>(null);
-  console.log(
-    "🚀 ~ file: InterVieweScheduleForm.tsx:59 ~ InterviewScheduleForm ~ responsePayload:",
-    responsePayload
-  );
+
   const { data } = useAppSelector((state: RooteState) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -77,8 +76,12 @@ export const InterviewScheduleForm = () => {
       participants: [],
     },
   });
-
+  const onClose=async()=>{
+    setIsModalOpen(false)
+    await dispatch(getUserData())
+  }
   const onSubmit = async (values: z.infer<typeof meetingSchema>) => {
+    setLoading(true);
     const interviewData = {
       ...values,
       interviewerId: data?._id,
@@ -89,16 +92,19 @@ export const InterviewScheduleForm = () => {
     );
 
     if (scheduleIntervieweActionAction.fulfilled.match(response)) {
+      setLoading(false);
       console.log(response.payload.data.data, "oooooo");
       setResponsePayload(response.payload.data.data);
       setIsModalOpen(true);
     } else {
+      setLoading(false);
       toast.error("Something went wrong");
     }
   };
 
   return (
     <>
+      {loading && <Loading />}
       <div className="w-full">
         <Form {...form}>
           <form
@@ -204,7 +210,7 @@ export const InterviewScheduleForm = () => {
                 type="submit"
                 className="bg-primary text-white font-bold py-2 px-4"
               >
-                Create Link
+                {loading ? "loading" : "Create Link"}
               </Button>
             </div>
           </form>
@@ -212,7 +218,7 @@ export const InterviewScheduleForm = () => {
       </div>
       <InterviewModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={onClose}
         title=" Your Interview Scheduled Successfully💡"
       >
         <SuccessPage response={responsePayload} />
