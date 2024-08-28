@@ -4,7 +4,6 @@ import { CLIENT_API } from "@/utils/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 
-
 export const updateProfileAction = createAsyncThunk(
   "user/update-status",
   async (data: any, { rejectWithValue }) => {
@@ -14,7 +13,10 @@ export const updateProfileAction = createAsyncThunk(
         data,
         config
       );
-      console.log("🚀 ~ file: updateProfileAction.tsx:17 ~ response:", response)
+      console.log(
+        "🚀 ~ file: updateProfileAction.tsx:17 ~ response:",
+        response
+      );
       if (response.data.success) {
         return response.data;
       }

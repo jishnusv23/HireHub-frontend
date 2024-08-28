@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 export const updateProfileImgAction = createAsyncThunk(
   "user/updateProfileImg",
   async (data: { url: string; email: string }, { rejectWithValue }) => {
-    console.log("🚀 ~ file: updateProfileImgAction.tsx:10 ~ data:", data)
+    // console.log("🚀 ~ file: updateProfileImgAction.tsx:10 ~ data:", data)
     
     try {
       const response = await CLIENT_API.post(

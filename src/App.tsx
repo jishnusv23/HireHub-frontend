@@ -117,9 +117,7 @@ import { logoutAction } from "./redux/store/actions/auth/logoutAction";
 import ForgotPasswrod from "./pages/auth/ForgotPasswrod";
 import { ForgotPassLogin } from "./pages/auth/ForgotPassLogin";
 import { InterViewerRoutes } from "./routes/InterViewerRoutes";
-
-
-
+// import { SuccessPage } from "./components/common/Interviewer/SuccessPage";
 
 const App = () => {
   const { data, loading } = useAppSelector((state: RooteState) => state.user);
@@ -212,8 +210,15 @@ const App = () => {
             <PublicRoute element={<ForgotPassLogin />} allowedRoles={[]} />
           }
         />
-       
-       
+        {/* <Route
+          path="/successpage"
+          element={
+            <PublicRoute
+              element={<SuccessPage />}
+              allowedRoles={["interviewer"]}
+            />
+          }
+        /> */}
       </Routes>
     </Router>
   );

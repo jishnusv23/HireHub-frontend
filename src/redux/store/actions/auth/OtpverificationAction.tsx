@@ -1,4 +1,4 @@
-import { config } from "@/common/configuration";
+  import { config } from "@/common/configuration";
 import { authservice } from "@/common/services/services";
 import { CLIENT_API } from "@/utils/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
