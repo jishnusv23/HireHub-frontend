@@ -47,6 +47,7 @@ export const InterviewerSideBar = ({ open }: { open: boolean }) => {
       icon: <FaUsers />,
       path: "/interviewer/MyInterviews",
     },
+
     {
       name: "Analytics",
       icon: <AutoStoriesIcon />,

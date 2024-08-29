@@ -11,7 +11,7 @@ export const ShortProfile = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
 
   return (
-    <div className="lg:ml-32 flex flex-col items-center text-center w-full p-4 rounded-lg shadow-md">
+    <div className="lg:ml-32 flex flex-col items-center text-center w-full p-4 rounded-2xl border  border-designColor">
       <h1 className="text-xl font-bold mb-4">Profile</h1>
 
       <div className="w-24 h-24 overflow-hidden rounded-full mb-4">

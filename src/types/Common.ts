@@ -13,6 +13,7 @@ export interface InterviewType {
   meetingLink: string;
   startTime: string;
   uniqueId: string;
+  interviewerEmail:string
   interviewType: string;
   participants: string[];
   createdAt: string;

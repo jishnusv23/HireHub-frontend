@@ -24,6 +24,9 @@ export default {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
+        borderColor: {
+          designColor: "var(--border-color)",
+        },
       },
     },
   },

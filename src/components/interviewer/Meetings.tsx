@@ -47,7 +47,6 @@ export const Meetings = () => {
     setCurrentPage(page);
   };
 
-  // Filter data based on status
   const ScheduledData = Array.isArray(interviewerMeetData)
     ? interviewerMeetData.filter((item) => item.interviewStatus === "Scheduled")
     : [];
@@ -56,45 +55,43 @@ export const Meetings = () => {
     ? interviewerMeetData.filter((item) => item.interviewStatus === "Completed")
     : [];
   const inProgressData = Array.isArray(interviewerMeetData)
-    ? interviewerMeetData.filter(
-        (item) => item.interviewStatus === "In Progress"
-      )
-    : [];
+  ? interviewerMeetData.filter((item) => item.interviewStatus === "Cancelled")
+  : [];
+  console.log("🚀 ~ file: Meetings.tsx:58 ~ Meetings ~ inProgressData:", inProgressData)
 
   return (
     <>
-      <div>
-        <Button className="w-30 flex justify-end">create meet</Button>
-      </div>
-      <div className="bg-background pt-20">
-        <div>
-          <Tabs defaultValue="Scheduled">
-            <TabsList>
-              <TabsTrigger value="Scheduled">Scheduled</TabsTrigger>
-              <TabsTrigger value="Completed">Completed</TabsTrigger>
-              <TabsTrigger value="in-progress">In Progress</TabsTrigger>
-            </TabsList>
+      <div className="bg-background">
+        <div className=" pt-20">
+          <div>
+            <Tabs defaultValue="Scheduled">
+              <TabsList>
+                <TabsTrigger value="Scheduled">Scheduled</TabsTrigger>
+                <TabsTrigger value="Completed">Completed</TabsTrigger>
+                <TabsTrigger value="Cancelled">Cancelled</TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="Scheduled">
-              <MeetingTable data={ScheduledData} />
-            </TabsContent>
+              <TabsContent value="Scheduled">
+                <MeetingTable data={ScheduledData} />
+              </TabsContent>
 
-            <TabsContent value="Completed">
-              <MeetingTable data={CompletedData} />
-            </TabsContent>
+              <TabsContent value="Completed">
+                <MeetingTable data={CompletedData} />
+              </TabsContent>
 
-            <TabsContent value="in-progress">
-              <MeetingTable data={inProgressData} />
-            </TabsContent>
-          </Tabs>
+              <TabsContent value="Cancelled">
+                <MeetingTable data={inProgressData} />
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
-      </div>
-      <div className="flex justify-center mt-6 ">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+        <div className="flex justify-center mt-6 bg-background  ">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
     </>
   );

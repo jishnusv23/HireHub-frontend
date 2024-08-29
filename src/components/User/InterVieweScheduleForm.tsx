@@ -85,6 +85,7 @@ export const InterviewScheduleForm = () => {
     const interviewData = {
       ...values,
       interviewerId: data?._id,
+      interviewerEmail:data?.email
     };
 
     const response = await dispatch(
