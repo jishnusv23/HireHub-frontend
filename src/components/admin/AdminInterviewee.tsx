@@ -43,7 +43,7 @@ export const AdminInterviewee: React.FC = () => {
             limit: intervieweePerPage,
             search: searchQuery,
           })
-        );
+        )
         if (getAllInterviewee.fulfilled.match(resultAction)) {
           const responseData = resultAction.payload.data;
           setInterviewees(responseData.data);

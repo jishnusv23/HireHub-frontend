@@ -1,63 +1,86 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MeetingTable } from "../common/Interviewer/MeetingTable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tab";
+import { Button } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import Pagination from "../common/Admin/Pagination";
+import { RooteState } from "@/redux/store";
+import { getAllMeetDetails } from "@/redux/store/actions/interviewer/getAllMeetingsDetails";
+import { InterviewType } from "@/types/Common";
 
 export const Meetings = () => {
-  const dummyData = [
-    {
-      name: "John Doe",
-      joined: "2024-08-15",
-      verified: true,
-      status: "Completed",
-      view: "View Details",
-    },
-    {
-      name: "Jane Smith",
-      joined: "2024-08-12",
-      verified: true,
-      status: "Pending",
-      view: "View Details",
-    },
-    {
-      name: "Emily Johnson",
-      joined: "2024-08-10",
-      verified: false,
-      status: "In Progress",
-      view: "View Details",
-    },
-    {
-      name: "Michael Brown",
-      joined: "2024-08-05",
-      verified: true,
-      status: "Completed",
-      view: "View Details",
-    },
-  ];
+  const { data } = useAppSelector((state: RooteState) => state.user);
+  const dispatch = useAppDispatch();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  // console.log("🚀 ~ file: Meetings.tsx:16 ~ Meetings ~ totalPages:", totalPages)
+  const [interviewerMeetData, setInterviewerMeetData] = useState<
+  InterviewType[]
+  >([]);
+  // console.log("🚀 ~ file: Meetings.tsx:16 ~ Meetings ~ interviewerMeetData:", interviewerMeetData)
+  const intervieweDetails = 5;
+
+  useEffect(() => {
+    const fetchAllMeetDetails = async () => {
+      try {
+        const response = await dispatch(
+          getAllMeetDetails({
+            page: currentPage,
+            limit: intervieweDetails,
+            search: "",
+            id: data?._id as string,
+          })
+        );
+        if (response.payload.success && Array.isArray(response.payload.data.data)) {
+          setInterviewerMeetData(response.payload.data.data);
+          setTotalPages(response.payload.data.totalPages);
+        } else {
+          setInterviewerMeetData([]); 
+        }
+      } catch (error: any) {
+        throw new Error(error?.message);
+      }
+    };
+    fetchAllMeetDetails();
+  }, [dispatch, currentPage]); 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   // Filter data based on status
-  const completedData = dummyData.filter((item) => item.status === "Completed");
-  const pendingData = dummyData.filter((item) => item.status === "Pending");
-  const inProgressData = dummyData.filter(
-    (item) => item.status === "In Progress"
-  );
+  const ScheduledData = Array.isArray(interviewerMeetData)
+    ? interviewerMeetData.filter((item) => item.interviewStatus === "Scheduled")
+    : [];
+  // console.log("🚀 ~ file: Meetings.tsx:52 ~ Meetings ~ ScheduledData:", ScheduledData)
+  const CompletedData = Array.isArray(interviewerMeetData)
+    ? interviewerMeetData.filter((item) => item.interviewStatus === "Completed")
+    : [];
+  const inProgressData = Array.isArray(interviewerMeetData)
+    ? interviewerMeetData.filter(
+        (item) => item.interviewStatus === "In Progress"
+      )
+    : [];
 
   return (
     <>
+      <div>
+        <Button className="w-30 flex justify-end">create meet</Button>
+      </div>
       <div className="bg-background pt-20">
         <div>
-          <Tabs defaultValue="completed">
+          <Tabs defaultValue="Scheduled">
             <TabsList>
-              <TabsTrigger value="completed" >Completed</TabsTrigger>
-              <TabsTrigger value="pending">Pending</TabsTrigger>
+              <TabsTrigger value="Scheduled">Scheduled</TabsTrigger>
+              <TabsTrigger value="Completed">Completed</TabsTrigger>
               <TabsTrigger value="in-progress">In Progress</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="completed">
-              <MeetingTable data={completedData} />
+            <TabsContent value="Scheduled">
+              <MeetingTable data={ScheduledData} />
             </TabsContent>
 
-            <TabsContent value="pending">
-              <MeetingTable data={pendingData} />
+            <TabsContent value="Completed">
+              <MeetingTable data={CompletedData} />
             </TabsContent>
 
             <TabsContent value="in-progress">
@@ -65,6 +88,13 @@ export const Meetings = () => {
             </TabsContent>
           </Tabs>
         </div>
+      </div>
+      <div className="flex justify-center mt-6 ">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </>
   );
