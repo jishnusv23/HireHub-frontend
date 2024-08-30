@@ -13,79 +13,52 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { scheduleIntervieweActionAction } from "@/redux/store/actions/user/scheduleIntervieweAction";
 import { RooteState } from "@/redux/store";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { InterviewModal } from "./InterviewModal";
 import { SuccessPage } from "../common/Interviewer/SuccessPage";
-import { getUserData } from "@/redux/store/actions/auth";
 import Loading from "../common/Loading/Loading";
+import { InterviewType, interviewTypes } from "@/types/Common";
+import { meetingSchema } from "@/utils/validation/interviewValidation";
 
-const meetingSchema = z.object({
-  title: z
-    .string()
-    .min(2, { message: "Title must be at least 2 characters long." })
-    .max(30, { message: "Title should be less than 30 characters." }),
-  description: z
-    .string()
-    .min(2, { message: "Description must be at least 2 characters long." })
-    .max(1000, {
-      message: "Description should be less than 1000 characters.",
-    }),
-  interviewType: z
-    .string()
-    .nonempty({ message: "Interview type is required." }),
-  jobPosition: z
-    .string()
-    .nonempty({ message: "JobPosition type is required." }),
-  date: z.string().refine((val) => dayjs(val).isAfter(dayjs()), {
-    message: "Date must be today or later.",
-  }),
-  startTime: z.string().nonempty({ message: "Start time is required." }),
-  participants: z
-    .array(z.string().email({ message: "Invalid email address." }))
-    .min(1, { message: "At least one participant is required." })
-    .max(4, { message: "Maximum 4 participants allowed." }),
-});
+interface MeetDataProps {
+  MeetData?: InterviewType | null;
+}
 
-const interviewTypes = [
-  "Technical",
-  "Behavioral",
-  "HR",
-  "Coding Challenge",
-  "Panel",
-  "Case Study",
-];
-
-export const InterviewScheduleForm = () => {
+export const InterviewScheduleForm: React.FC<MeetDataProps> = ({
+  MeetData,
+}) => {
+  const { data } = useAppSelector((state: RooteState) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [responsePayload, setResponsePayload] = useState<any>(null);
+  const location = useLocation();
 
-  const { data } = useAppSelector((state: RooteState) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof meetingSchema>>({
     resolver: zodResolver(meetingSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      interviewType: "",
-      jobPosition: "",
-      date: "",
-      startTime: "",
-      participants: [],
+      title: MeetData?.title || "",
+      description: MeetData?.description || "",
+      interviewType: MeetData?.interviewType || "",
+      jobPosition: MeetData?.jobPosition || "",
+      date: MeetData?.date || "",
+      startTime: MeetData?.startTime || "",
+      participants: MeetData?.participants || [],
     },
   });
-  const onClose=async()=>{
-    setIsModalOpen(false)
-    await dispatch(getUserData())
-  }
+
+  const onClose = async () => {
+    setIsModalOpen(false);
+  };
+
   const onSubmit = async (values: z.infer<typeof meetingSchema>) => {
     setLoading(true);
     const interviewData = {
       ...values,
       interviewerId: data?._id,
-      interviewerEmail:data?.email
+      interviewerEmail: data?.email,
     };
 
     const response = await dispatch(
@@ -94,7 +67,6 @@ export const InterviewScheduleForm = () => {
 
     if (scheduleIntervieweActionAction.fulfilled.match(response)) {
       setLoading(false);
-      console.log(response.payload.data.data, "oooooo");
       setResponsePayload(response.payload.data.data);
       setIsModalOpen(true);
     } else {
@@ -106,13 +78,13 @@ export const InterviewScheduleForm = () => {
   return (
     <>
       {loading && <Loading />}
-      <div className="w-full">
+      <div className="w-full md:pl-6 ">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-8 gap-6"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-8 md:pl-6"
           >
-            <div className="space-y-6 col-span-2">
+            <div className="space-y-6 col-span-1 lg:col-span-2 ">
               <FormField
                 control={form.control}
                 name="title"
@@ -122,7 +94,7 @@ export const InterviewScheduleForm = () => {
                     field={field}
                     showTitle={true}
                     title="Meeting Title"
-                    className="w-full h-12"
+                    className="w-full h-12 "
                   />
                 )}
               />
@@ -140,6 +112,7 @@ export const InterviewScheduleForm = () => {
                   />
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="startTime"
@@ -156,7 +129,7 @@ export const InterviewScheduleForm = () => {
               />
             </div>
 
-            <div className="space-y-6 col-span-3 pt-8">
+            <div className="space-y-6 col-span-1 md:col-span-2 lg:col-span-3 pt-8">
               <FormField
                 control={form.control}
                 name="date"
@@ -183,7 +156,7 @@ export const InterviewScheduleForm = () => {
               />
             </div>
 
-            <div className="space-y-6 col-span-3">
+            <div className="space-y-6 col-span-1 md:col-span-2 lg:col-span-3">
               <FormField
                 control={form.control}
                 name="description"
@@ -197,6 +170,7 @@ export const InterviewScheduleForm = () => {
                   />
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="interviewType"
@@ -206,12 +180,13 @@ export const InterviewScheduleForm = () => {
               />
             </div>
 
-            <div className="col-span-8 flex justify-end">
+            <div className="col-span-1 md:col-span-2 lg:col-span-8 flex justify-end">
               <Button
                 type="submit"
                 className="bg-primary text-white font-bold py-2 px-4"
+                disabled={loading}
               >
-                {loading ? "loading" : "Create Link"}
+                {MeetData ? "Update Meeting" : "Create Meeting"}
               </Button>
             </div>
           </form>

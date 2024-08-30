@@ -1,10 +1,3 @@
-// import React from 'react'
-
-// export const InterviewerNabar = () => {
-//   return (
-//     <div>InterviewerNabar</div>
-//   )
-// }
 import React, { useState } from "react";
 import { ModeToggle } from "../ui/mode-toggle";
 import { IoMdPerson } from "react-icons/io";
@@ -49,7 +42,7 @@ const InterviewerNabar: React.FC<{ toggleSidebar: () => void }> = ({
         <div className="flex items-center space-x-3">
           <button
             onClick={toggleSidebar}
-            className="text-primary text-xl focus:outline-none"
+            className="text-primary text-xl focus:outline-none hidden lg:block "
           >
             <FaBars />
           </button>

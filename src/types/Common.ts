@@ -19,3 +19,12 @@ export interface InterviewType {
   createdAt: string;
   updatedAt: string;
 }
+
+export const interviewTypes = [
+  "Technical",
+  "Behavioral",
+  "HR",
+  "Coding Challenge",
+  "Panel",
+  "Case Study",
+];

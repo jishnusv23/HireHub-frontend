@@ -1,7 +1,7 @@
 import { InterviewType } from "@/types/Common";
 import { Button } from "@mui/material";
 import WbIncandescentOutlinedIcon from "@mui/icons-material/WbIncandescentOutlined";
-import React from "react";
+import React, { useState } from "react";
 import RotateRightOutlinedIcon from "@mui/icons-material/RotateRightOutlined";
 import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
@@ -9,9 +9,22 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import { formatDate } from "@/components/lib/DateExtracting";
 import { convertTo12Hour } from "@/components/lib/TimeExtract";
 import { Link, useNavigate } from "react-router-dom";
+import { InterviewModal } from "@/components/User/InterviewModal";
+import { InterviewScheduleForm } from "@/components/User/InterVieweScheduleForm";
 
 export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
-  const navigate = useNavigate();
+  
+   const [isModalOpen, setIsModalOpen] = useState(false);
+   const navigate = useNavigate();
+
+   const handleInterview = () => {
+     setIsModalOpen(true);
+   };
+
+   const closeModal = async () => {
+     setIsModalOpen(false);
+     
+   };
   const handleView = (rowData:any) => {
     navigate("/interviewer/MyInterviews/singleDetails", {
       state: { data: rowData },
@@ -19,8 +32,10 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
   };
   return (
     <>
-      <div className="flex justify-end mb-4">
-        <Button className="flex justify-end">Create</Button>
+      <div className="flex justify-end mb-4 ">
+        <Button  variant="contained" color="primary" onClick={handleInterview}>
+          Schedule 
+        </Button>
       </div>
       {data.length === 0 && (
         <div className="flex items-center justify-center  min-h-[calc(100vh-4rem)]">
@@ -84,8 +99,8 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
                   )}
                 </div>
                 <div className="flex-1 mb-2 sm:mb-0">
-                  <Button onClick={()=>handleView(row)}>Detail View</Button>
-                  
+                  <Button onClick={() => handleView(row)}>Detail View</Button>
+
                   {/* <Link to={`/MyInterviews/singleDetails`}>link</Link> */}
                 </div>
               </div>
@@ -93,6 +108,13 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
           </div>
         </div>
       </div>
+      <InterviewModal isOpen={isModalOpen}
+          onClose={closeModal}
+          title="ScheduleInterview"
+          >
+            <InterviewScheduleForm MeetData={null}/>
+          </InterviewModal>
+
     </>
   );
 };

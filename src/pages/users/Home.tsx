@@ -25,7 +25,7 @@ export const Home = () => {
 
   const closeModal = async () => {
     setIsModalOpen(false);
-    await dispatch(getUserData())
+    await dispatch(getUserData());
   };
   return (
     <>
@@ -73,7 +73,7 @@ export const Home = () => {
           onClose={closeModal}
           title="Create a Meeting"
         >
-          <InterviewScheduleForm />
+          <InterviewScheduleForm MeetData={null}/>
         </InterviewModal>
         <Contentsection />
         <Featuressection />
