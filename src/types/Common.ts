@@ -3,7 +3,7 @@ export interface dataType{
 }
 
 export interface InterviewType {
-  _id: string;
+  _id?: string;
   interviewerId: string;
   title: string;
   description: string;

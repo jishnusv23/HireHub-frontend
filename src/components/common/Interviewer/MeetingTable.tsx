@@ -12,11 +12,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { InterviewModal } from "@/components/User/InterviewModal";
 import { InterviewScheduleForm } from "@/components/User/InterVieweScheduleForm";
 
+
 export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
-  
+   
    const [isModalOpen, setIsModalOpen] = useState(false);
    const navigate = useNavigate();
-
+   
+  
    const handleInterview = () => {
      setIsModalOpen(true);
    };
@@ -33,8 +35,8 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
   return (
     <>
       <div className="flex justify-end mb-4 ">
-        <Button  variant="contained" color="primary" onClick={handleInterview}>
-          Schedule 
+        <Button variant="contained" color="primary" onClick={handleInterview}>
+          Schedule
         </Button>
       </div>
       {data.length === 0 && (
@@ -108,13 +110,14 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
           </div>
         </div>
       </div>
-      <InterviewModal isOpen={isModalOpen}
-          onClose={closeModal}
-          title="ScheduleInterview"
-          >
-            <InterviewScheduleForm MeetData={null}/>
-          </InterviewModal>
-
+      
+      <InterviewModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title="ScheduleInterview"
+      >
+        <InterviewScheduleForm MeetData={null} />
+      </InterviewModal>
     </>
   );
 };

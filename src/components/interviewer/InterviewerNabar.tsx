@@ -58,6 +58,9 @@ const InterviewerNabar: React.FC<{ toggleSidebar: () => void }> = ({
           />
         </div>
         <div className="flex items-center space-x-6">
+          <Button className="text-sm  h-8 lg:hidden" onClick={handleLogout}>
+            Logout
+          </Button>
           <div className="hidden md:flex items-center space-x-3">
             <IoMdPerson className="text-xl " />
             <span>INTERVIEWER</span>
@@ -71,7 +74,7 @@ const InterviewerNabar: React.FC<{ toggleSidebar: () => void }> = ({
         <ConfirmModal
           onConfirm={handleLogo}
           onCancel={handleCancel}
-          message="Are you sure you want to log out?"
+          message="logout?"
         />
       )}
     </>

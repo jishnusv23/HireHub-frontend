@@ -13,13 +13,16 @@ import { getUserData } from "@/redux/store/actions/auth";
 import { useAppDispatch } from "@/hooks/hooks";
 import { InterviewModal } from "@/components/User/InterviewModal";
 import { InterviewScheduleForm } from "@/components/User/InterVieweScheduleForm";
+import ConfirmModal from "../users/ConfirmModal";
+import { cancelInterveiws } from "@/redux/store/actions/interviewer/cancelnterveiws";
 
 export const SingleInterviewDetails = () => {
   const [singleInterview, setSingelInterview] = useState<InterviewType | null>(
     null
   );
-  const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -41,6 +44,21 @@ export const SingleInterviewDetails = () => {
   const handleBack = () => {
     navigate("/interviewer/MyInterviews");
   };
+  const handleCancelInterveiw = () => {
+    setCancelModalOpen(true);
+  };
+  const handleCancelInterview =async () => {
+    if(singleInterview){
+      setCancelModalOpen(false)
+      const response=await dispatch(cancelInterveiws({data:singleInterview._id}))
+      console.log("🚀 ~ file: SingleInterviewDetails.tsx:53 ~ handleCancelInterview ~ response:", response.payload.data)
+      setSingelInterview(response.payload.data)
+      
+    }
+  };
+  const closeModalInterview = () => {
+    setCancelModalOpen(false);
+  };
 
   return (
     <>
@@ -54,21 +72,26 @@ export const SingleInterviewDetails = () => {
           >
             Back to Interviews
           </Button>
-          <Button
-            onClick={handleInterview}
-            variant="contained"
-            color="primary"
-            className="w-full md:w-auto mb-4 md:mb-0"
-          >
-            Interviews Edit
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            className="w-full md:w-auto rounded-2xl"
-          >
-            Interviews
-          </Button>
+          {singleInterview?.interviewStatus === "Scheduled" && (
+            <div className="flex flex-col md:flex-row gap-4">
+              <Button
+                onClick={handleInterview}
+                variant="contained"
+                color="primary"
+                className="w-full md:w-auto mb-4 md:mb-0"
+              >
+                Edit Interview
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                className="w-full md:w-auto rounded-2xl"
+                onClick={handleCancelInterveiw}
+              >
+                Cancel Interview
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Date and Time */}
@@ -187,6 +210,14 @@ export const SingleInterviewDetails = () => {
       <InterviewModal isOpen={isModalOpen} onClose={closeModal} title="edit">
         <InterviewScheduleForm MeetData={singleInterview} />
       </InterviewModal>
+
+      {cancelModalOpen && (
+        <ConfirmModal
+          onConfirm={handleCancelInterview}
+          onCancel={closeModalInterview}
+          message="CANCEL Interview"
+        />
+      )}
     </>
   );
 };

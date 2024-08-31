@@ -57,7 +57,9 @@ export const LoginForm = () => {
       setLoading(false);
       console.log(response.payload, "jfskfjskfjsf");
 
-      toast.error(response?.payload?.message);
+      toast.error(
+        response?.payload?.message || "The server might be down for maintenance"
+      );
     } else {
       // console.log(response.payload.data.email, "lololololo");
 
