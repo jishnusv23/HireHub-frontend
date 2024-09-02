@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { MeetingTable } from "../common/Interviewer/MeetingTable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tab";
-import { Button } from "@mui/material";
+
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import Pagination from "../common/Admin/Pagination";
 import { RooteState } from "@/redux/store";
@@ -39,7 +39,7 @@ export const Meetings = () => {
           const fetchedData = response.payload.data.data;
           setAllMeetData(fetchedData);
 
-          // Filter to show only "Scheduled" interviews initially
+          
           const scheduledInterviews = fetchedData.filter(
             (item:InterviewType) => item.interviewStatus === "Scheduled"
           );
