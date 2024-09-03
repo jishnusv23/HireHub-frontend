@@ -113,7 +113,9 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
                         to={`/Meet-HireHub/${row.uniqueId}`}
                         className="flex-1 mb-2 sm:mb-0"
                       >
-                        <Button color="success">JOIN</Button>
+                        <Button color="success" className="">
+                          JOIN
+                        </Button>
                       </Link>
                     ) : (
                       <div className="flex-1 mb-2 sm:mb-0">
