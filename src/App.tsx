@@ -117,6 +117,7 @@ import { logoutAction } from "./redux/store/actions/auth/logoutAction";
 import ForgotPasswrod from "./pages/auth/ForgotPasswrod";
 import { ForgotPassLogin } from "./pages/auth/ForgotPassLogin";
 import { InterViewerRoutes } from "./routes/InterViewerRoutes";
+import { Room } from "./pages/Meet/Room";
 // import { SuccessPage } from "./components/common/Interviewer/SuccessPage";
 
 const App = () => {
@@ -210,15 +211,15 @@ const App = () => {
             <PublicRoute element={<ForgotPassLogin />} allowedRoles={[]} />
           }
         />
-        {/* <Route
-          path="/successpage"
+        <Route
+          path="/Meet-HireHub/:uniqueId"
           element={
             <PublicRoute
-              element={<SuccessPage />}
-              allowedRoles={["interviewer"]}
+              element={<Room />}
+              allowedRoles={["interviewer", "pending"]}
             />
           }
-        /> */}
+        />
       </Routes>
     </Router>
   );

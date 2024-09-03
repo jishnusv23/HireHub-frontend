@@ -11,23 +11,23 @@ import { convertTo12Hour } from "@/components/lib/TimeExtract";
 import { Link, useNavigate } from "react-router-dom";
 import { InterviewModal } from "@/components/User/InterviewModal";
 import { InterviewScheduleForm } from "@/components/User/InterVieweScheduleForm";
-
-
+import { isActive, isExpired } from "@/components/lib/JoinAccess"; // Expected output depends on the current time
 export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
-   
-   const [isModalOpen, setIsModalOpen] = useState(false);
-   const navigate = useNavigate();
-   
-  
-   const handleInterview = () => {
-     setIsModalOpen(true);
-   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const testStartTime = "16:05";
+  const testDateString = "2024-09-03T15:35:00Z"; // Adjust if needed
 
-   const closeModal = async () => {
-     setIsModalOpen(false);
-     
-   };
-  const handleView = (rowData:any) => {
+  console.log(isActive(testStartTime, testDateString), "oooooo");
+
+  const handleInterview = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = async () => {
+    setIsModalOpen(false);
+  };
+  const handleView = (rowData: any) => {
     navigate("/interviewer/MyInterviews/singleDetails", {
       state: { data: rowData },
     });
@@ -100,6 +100,31 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
                     <CheckCircleOutlineOutlinedIcon color="success" />
                   )}
                 </div>
+                {row.interviewStatus === "Scheduled" && (
+                  <>
+                    {isExpired(row.startTime, row.date) ? (
+                      <div className="flex-1 mb-2 sm:mb-0">
+                        <Button className="" color="error">
+                          Expired
+                        </Button>
+                      </div>
+                    ) : isActive(row.startTime, row.date) ? (
+                      <Link
+                        to={`/Meet-HireHub/${row.uniqueId}`}
+                        className="flex-1 mb-2 sm:mb-0"
+                      >
+                        <Button color="success">JOIN</Button>
+                      </Link>
+                    ) : (
+                      <div className="flex-1 mb-2 sm:mb-0">
+                        <Button className="" color="warning">
+                          Pending
+                        </Button>
+                      </div>
+                    )}
+                  </>
+                )}
+
                 <div className="flex-1 mb-2 sm:mb-0">
                   <Button onClick={() => handleView(row)}>Detail View</Button>
 
@@ -110,7 +135,7 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
           </div>
         </div>
       </div>
-      
+
       <InterviewModal
         isOpen={isModalOpen}
         onClose={closeModal}
