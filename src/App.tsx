@@ -216,7 +216,7 @@ const App = () => {
           element={
             <PublicRoute
               element={<Room />}
-              allowedRoles={["interviewer", "pending"]}
+              allowedRoles={["interviewer", ""]}
             />
           }
         />

@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MeetingTable } from "../common/Interviewer/MeetingTable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tab";
 
@@ -39,9 +39,8 @@ export const Meetings = () => {
           const fetchedData = response.payload.data.data;
           setAllMeetData(fetchedData);
 
-          
           const scheduledInterviews = fetchedData.filter(
-            (item:InterviewType) => item.interviewStatus === "Scheduled"
+            (item: InterviewType) => item.interviewStatus === "Scheduled"
           );
           setCurrentTabData(scheduledInterviews);
           setTotalPages(Math.ceil(scheduledInterviews.length / itemsPerPage));

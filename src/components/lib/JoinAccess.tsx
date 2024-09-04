@@ -13,8 +13,8 @@ export const isExpired = (startTime: string, dateString: string) => {
 
   const currentTime = new Date();
 
-  console.log("End Time Window for Expiry:", endTimeWindow);
-  console.log("Current Time:", currentTime);
+  // console.log("End Time Window for Expiry:", endTimeWindow);
+  // console.log("Current Time:", currentTime);
 
   return isAfter(currentTime, endTimeWindow);
 };
@@ -34,15 +34,15 @@ export const isActive = (startTime: string, dateString: string) => {
   const currentTime = new Date();
 
   
-  console.log("Start Time Object:", startTimeObject);
-  console.log("Start Time Window:", startTimeWindow);
-  console.log("End Time Window:", endTimeWindow);
-  console.log("Current Time:", currentTime);
-  console.log(
-    isAfter(currentTime, startTimeWindow) &&
-      isBefore(currentTime, endTimeWindow),
-    "pppppopo"
-  );
+  // console.log("Start Time Object:", startTimeObject);
+  // console.log("Start Time Window:", startTimeWindow);
+  // console.log("End Time Window:", endTimeWindow);
+  // console.log("Current Time:", currentTime);
+  // console.log(
+  //   isAfter(currentTime, startTimeWindow) &&
+  //     isBefore(currentTime, endTimeWindow),
+  //   "pppppopo"
+  // );
   return (
     isAfter(currentTime, startTimeWindow) &&
     isBefore(currentTime, endTimeWindow)

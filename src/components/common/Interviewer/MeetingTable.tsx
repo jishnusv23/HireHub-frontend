@@ -15,10 +15,10 @@ import { isActive, isExpired } from "@/components/lib/JoinAccess"; // Expected o
 export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const testStartTime = "16:05";
-  const testDateString = "2024-09-03T15:35:00Z"; // Adjust if needed
+  // const testStartTime = "16:05";
+  // const testDateString = "2024-09-03T15:35:00Z"; // Adjust if needed
 
-  console.log(isActive(testStartTime, testDateString), "oooooo");
+  // console.log(isActive(testStartTime, testDateString), "oooooo");
 
   const handleInterview = () => {
     setIsModalOpen(true);

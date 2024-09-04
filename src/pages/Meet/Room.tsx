@@ -1,28 +1,72 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { RooteState } from "@/redux/store";
 import { verifyIntervewe } from "@/redux/store/actions/common/verifyHost";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { VideoCall } from "@/components/common/VideoCall";
+import { MeetValidation } from "@/components/common/Meet/MeetValidation";
+import { InterivieweeMeetAcess } from "@/redux/store/actions/common/IntervieweeMeetAccessAction";
+import { toast } from "sonner";
 
 export const Room = () => {
   const { uniqueId } = useParams();
-  console.log("🚀 ~ file: Room.tsx:6 ~ Room ~ params:", uniqueId);
-  const dispatch=useAppDispatch()
+  const dispatch = useAppDispatch();
   const { data } = useAppSelector((state: RooteState) => state.user);
-  console.log("🚀 ~ file: Room.tsx:12 ~ Room ~ data:", data)
-  const [interviewerJoined,setInterviewerJoined]=useState(false)
-  const obje={
+
+  const [interviewerJoined, setInterviewerJoined] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+
+  const obje = {
     uniqueId,
-    userId:data?._id
+    userId: data?._id || "",
+  };
 
-  }
-  useEffect(()=>{
-    const fetchRightInterviewe=async()=>{
-        const response=dispatch(verifyIntervewe(obje))
-        console.log("🚀 ~ file: Room.tsx:22 ~ fetchRightInterviewe ~ response:", response)
+  const checkInterviewerStatus = async () => {
+    const response = await dispatch(verifyIntervewe(obje));
+    if (response.payload.success) {
+      setInterviewerJoined(true);
     }
-    fetchRightInterviewe()
-  },[uniqueId])
+  };
 
-  return <div>Room</div>;
+  useEffect(() => {
+    if (uniqueId && data?._id) {
+      checkInterviewerStatus();
+    }
+  }, [uniqueId, dispatch, data]);
+
+  const handleFormSubmit = async (formData: any) => {
+    const { username, email } = formData;
+    localStorage.setItem("username", username);
+    localStorage.setItem("email", email);
+
+    console.log("🚀 ~ formData:", formData);
+
+    const response = await dispatch(InterivieweeMeetAcess(uniqueId || ""));
+
+    console.log("🚀 ~ response payload:", response.payload);
+
+    if (response.payload.success) {
+      console.log("🚀 ~ Interviewer joined and form submitted");
+      setInterviewerJoined(true);
+      setIsFormSubmitted(true);
+    } else {
+      toast.error("Session has not started yet");
+    }
+  };
+
+  if (data?.role === "interviewer") {
+    return <VideoCall RoomID={uniqueId || ""} userRole="interviewer" />;
+  }
+
+  if (!data && !isFormSubmitted) {
+    return (
+      <MeetValidation RoomID={uniqueId || ""} onSubmit={handleFormSubmit} />
+    );
+  }
+
+  if (interviewerJoined && isFormSubmitted) {
+    return <VideoCall RoomID={uniqueId || ""} userRole="interviewee" />;
+  }
+
+  return <div>Waiting for interviewer to join...</div>;
 };
