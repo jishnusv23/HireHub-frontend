@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { RooteState } from "@/redux/store";
 import { verifyIntervewe } from "@/redux/store/actions/common/verifyHost";
@@ -11,42 +11,38 @@ import { toast } from "sonner";
 export const Room = () => {
   const { uniqueId } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { data } = useAppSelector((state: RooteState) => state.user);
 
   const [interviewerJoined, setInterviewerJoined] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-  const obje = {
-    uniqueId,
-    userId: data?._id || "",
-  };
-
   const checkInterviewerStatus = async () => {
-    const response = await dispatch(verifyIntervewe(obje));
-    if (response.payload.success) {
-      setInterviewerJoined(true);
+    if (uniqueId && data?._id) {
+      const response = await dispatch(
+        verifyIntervewe({ uniqueId, userId: data._id })
+      );
+      if (response.payload.success) {
+        setInterviewerJoined(true);
+      }
     }
   };
 
   useEffect(() => {
-    if (uniqueId && data?._id) {
-      checkInterviewerStatus();
-    }
+    checkInterviewerStatus();
   }, [uniqueId, dispatch, data]);
 
-  const handleFormSubmit = async (formData: any) => {
+  const handleFormSubmit = async (formData: {
+    username: string;
+    email: string;
+  }) => {
     const { username, email } = formData;
-    localStorage.setItem("username", username);
-    localStorage.setItem("email", email);
-
-    console.log("🚀 ~ formData:", formData);
+    sessionStorage.setItem("username", username);
+    sessionStorage.setItem("email", email);
 
     const response = await dispatch(InterivieweeMeetAcess(uniqueId || ""));
 
-    console.log("🚀 ~ response payload:", response.payload);
-
     if (response.payload.success) {
-      console.log("🚀 ~ Interviewer joined and form submitted");
       setInterviewerJoined(true);
       setIsFormSubmitted(true);
     } else {
@@ -54,8 +50,20 @@ export const Room = () => {
     }
   };
 
+  const handleLeaveMeeting = () => {
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("email");
+    navigate("/"); 
+  };
+
   if (data?.role === "interviewer") {
-    return <VideoCall RoomID={uniqueId || ""} userRole="interviewer" />;
+    return (
+      <VideoCall
+        RoomID={uniqueId || ""}
+        userRole="interviewer"
+        onLeaveMeeting={handleLeaveMeeting}
+      />
+    );
   }
 
   if (!data && !isFormSubmitted) {
@@ -65,7 +73,13 @@ export const Room = () => {
   }
 
   if (interviewerJoined && isFormSubmitted) {
-    return <VideoCall RoomID={uniqueId || ""} userRole="interviewee" />;
+    return (
+      <VideoCall
+        RoomID={uniqueId || ""}
+        userRole="interviewee"
+        onLeaveMeeting={handleLeaveMeeting}
+      />
+    );
   }
 
   return <div>Waiting for interviewer to join...</div>;

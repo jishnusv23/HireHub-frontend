@@ -6,6 +6,7 @@ import * as z from "zod";
 import { FiUser, FiMail, FiKey } from "react-icons/fi";
 import FormInputWithIcon from "../FormInuprWithIcon";
 import { Button, CircularProgress } from "@mui/material";
+import Header from "../users/Header";
 
 // Form validation schema using Zod
 const formSchema = z.object({
@@ -55,80 +56,83 @@ export const MeetValidation: React.FC<MeetValidationProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-4"
-          >
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field, fieldState }) => (
-                <>
-                  <FormInputWithIcon
-                    field={field}
-                    icon={<FiUser />}
-                    placeholder="Your Username"
-                    showTitle={false}
-                  />
-                  {fieldState.error && (
-                    <p className="text-red-600">{fieldState.error.message}</p>
-                  )}
-                </>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field, fieldState }) => (
-                <>
-                  <FormInputWithIcon
-                    field={field}
-                    icon={<FiMail />}
-                    placeholder="Your Email"
-                    showTitle={false}
-                  />
-                  {fieldState.error && (
-                    <p className="text-red-600">{fieldState.error.message}</p>
-                  )}
-                </>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="uniqueId"
-              render={({ field, fieldState }) => (
-                <>
-                  <FormInputWithIcon
-                    field={field}
-                    icon={<FiKey />}
-                    placeholder="Meeting ID"
-                    showTitle={false}
-                  />
-                  {fieldState.error && (
-                    <p className="text-red-600">{fieldState.error.message}</p>
-                  )}
-                </>
-              )}
-            />
-
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              disabled={loading}
-              startIcon={loading && <CircularProgress size={20} />}
+    <>
+      <Header />
+      <div className="flex items-center justify-center min-h-screen bg-background p-4">
+        <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-4"
             >
-              {loading ? "Joining..." : "Join Meeting"}
-            </Button>
-          </form>
-        </Form>
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field, fieldState }) => (
+                  <>
+                    <FormInputWithIcon
+                      field={field}
+                      icon={<FiUser />}
+                      placeholder="Your Username"
+                      showTitle={false}
+                    />
+                    {fieldState.error && (
+                      <p className="text-red-600">{fieldState.error.message}</p>
+                    )}
+                  </>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field, fieldState }) => (
+                  <>
+                    <FormInputWithIcon
+                      field={field}
+                      icon={<FiMail />}
+                      placeholder="Your Email"
+                      showTitle={false}
+                    />
+                    {fieldState.error && (
+                      <p className="text-red-600">{fieldState.error.message}</p>
+                    )}
+                  </>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="uniqueId"
+                render={({ field, fieldState }) => (
+                  <>
+                    <FormInputWithIcon
+                      field={field}
+                      icon={<FiKey />}
+                      placeholder="Meeting ID"
+                      showTitle={false}
+                    />
+                    {fieldState.error && (
+                      <p className="text-red-600">{fieldState.error.message}</p>
+                    )}
+                  </>
+                )}
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                disabled={loading}
+                startIcon={loading && <CircularProgress size={20} />}
+              >
+                {loading ? "Joining..." : "Join Meeting"}
+              </Button>
+            </form>
+          </Form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

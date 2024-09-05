@@ -10,7 +10,7 @@ export const updateProfileImgAction = createAsyncThunk(
     // console.log("🚀 ~ file: updateProfileImgAction.tsx:10 ~ data:", data)
     
     try {
-      const response = await CLIENT_API.post(
+      const response = await CLIENT_API.put(
         `${userService}updateImge`,
         data,
         config

@@ -27,7 +27,10 @@ export const Login = () => {
             </div>
             <div className="text-2xl font-bold py-2">Login</div>
             <LoginForm />
-            <p className="py-5 text-primary text-center hover:text-blue-600">
+            <p
+              className="py-5 text-primary text-center hover:text-blue-600"
+              onClick={() => navigate("/forgot-password")}
+            >
               Forgot Password
             </p>
             <div className="flex items-center gap-3">
