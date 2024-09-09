@@ -1,5 +1,5 @@
 import { CLIENT_API } from "@/utils/axios";
-import { config } from "@/common/configuration";
+// import { config } from "@/common/configuration";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { authservice } from "@/common/services/services";
 import { AxiosError } from "axios";

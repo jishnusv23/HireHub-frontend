@@ -13,7 +13,8 @@ export interface InterviewType {
   meetingLink: string;
   startTime: string;
   uniqueId: string;
-  reminded:boolean
+  instantMeet:boolean;
+  reminded: boolean;
   interviewerEmail: string;
   interviewType: string;
   participants: string[];
