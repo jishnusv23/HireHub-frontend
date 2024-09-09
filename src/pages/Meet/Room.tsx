@@ -51,8 +51,7 @@ export const Room = () => {
   };
 
   const handleLeaveMeeting = () => {
-    sessionStorage.removeItem("username");
-    sessionStorage.removeItem("email");
+   sessionStorage.clear();
     navigate("/"); 
   };
 

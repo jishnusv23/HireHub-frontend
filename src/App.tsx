@@ -130,7 +130,7 @@ const App = () => {
       dispatch(getUserData());
     } else if (data.isBlocked) {
       dispatch(logoutAction());
-    }
+    } 
   }, [data, dispatch]);
 
   return (

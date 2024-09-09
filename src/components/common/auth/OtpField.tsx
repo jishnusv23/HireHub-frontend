@@ -71,16 +71,19 @@ export const OtpField = () => {
       const mergeOtp = otp.join("");
       try {
         const response = await dispatch(
-          OtpverficationAction({ otp: mergeOtp, email: location.state.email })
+          OtpverficationAction({ otp: mergeOtp, datas:location.state.data })
         );
-        console.log("🚀 ~ file: OtpField.tsx:103 ~ handleTheOtp ~ response:", response)
+        console.log(
+          "🚀 ~ file: OtpField.tsx:103 ~ handleTheOtp ~ response:",
+          response
+        );
         if (response.payload.success && !response.payload.error) {
-          // console.log(response.payload.data);
+          console.log(response.payload.data, "koko");
 
           dispatch(storeUserData(response.payload.data));
           navigate("/");
-        }else{
-          toast.error(response.payload.message)
+        } else {
+          toast.error(response.payload.message);
         }
       } catch (error) {
         console.error("Error during OTP verification:", error);

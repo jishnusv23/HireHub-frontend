@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 
 export const OtpverficationAction = createAsyncThunk(
   "user/otpverification",
-  async (data: { otp: string; email: string }, { rejectWithValue }) => {
+  async (data: { otp: string; datas:any}, { rejectWithValue }) => {
     try {
       const response = await CLIENT_API.post(
         `${authservice}optverification`,

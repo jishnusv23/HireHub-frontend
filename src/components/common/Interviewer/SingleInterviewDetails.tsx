@@ -20,6 +20,7 @@ export const SingleInterviewDetails = () => {
   const [singleInterview, setSingelInterview] = useState<InterviewType | null>(
     null
   );
+  const [loading,setLoading]=useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const dispatch = useAppDispatch();
@@ -49,15 +50,23 @@ export const SingleInterviewDetails = () => {
   };
   const handleCancelInterview =async () => {
     if(singleInterview){
+      setLoading(true)
       setCancelModalOpen(false)
       const response=await dispatch(cancelInterveiws({data:singleInterview._id}))
       console.log("🚀 ~ file: SingleInterviewDetails.tsx:53 ~ handleCancelInterview ~ response:", response.payload.data)
-      setSingelInterview(response.payload.data)
+      if(response.payload.data){
+        setLoading(false)
+
+        setSingelInterview(response.payload.data)
+      }else{
+        setLoading(false)
+      }
       
     }
   };
   const closeModalInterview = () => {
     setCancelModalOpen(false);
+    setLoading(false)
   };
 
   return (
@@ -80,7 +89,7 @@ export const SingleInterviewDetails = () => {
                 color="primary"
                 className="w-full md:w-auto mb-4 md:mb-0"
               >
-                Edit Interview
+                {loading ? "loading" : "Edit Interview"}
               </Button>
               <Button
                 variant="contained"
@@ -88,7 +97,7 @@ export const SingleInterviewDetails = () => {
                 className="w-full md:w-auto rounded-2xl"
                 onClick={handleCancelInterveiw}
               >
-                Cancel Interview
+                {loading ? "loading" : "Cancel Interview"}
               </Button>
             </div>
           )}

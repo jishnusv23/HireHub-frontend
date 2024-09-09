@@ -79,21 +79,22 @@ const SignupForm = () => {
       return;
     }
 
-    const response = await dispatch(signupAction(allData));
+    // const response = await dispatch(signupAction(allData));
+    // console.log("🚀 ~ file: SignupForm.tsx:83 ~ onsubmit ~ response:", response)
 
-    if (response.payload && response.payload.success) {
-      console.log(
-        "🚀 ~ file: SignupForm.tsx:79 ~ onsubmit ~ response:",
-        response
-      );
+    // if (response.payload && response.payload.success) {
+      // console.log(
+      //   "🚀 ~ file: SignupForm.tsx:79 ~ onsubmit ~ response:",
+      //   response
+      // );
       // dispatch(storeUserData(response.payload.data));
-      console.log(response.payload.data.email);
-      dispatch(sendVerificationMail(response.payload.data.email));
+      // console.log(response.payload.data.email);
+      dispatch(sendVerificationMail(values.email));
       setLoading(false);
       navigate("/otp-verification", {
-        state: { email: response.payload.data.email },
+        state: { data:allData },
       });
-    }
+    // }
   }
   return (
     <Form {...form}>
