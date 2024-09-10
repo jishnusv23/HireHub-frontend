@@ -1,5 +1,5 @@
 import { InterviewType } from "@/types/Common";
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 import WbIncandescentOutlinedIcon from "@mui/icons-material/WbIncandescentOutlined";
 import React, { useState } from "react";
 import RotateRightOutlinedIcon from "@mui/icons-material/RotateRightOutlined";
@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { InterviewModal } from "@/components/User/InterviewModal";
 import { InterviewScheduleForm } from "@/components/User/InterVieweScheduleForm";
 import { isActive, isExpired } from "@/components/lib/JoinAccess"; // Expected output depends on the current time
+import { Button } from "@/components/ui/button";
 export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -34,10 +35,9 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
   };
   return (
     <>
-      <div className="flex justify-end mb-4 ">
-        <Button variant="contained" color="primary" onClick={handleInterview}>
-          Schedule
-        </Button>
+      <div className="flex justify-end mb-4 gap-4">
+        <Button>Start Meet</Button>
+        <Button onClick={handleInterview}>Schedule</Button>
       </div>
       {data.length === 0 && (
         <div className="flex items-center justify-center  min-h-[calc(100vh-4rem)]">
@@ -104,7 +104,7 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
                   <>
                     {isExpired(row.startTime, row.date) ? (
                       <div className="flex-1 mb-2 sm:mb-0">
-                        <Button className="" color="error">
+                        <Button className="bg-red-500 hover:bg-red-400">
                           Expired
                         </Button>
                       </div>
@@ -113,13 +113,13 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
                         to={`/Meet-HireHub/${row.uniqueId}`}
                         className="flex-1 mb-2 sm:mb-0"
                       >
-                        <Button color="success" className="">
+                        <Button className="bg-green-500 hover:bg-green-400">
                           JOIN
                         </Button>
                       </Link>
                     ) : (
                       <div className="flex-1 mb-2 sm:mb-0">
-                        <Button className="" color="warning">
+                        <Button className="bg-yellow-500 hover:bg-yellow-400">
                           Pending
                         </Button>
                       </div>

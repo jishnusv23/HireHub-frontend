@@ -118,6 +118,7 @@ import ForgotPasswrod from "./pages/auth/ForgotPasswrod";
 import { ForgotPassLogin } from "./pages/auth/ForgotPassLogin";
 import { InterViewerRoutes } from "./routes/InterViewerRoutes";
 import { Room } from "./pages/Meet/Room";
+
 // import { SuccessPage } from "./components/common/Interviewer/SuccessPage";
 
 const App = () => {
@@ -216,10 +217,19 @@ const App = () => {
           element={
             <PublicRoute
               element={<Room />}
-              allowedRoles={["interviewer", ""]}
+              allowedRoles={["interviewer", "pending",""]}
             />
           }
         />
+        {/* <Route
+          path="/Meet-now"
+          element={
+            <PublicRoute
+              element={<InstantMeetSuccess />}
+              allowedRoles={["interviewer", "pending"]}
+            />
+          }
+        /> */}
       </Routes>
     </Router>
   );

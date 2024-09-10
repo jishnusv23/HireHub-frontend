@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 export const Room = () => {
   const { uniqueId } = useParams();
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { data } = useAppSelector((state: RooteState) => state.user);
@@ -51,11 +52,11 @@ export const Room = () => {
   };
 
   const handleLeaveMeeting = () => {
-   sessionStorage.clear();
-    navigate("/"); 
+    sessionStorage.clear();
+    navigate("/");
   };
 
-  if (data?.role === "interviewer") {
+  if (data?.role === "interviewer" || data?.role == "pending") {
     return (
       <VideoCall
         RoomID={uniqueId || ""}

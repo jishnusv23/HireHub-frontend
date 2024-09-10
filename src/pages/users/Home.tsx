@@ -14,6 +14,7 @@ import { InterviewModal } from "@/components/User/InterviewModal";
 import { useAppDispatch } from "@/hooks/hooks";
 import { getUserData } from "@/redux/store/actions/auth";
 import { InterviewChoice } from "@/components/customs/InterviewChoice";
+import { CustomModal } from "@/components/customs/CustomModal";
 export const Home = () => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
@@ -72,14 +73,14 @@ export const Home = () => {
             Join a Meeting
           </Button>
         </div>
-        <InterviewModal
+        <CustomModal
           isOpen={isModalOpen}
           onClose={closeModal}
           title="Create a Meeting"
         >
           <InterviewChoice />
-          {/* <InterviewScheduleForm MeetData={null}/> */}
-        </InterviewModal>
+          
+        </CustomModal>
         <Contentsection />
         <Featuressection />
       </main>

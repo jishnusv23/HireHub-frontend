@@ -20,6 +20,7 @@ import Loading from "../common/Loading/Loading";
 import { InterviewType, interviewTypes } from "@/types/Common";
 import { meetingSchema } from "@/utils/validation/interviewValidation";
 import { updateInterview } from "@/redux/store/actions/interviewer/updateInterviewer";
+import { CustomModal } from "../customs/CustomModal";
 
 interface MeetDataProps {
   MeetData?: InterviewType | null;
@@ -61,24 +62,25 @@ export const InterviewScheduleForm: React.FC<MeetDataProps> = ({
       interviewerId: data?._id,
       interviewerEmail: data?.email,
     };
-    let response
-    if(MeetData&&MeetData._id){
-      response=await dispatch(updateInterview({data:interviewData,id:MeetData._id }))
-      if(updateInterview.fulfilled.match(response)){
-        setLoading(false)
-        console.log("🚀 ~ file: InterVieweScheduleForm.tsx:67 ~ onSubmit Edit ~ response:", response)
-         setResponsePayload(response.payload.data.data);
-         setIsModalOpen(true);
-      }else{
-        setLoading(false)
-        toast.error('Update interview Fail')
-      }
-
-    }else{
-
+    let response;
+    if (MeetData && MeetData._id) {
       response = await dispatch(
-       scheduleIntervieweActionAction(interviewData,)
+        updateInterview({ data: interviewData, id: MeetData._id })
       );
+      if (updateInterview.fulfilled.match(response)) {
+        setLoading(false);
+        console.log(
+          "🚀 ~ file: InterVieweScheduleForm.tsx:67 ~ onSubmit Edit ~ response:",
+          response
+        );
+        setResponsePayload(response.payload.data.data);
+        setIsModalOpen(true);
+      } else {
+        setLoading(false);
+        toast.error("Update interview Fail");
+      }
+    } else {
+      response = await dispatch(scheduleIntervieweActionAction(interviewData));
       if (scheduleIntervieweActionAction.fulfilled.match(response)) {
         setLoading(false);
         setResponsePayload(response.payload.data.data);
@@ -88,7 +90,6 @@ export const InterviewScheduleForm: React.FC<MeetDataProps> = ({
         toast.error("Something went wrong");
       }
     }
-
   };
 
   return (
@@ -208,13 +209,13 @@ export const InterviewScheduleForm: React.FC<MeetDataProps> = ({
           </form>
         </Form>
       </div>
-      <InterviewModal
+      <CustomModal
         isOpen={isModalOpen}
         onClose={onClose}
         title=" Your Interview Scheduled Successfully💡"
       >
-        <SuccessPage response={responsePayload} />
-      </InterviewModal>
+        <SuccessPage response={responsePayload} InstantMeet={false} />
+      </CustomModal>
     </>
   );
 };
