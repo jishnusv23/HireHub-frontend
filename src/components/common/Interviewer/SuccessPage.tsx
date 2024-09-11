@@ -14,14 +14,17 @@ interface SuccessPageProps {
     jobPosition?: string;
     time?: string;
     date?: string;
-    uniqueId:string
+    uniqueId: string;
     interviewType?: string;
     meetingLink?: string;
   };
   InstantMeet: boolean;
 }
 
-export const SuccessPage: React.FC<SuccessPageProps> = ({ response ,InstantMeet}) => {
+export const SuccessPage: React.FC<SuccessPageProps> = ({
+  response,
+  InstantMeet,
+}) => {
   const [isCopied, setIsCopied] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -36,8 +39,8 @@ export const SuccessPage: React.FC<SuccessPageProps> = ({ response ,InstantMeet}
   };
 
   return (
-    <div className="h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md sm:max-w-lg p-4 sm:p-6 lg:p-8 bg-white shadow-lg rounded-lg">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md sm:max-w-lg p-4 sm:p-6 lg:p-8 bg-background shadow-lg rounded-lg">
         <div className="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 mt-6">
           {!InstantMeet && (
             <>
@@ -74,17 +77,20 @@ export const SuccessPage: React.FC<SuccessPageProps> = ({ response ,InstantMeet}
                 {isCopied ? "Copied!" : "Copy Meeting Link"}
               </Button>
             </CopyToClipboard>
-              {InstantMeet && (
-             
+
+            {/* Added a div to wrap the JOIN button and ensure it's below the copy button */}
+            {InstantMeet && (
+              <div className="mt-4">
                 <Link
                   to={`/Meet-HireHub/${response.uniqueId}`}
                   className="flex-1 mb-2 sm:mb-0"
                 >
-                  <Button className="bg-green-500 hover:bg-green-400">
+                  <Button className="w-full sm:w-auto bg-green-500 hover:bg-green-400">
                     JOIN
                   </Button>
                 </Link>
-              )}
+              </div>
+            )}
           </div>
         </div>
       </div>

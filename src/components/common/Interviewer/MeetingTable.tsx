@@ -13,9 +13,22 @@ import { InterviewModal } from "@/components/User/InterviewModal";
 import { InterviewScheduleForm } from "@/components/User/InterVieweScheduleForm";
 import { isActive, isExpired } from "@/components/lib/JoinAccess"; // Expected output depends on the current time
 import { Button } from "@/components/ui/button";
-export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { InstantMeetAction } from "@/redux/store/actions/common/InstantMeetAction";
+import { RooteState } from "@/redux/store";
+import { CustomModal } from "@/components/customs/CustomModal";
+import { SuccessPage } from "./SuccessPage";
+export const MeetingTable = ({
+  Interviewdata,
+}: {
+  Interviewdata: InterviewType[];
+}) => {
+  const { data } = useAppSelector((state: RooteState) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [responsePayload, setResponsePayload] = useState<any>(null);
+  const [isModalOpenCustom, setIsModalOpenCustom] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   // const testStartTime = "16:05";
   // const testDateString = "2024-09-03T15:35:00Z"; // Adjust if needed
 
@@ -27,19 +40,33 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
 
   const closeModal = async () => {
     setIsModalOpen(false);
+    setIsModalOpenCustom(false);
   };
   const handleView = (rowData: any) => {
     navigate("/interviewer/MyInterviews/singleDetails", {
       state: { data: rowData },
     });
   };
+  const handleInstantMeet = async () => {
+    const response = await dispatch(
+      InstantMeetAction({
+        interviewerId: data?._id as string,
+        interviewerEmail: data?.email as string,
+      })
+    );
+    if (response.payload.success) {
+      setIsModalOpenCustom(true);
+      setResponsePayload(response.payload.data);
+      // navigate('/Meet-now',{state:{data:response.payload.data}});
+    }
+  };
   return (
     <>
       <div className="flex justify-end mb-4 gap-4">
-        <Button>Start Meet</Button>
+        <Button onClick={handleInstantMeet}>Start Meet</Button>
         <Button onClick={handleInterview}>Schedule</Button>
       </div>
-      {data.length === 0 && (
+      {Interviewdata.length === 0 && (
         <div className="flex items-center justify-center  min-h-[calc(100vh-4rem)]">
           <div className="text-center">
             <h1>Condecting your meet</h1>
@@ -61,7 +88,7 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
       <div className="p-4 sm:p-6 lg:p-8 bg-background">
         <div className="relative overflow-x-auto sm:rounded-lg">
           <div className="min-w-full">
-            {data.map((row, index) => (
+            {Interviewdata.map((row, index) => (
               <div
                 key={index}
                 className="shadow-md rounded-lg mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border dark:hover:border-primary"
@@ -145,6 +172,13 @@ export const MeetingTable = ({ data }: { data: InterviewType[] }) => {
       >
         <InterviewScheduleForm MeetData={null} />
       </InterviewModal>
+      <CustomModal
+        isOpen={isModalOpenCustom}
+        onClose={closeModal}
+        title="Invite participants to join meeting"
+      >
+        <SuccessPage response={responsePayload} InstantMeet={true} />
+      </CustomModal>
     </>
   );
 };

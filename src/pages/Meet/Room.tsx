@@ -41,7 +41,7 @@ export const Room = () => {
     sessionStorage.setItem("username", username);
     sessionStorage.setItem("email", email);
 
-    const response = await dispatch(InterivieweeMeetAcess(uniqueId || ""));
+    const response = await dispatch(InterivieweeMeetAcess({uniqueId:uniqueId as string,email:email as string}));
 
     if (response.payload.success) {
       setInterviewerJoined(true);

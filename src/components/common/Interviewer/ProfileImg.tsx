@@ -11,7 +11,7 @@ import { storeUserData } from "@/redux/store/slices/users";
 
 export const ProfileImg = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
-  const dispatch=useAppDispatch()
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isEditing, setEditing] = useState(false);
@@ -33,13 +33,18 @@ export const ProfileImg = () => {
       );
       if (IMGUrl) {
         setLoading(false);
-        const response=await dispatch(updateProfileImgAction({email:data?.email as string ,url:IMGUrl}))
-        console.log("🚀 ~ file: ProfileImg.tsx:33 ~ ProfileImg ~ response:", response)
-        if(updateProfileImgAction.fulfilled.match(response)){
-          dispatch(storeUserData(response.payload.data))
-          toast.success(response.payload.message)
-        }else{
-          toast.error('Profile Imge updation failed')
+        const response = await dispatch(
+          updateProfileImgAction({ email: data?.email as string, url: IMGUrl })
+        );
+        console.log(
+          "🚀 ~ file: ProfileImg.tsx:33 ~ ProfileImg ~ response:",
+          response
+        );
+        if (updateProfileImgAction.fulfilled.match(response)) {
+          dispatch(storeUserData(response.payload.data));
+          toast.success(response.payload.message);
+        } else {
+          toast.error("Profile Imge updation failed");
         }
       }
     }
@@ -52,11 +57,11 @@ export const ProfileImg = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-32 h-32 overflow-hidden rounded-full">
+      <div className="w-32 h-32 overflow-hidden rounded-full ">
         <img
           src={data?.profile?.avatar}
           alt="Profile"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover "
         />
       </div>
       <input
@@ -67,7 +72,12 @@ export const ProfileImg = () => {
         onChange={handleImageChange}
         disabled={!isEditing}
       />
-      <Button onClick={startEditing} type="button" disabled={loading}>
+      <Button
+        onClick={startEditing}
+        className="bg-red-700 hover:bg-red-500"
+        type="button"
+        disabled={loading}
+      >
         {!loading ? "Change Profile" : "Loading"}
       </Button>
     </div>

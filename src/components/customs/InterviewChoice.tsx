@@ -80,7 +80,8 @@ export const InterviewChoice = () => {
       <CustomModal
         isOpen={isModalOpenCustom}
         onClose={closeModal}
-        title="schedule"
+        title="Invite participants to join meeting
+        "
       >
         <SuccessPage response={responsePayload} InstantMeet={true} />
       </CustomModal>

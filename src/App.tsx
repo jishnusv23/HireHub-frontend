@@ -131,7 +131,7 @@ const App = () => {
       dispatch(getUserData());
     } else if (data.isBlocked) {
       dispatch(logoutAction());
-    } 
+    }
   }, [data, dispatch]);
 
   return (
@@ -203,7 +203,10 @@ const App = () => {
         <Route
           path="/forgot-password"
           element={
-            <PublicRoute element={<ForgotPasswrod />} allowedRoles={[]} />
+            <PublicRoute
+              element={<ForgotPasswrod />}
+              allowedRoles={["interviewer", "", "pending"]}
+            />
           }
         />
         <Route
@@ -217,7 +220,7 @@ const App = () => {
           element={
             <PublicRoute
               element={<Room />}
-              allowedRoles={["interviewer", "pending",""]}
+              allowedRoles={["interviewer", "pending", ""]}
             />
           }
         />

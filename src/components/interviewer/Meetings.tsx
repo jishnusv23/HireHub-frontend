@@ -90,15 +90,15 @@ export const Meetings = () => {
               </TabsList>
 
               <TabsContent value="Scheduled">
-                <MeetingTable data={paginatedData} />
+                <MeetingTable Interviewdata={paginatedData} />
               </TabsContent>
 
               <TabsContent value="Completed">
-                <MeetingTable data={paginatedData} />
+                <MeetingTable Interviewdata={paginatedData} />
               </TabsContent>
 
               <TabsContent value="Cancelled">
-                <MeetingTable data={paginatedData} />
+                <MeetingTable Interviewdata={paginatedData} />
               </TabsContent>
             </Tabs>
           </div>
