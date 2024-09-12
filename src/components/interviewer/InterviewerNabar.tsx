@@ -50,11 +50,12 @@ const InterviewerNabar: React.FC<{ toggleSidebar: () => void }> = ({
             Interviewer Panel
           </span>
         </div>
-        <div className="hidden lg:block">
+        <div className="hidden lg:block ">
           <InputWithIcon
-            icon={<LocationSearchingTwoToneIcon className="" />}
-            placeholder="search here"
+            icon={<LocationSearchingTwoToneIcon className="mb-3 pb-1 " />}
+            placeholder="  search here"
             type="text"
+            
           />
         </div>
         <div className="flex items-center space-x-6">

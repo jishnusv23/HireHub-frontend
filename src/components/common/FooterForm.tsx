@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -13,12 +13,14 @@ import {
 import { Input } from "../ui/Input";
 import { Button } from "../ui/button";
 import Logo from "@/assets/logos/HireHub-r.png";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.string().email(),
   message: z.string().min(1, "Message is required"),
 });
 export function FooterForm() {
+  // const [message,setMessage]=useState('')
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -26,8 +28,13 @@ export function FooterForm() {
       message: "",
     },
   });
-  const onSubmit = () => {
-    console.log("first");
+  const onSubmit = async(value:any) => {
+    // setMessage(value)
+    toast.success('Thank you for your response! Our team will review your submission and get back to you soon. ')
+    form.reset()
+    // setMessage('')
+   
+
   };
   return (
     <div className="p-5 lg:p-16 bg-backgroundAccent rounded-xl flex flex-col gap-4">
@@ -67,7 +74,7 @@ export function FooterForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>message</FormLabel>
                   <FormControl>
                     <Input
                       type="tex"

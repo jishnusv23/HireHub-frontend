@@ -118,6 +118,7 @@ import ForgotPasswrod from "./pages/auth/ForgotPasswrod";
 import { ForgotPassLogin } from "./pages/auth/ForgotPassLogin";
 import { InterViewerRoutes } from "./routes/InterViewerRoutes";
 import { Room } from "./pages/Meet/Room";
+import { Contact } from "./pages/common/Contact";
 
 // import { SuccessPage } from "./components/common/Interviewer/SuccessPage";
 
@@ -224,15 +225,10 @@ const App = () => {
             />
           }
         />
-        {/* <Route
-          path="/Meet-now"
-          element={
-            <PublicRoute
-              element={<InstantMeetSuccess />}
-              allowedRoles={["interviewer", "pending"]}
-            />
-          }
-        /> */}
+        <Route
+          path="/contact"
+          element={<PublicRoute element={<Contact/>} allowedRoles={[]} />}
+        />
       </Routes>
     </Router>
   );
