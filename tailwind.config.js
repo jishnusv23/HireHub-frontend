@@ -27,6 +27,7 @@ export default {
         borderColor: {
           designColor: "var(--border-color)",
         },
+       
       },
     },
   },

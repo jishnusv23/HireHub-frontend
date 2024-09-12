@@ -48,12 +48,15 @@ export const CustomModal: React.FC<CustomModalProps> = ({
               leaveTo="opacity-0 scale-95"
             >
               <DialogPanel className="w-full max-w-md sm:max-w-lg md:max-w-2xl  transform overflow-hidden rounded-2xl bg-background p-6 text-left align-middle shadow-xl transition-all">
-                <div onClick={onClose} className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
-                  <CloseIcon color="error" />
+                <div
+                  onClick={onClose}
+                  className="absolute top-3 right-3 bg-primary hover:bg-red-500 rounded-xl"
+                >
+                  <CloseIcon sx={{ color: "white" }} className="w-6 h-6" />
                 </div>
                 <DialogTitle
                   as="h3"
-                  className="text-xl md:text-2xl font-bold leading-6 text-center text-gray-900"
+                  className="text-xl md:text-2xl font-bold leading-6 text-center "
                 >
                   {title}
                 </DialogTitle>
@@ -61,9 +64,7 @@ export const CustomModal: React.FC<CustomModalProps> = ({
                 <div className="mt-4 w-full p-4 rounded-md">{children}</div>
 
                 <div className="mt-6 flex justify-end">
-                  {/* <Button onClick={onClose}> */}
-
-                  {/* </Button> */}
+                
                 </div>
               </DialogPanel>
             </TransitionChild>

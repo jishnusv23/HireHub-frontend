@@ -61,6 +61,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
 import { RooteState } from "@/redux/store";
 import { useNavigate } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 
 interface VideoCallProps {
   RoomID: string;
@@ -74,14 +76,15 @@ export const VideoCall: React.FC<VideoCallProps> = ({
   onLeaveMeeting,
 }) => {
   const [zp, setZp] = useState<ZegoUIKitPrebuilt | null>(null);
-    const [meetingEnded, setMeetingEnded] = useState(false);
+  const [meetingEnded, setMeetingEnded] = useState(false);
+  const [meetingJoined, setMeetingJoined] = useState(false);
   const { data } = useSelector((state: RooteState) => state.user);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const navigate = useNavigate();
+
   useEffect(() => {
     let ui: ZegoUIKitPrebuilt | undefined;
-    console.log("RoomID changed:", RoomID);
 
     const joinMeet = async () => {
       try {
@@ -112,7 +115,10 @@ export const VideoCall: React.FC<VideoCallProps> = ({
               mode: ZegoUIKitPrebuilt.VideoConference,
             },
             showPreJoinView: false,
-           
+            maxUsers: 5,
+            onJoinRoom: () => {
+              setMeetingJoined(true);
+            },
             onLeaveRoom: () => {
               setMeetingEnded(true);
             },
@@ -131,14 +137,35 @@ export const VideoCall: React.FC<VideoCallProps> = ({
       }
     };
   }, [RoomID, data]);
+
   const goToHome = () => {
     onLeaveMeeting();
-    navigate("/home"); // Adjust the path based on your route
+    navigate("/home");
+  };
+
+  const handleCustomAction = () => {
+    console.log("Custom Action triggered");
+    alert("Custom button clicked!");
+    
   };
 
   return (
-    <div className="w-full h-screen">
-      <div ref={containerRef} className="w-full h-full" />
+    <div className="relative w-full h-full">
+      <div ref={containerRef} className=" h-screen" />
+      {meetingJoined && (
+        <div className="absolute bottom-4 right-1/4 transform translate-x-1/2">
+          <IconButton
+            onClick={handleCustomAction}
+            style={{
+              backgroundColor: "#2196f3",
+              color: "white",
+              padding: "12px",
+            }}
+          >
+            <EditCalendarIcon />
+          </IconButton>
+        </div>
+      )}
       {meetingEnded && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
           <button

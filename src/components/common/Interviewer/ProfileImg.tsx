@@ -3,7 +3,9 @@ import { RooteState } from "@/redux/store";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import { ImageUpload } from "@/utils/cloudinary/ImageUpload";
+import AddIcon from "@mui/icons-material/Add";
 import { updateProfileAction } from "@/redux/store/actions/user/updateProfileAction";
 import { updateProfileImgAction } from "@/redux/store/actions/user/updateProfileImgAction";
 import { toast } from "sonner";
@@ -72,14 +74,28 @@ export const ProfileImg = () => {
         onChange={handleImageChange}
         disabled={!isEditing}
       />
-      <Button
+      {loading && (
+        <span className="bg-red-600 rounded-2xl h-10 w-10 flex items-center justify-center">
+          <DirectionsRunIcon sx={{ color: "white" }} className="w-6 h-6" />
+        </span>
+      )}
+      {!loading && (
+        <span
+          className="bg-red-600 rounded-2xl h-10 w-10 flex items-center justify-center"
+          onClick={startEditing}
+        >
+          <AddIcon sx={{ color: "white" }} className="w-6 h-6" />
+        </span>
+      )}
+
+      {/* <Button
         onClick={startEditing}
         className="bg-red-700 hover:bg-red-500"
         type="button"
         disabled={loading}
       >
         {!loading ? "Change Profile" : "Loading"}
-      </Button>
+      </Button> */}
     </div>
   );
 };

@@ -69,14 +69,16 @@ export const MeetingTable = ({
       {Interviewdata.length === 0 && (
         <div className="flex items-center justify-center  min-h-[calc(100vh-4rem)]">
           <div className="text-center">
-            <h1>Condecting your meet</h1>
+            <h1 className="font-bold text-2xl text-foreground">
+              No active meetings. Set up a new one to begin!
+            </h1>
             <Player
               src="https://lottie.host/dacdeae0-e164-4f33-8b87-3be09559dc99/KsBkmJ1IRN.json"
               background="transparent"
               speed={1}
               loop
               autoplay
-              className="w-60 mx-auto"
+              className="w-80 mx-auto"
             />
             <div className="mt-4">
               <Button className="mr-2">Meet Now</Button>
