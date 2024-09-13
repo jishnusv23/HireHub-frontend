@@ -119,6 +119,7 @@ import { ForgotPassLogin } from "./pages/auth/ForgotPassLogin";
 import { InterViewerRoutes } from "./routes/InterViewerRoutes";
 import { Room } from "./pages/Meet/Room";
 import { Contact } from "./pages/common/Contact";
+import { AboutUs } from "./pages/common/AboutUs";
 
 // import { SuccessPage } from "./components/common/Interviewer/SuccessPage";
 
@@ -228,6 +229,10 @@ const App = () => {
         <Route
           path="/contact"
           element={<PublicRoute element={<Contact/>} allowedRoles={[]} />}
+        />
+        <Route
+          path="/About"
+          element={<PublicRoute element={<AboutUs/>} allowedRoles={[]} />}
         />
       </Routes>
     </Router>

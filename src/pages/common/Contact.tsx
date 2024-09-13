@@ -9,6 +9,7 @@ export const Contact = () => {
       <Header />
 
       <ContactUsPage />
+      
 
       <Footer />
     </>

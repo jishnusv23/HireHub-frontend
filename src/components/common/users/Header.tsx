@@ -55,7 +55,12 @@ const Header = () => {
           <div className="hover-text font-bold" onClick={() => navigate("/")}>
             Home
           </div>
-          <div className="hover-text font-bold">Overview</div>
+          <div
+            className="hover-text font-bold"
+            onClick={() => navigate("/About")}
+          >
+            Overview
+          </div>
           <div
             className="hover-text font-bold"
             onClick={() => navigate("/contact")}
