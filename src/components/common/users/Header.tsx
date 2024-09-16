@@ -106,7 +106,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu setup this */}
       {menuOpen && (
         <div className="fixed inset-y-0 right-0 w-1/2 bg-backgroundAccent shadow-lg z-50 transition-transform transform duration-300 ease-in-out lg:hidden">
           <div className="flex flex-col h-full">
@@ -131,7 +131,8 @@ const Header = () => {
               <div
                 className="hover-text font-bold"
                 onClick={() => {
-                  toggleMenu;
+                  navigate("/About");
+                  toggleMenu()
                 }}
               >
                 Overview
