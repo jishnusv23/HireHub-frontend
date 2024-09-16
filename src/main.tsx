@@ -7,6 +7,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "./components/ui/theme-provider.tsx";
 import { store } from "./redux/store/index.tsx";
+import { SocketProvider } from "./context/SocketProvider.tsx";
 
 const clientId = import.meta.env.VITE_CLIENT_ID;
 
@@ -16,9 +17,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Provider store={store}>
         <GoogleOAuthProvider clientId={clientId}>
           <Toaster richColors position="top-center" />
+          <SocketProvider>
 
           <App />
-          {/* <Apps /> */}
+          </SocketProvider>
+          
         </GoogleOAuthProvider>
       </Provider>
     </ThemeProvider>

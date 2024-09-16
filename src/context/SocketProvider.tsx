@@ -12,7 +12,7 @@ interface SocketContextType {
 }
 
 interface SocketProviderProps {
-  childern: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const Socket_bakcend_url = import.meta.env.VITE_SOCKET_BACKEND_URL;
@@ -20,7 +20,7 @@ const IS_LOCAL_ENV = import.meta.env.MODE === "development";
 
 export const SocketContext = createContext<SocketContextType | null>(null);
 
-export const SocketProvider: React.FC<SocketProviderProps> = ({ childern }) => {
+export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<
@@ -69,7 +69,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ childern }) => {
 
   return (
     <SocketContext.Provider value={ContextValues}>
-      {childern}
+      {children}
     </SocketContext.Provider>
   );
 };
