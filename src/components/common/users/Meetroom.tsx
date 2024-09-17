@@ -4,17 +4,17 @@ interface VideoCallProps {
   RoomID: string;
   onLeaveMeeting: () => void;
   localStream: MediaStream | null;
-  remoteStream: MediaStream | null;
+  remoteStreams: MediaStream[];
 }
 
 export const Meetroom: React.FC<VideoCallProps> = ({
   RoomID,
   onLeaveMeeting,
   localStream,
-  remoteStream,
+  remoteStreams,
 }) => {
   const localVideoRef = useRef<HTMLVideoElement>(null);
-  const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  const remoteVideoRefs = useRef<HTMLVideoElement[]>([]); // Use a ref array for multiple remote streams
 
   useEffect(() => {
     if (localVideoRef.current && localStream) {
@@ -23,30 +23,53 @@ export const Meetroom: React.FC<VideoCallProps> = ({
   }, [localStream]);
 
   useEffect(() => {
-    if (remoteVideoRef.current && remoteStream) {
-      remoteVideoRef.current.srcObject = remoteStream;
-    }
-  }, [remoteStream]);
+    // Assign each remote stream to its corresponding video element
+    remoteStreams.forEach((stream, index) => {
+      if (
+        remoteVideoRefs.current[index] &&
+        remoteVideoRefs.current[index].srcObject !== stream
+      ) {
+        remoteVideoRefs.current[index].srcObject = stream;
+      }
+    });
+  }, [remoteStreams]);
 
   return (
-    <>
+    <div className="relative w-full h-screen bg-gray-900">
+      {/* Local Video */}
       {localStream && (
         <video
           ref={localVideoRef}
           autoPlay
           playsInline
           muted
-          className="absolute bottom-4 right-4 w-1/4 max-w-[200px] aspect-video object-cover rounded-lg border-2 border-white shadow-md"
+          className="absolute bottom-4 right-4 w-1/4 max-w-[200px] aspect-video object-cover rounded-lg border-2 border-white shadow-md z-10"
         />
       )}
-      {remoteStream && (
+
+      {/* Remote Videos */}
+      {remoteStreams.map((_, index) => (
         <video
-          ref={remoteVideoRef}
+          key={index}
+          ref={(el) => {
+            // Store the reference of each remote video element in the array
+            if (el && !remoteVideoRefs.current[index]) {
+              remoteVideoRefs.current[index] = el;
+            }
+          }}
           autoPlay
           playsInline
           className="w-full h-full object-cover"
         />
-      )}
-    </>
+      ))}
+
+      {/* Leave Meeting Button */}
+      <button
+        onClick={onLeaveMeeting}
+        className="absolute bottom-4 left-4 bg-red-500 text-white px-4 py-2 rounded-lg z-20"
+      >
+        Leave Meeting
+      </button>
+    </div>
   );
 };

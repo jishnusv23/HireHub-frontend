@@ -15,23 +15,23 @@ export const Room = () => {
   const navigate = useNavigate();
   const { data } = useAppSelector((state: RooteState) => state.user);
 
-  const [interviewerJoined, setInterviewerJoined] = useState(false);
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+    const [interviewerJoined, setInterviewerJoined] = useState(false);
+    const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-  const checkInterviewerStatus = async () => {
-    if (uniqueId && data?._id) {
-      const response = await dispatch(
-        verifyIntervewe({ uniqueId, userId: data._id })
-      );
-      if (response.payload.success) {
-        setInterviewerJoined(true);
+    const checkInterviewerStatus = async () => {
+      if (uniqueId && data?._id) {
+        const response = await dispatch(
+          verifyIntervewe({ uniqueId, userId: data._id })
+        );
+        if (response.payload.success) {
+          setInterviewerJoined(true);
+        }
       }
-    }
-  };
+    };
 
-  useEffect(() => {
-    checkInterviewerStatus();
-  }, [uniqueId, dispatch, data]);
+    useEffect(() => {
+      checkInterviewerStatus();
+    }, [uniqueId, dispatch, data]);
 
   const handleFormSubmit = async (formData: {
     username: string;
