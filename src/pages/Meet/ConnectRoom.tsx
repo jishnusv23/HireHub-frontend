@@ -157,6 +157,7 @@ const ConnectRoom: React.FC = () => {
     </div>
   );
 };
+//  const [sharingId, setSharingId] = useState<boolean>(false);
 
 export default ConnectRoom;
 
