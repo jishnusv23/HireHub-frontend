@@ -1,3 +1,4 @@
+// const IS_LOCAL_ENV = import.meta.env.MODE === "development";
 // import { useAppSelector } from "@/hooks/hooks";
 // import { RooteState } from "@/redux/store";
 // import React, { createContext, useContext, useEffect, useState } from "react";
@@ -73,9 +74,12 @@
 //     </SocketContext.Provider>
 //   );
 // };
+
+
+
 import { useAppSelector } from "@/hooks/hooks";
 import { RooteState } from "@/redux/store";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 import io, { Socket } from "socket.io-client";
 
 interface OnlineUser {
@@ -92,7 +96,7 @@ interface SocketContextType {
 }
 
 const SocketBackendURL = import.meta.env.VITE_SOCKET_BACKEND_URL;
-const IS_LOCAL_ENV = import.meta.env.MODE === "development";
+export const socket = io(SocketBackendURL, { transports: ["websocket", "polling"] });
 
 export const SocketContext = createContext<SocketContextType | undefined>(
   undefined
@@ -104,48 +108,11 @@ interface SocketProviderProps {
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const { data } = useAppSelector((state: RooteState) => state.user);
-  const [socket, setSocket] = useState<Socket | null>(null);
+  // const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [currentRoom, setCurrentRoom] = useState<string>("");
 
-  useEffect(() => {
-    if (
-      data &&
-      (data.role === "interviewer" || data.role === "pending") &&
-      SocketBackendURL
-    ) {
-      const transports = IS_LOCAL_ENV
-        ? ["websocket", "polling"]
-        : ["websocket"];
-
-      const newSocket = io(SocketBackendURL, {
-        transports,
-        query: { userId: data._id },
-      });
-
-      newSocket.on("connect", () => {
-        console.log("Socket connected");
-        newSocket.emit("user-connected", data._id);
-      });
-
-      newSocket.on("update-online-users", (users: OnlineUser[]) => {
-        setOnlineUsers(users);
-      });
-
-      newSocket.on("disconnect", () => {
-        console.log("Socket disconnected");
-        newSocket.emit("user-disconnected", data._id);
-      });
-
-      setSocket(newSocket);
-
-      return () => {
-        newSocket.disconnect();
-        console.log("Socket disconnected from frontend");
-      };
-    }
-  }, [data]);
-
+  
   const ContextValues: SocketContextType = {
     socket,
     onlineUsers,
@@ -153,10 +120,47 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     currentRoom,
     setCurrentRoom,
   };
-
+  
   return (
     <SocketContext.Provider value={ContextValues}>
       {children}
     </SocketContext.Provider>
   );
 };
+// useEffect(() => {
+//   if (
+//     data &&
+//     (data.role === "interviewer" || data.role === "pending") &&
+//     SocketBackendURL
+//   ) {
+//     const transports = IS_LOCAL_ENV
+//       ? ["websocket", "polling"]
+//       : ["websocket"];
+
+//     const newSocket = io(SocketBackendURL, {
+//       transports,
+//       query: { userId: data._id },
+//     });
+
+//     newSocket.on("connect", () => {
+//       console.log("Socket connected");
+//       newSocket.emit("user-connected", data._id);
+//     });
+
+//     newSocket.on("update-online-users", (users: OnlineUser[]) => {
+//       setOnlineUsers(users);
+//     });
+
+//     newSocket.on("disconnect", () => {
+//       console.log("Socket disconnected");
+//       newSocket.emit("user-disconnected", data._id);
+//     });
+
+//     setSocket(newSocket);
+
+//     return () => {
+//       newSocket.disconnect();
+//       console.log("Socket disconnected from frontend");
+//     };
+//   }
+// }, [data]);
