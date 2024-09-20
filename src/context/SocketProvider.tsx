@@ -78,44 +78,49 @@ import { RooteState } from "@/redux/store";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
 
+interface OnlineUser {
+  userId: string;
+  socketId: string;
+}
+
 interface SocketContextType {
   socket: Socket | null;
-  onlineUsers: { userId: string; socketId: string }[];
-  setOnlineUsers: (users: { userId: string; socketId: string }[]) => void;
+  onlineUsers: OnlineUser[];
+  setOnlineUsers: (users: OnlineUser[]) => void;
   currentRoom: string;
   setCurrentRoom: (room: string) => void;
 }
 
-const Socket_bakcend_url = import.meta.env.VITE_SOCKET_BACKEND_URL;
+const SocketBackendURL = import.meta.env.VITE_SOCKET_BACKEND_URL;
 const IS_LOCAL_ENV = import.meta.env.MODE === "development";
 
-export const SocketContext = createContext<SocketContextType | null>(null);
+export const SocketContext = createContext<SocketContextType | undefined>(
+  undefined
+);
 
 interface SocketProviderProps {
   children: React.ReactNode;
 }
+
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [onlineUsers, setOnlineUsers] = useState<
-    { userId: string; socketId: string }[]
-  >([]);
+  const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [currentRoom, setCurrentRoom] = useState<string>("");
 
   useEffect(() => {
     if (
-      (data?.role === "interviewer" || data?.role === "pending") &&
-      Socket_bakcend_url
+      data &&
+      (data.role === "interviewer" || data.role === "pending") &&
+      SocketBackendURL
     ) {
       const transports = IS_LOCAL_ENV
         ? ["websocket", "polling"]
         : ["websocket"];
 
-      const newSocket: Socket = io(Socket_bakcend_url, {
+      const newSocket = io(SocketBackendURL, {
         transports,
-        query: {
-          userId: data._id,
-        },
+        query: { userId: data._id },
       });
 
       newSocket.on("connect", () => {
@@ -123,12 +128,9 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         newSocket.emit("user-connected", data._id);
       });
 
-      newSocket.on(
-        "update-online-users",
-        (users: { userId: string; socketId: string }[]) => {
-          setOnlineUsers(users);
-        }
-      );
+      newSocket.on("update-online-users", (users: OnlineUser[]) => {
+        setOnlineUsers(users);
+      });
 
       newSocket.on("disconnect", () => {
         console.log("Socket disconnected");
@@ -145,11 +147,11 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }, [data]);
 
   const ContextValues: SocketContextType = {
-    currentRoom,
+    socket,
     onlineUsers,
     setOnlineUsers,
+    currentRoom,
     setCurrentRoom,
-    socket,
   };
 
   return (

@@ -18,10 +18,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <GoogleOAuthProvider clientId={clientId}>
           <Toaster richColors position="top-center" />
           <SocketProvider>
-
-          <App />
+            <App />
           </SocketProvider>
-          
         </GoogleOAuthProvider>
       </Provider>
     </ThemeProvider>

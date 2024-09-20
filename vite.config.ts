@@ -13,4 +13,7 @@ export default defineConfig({
       "vite-env": path.resolve(__dirname, "src", "vite-env.d.ts"),
     },
   },
+  define: {
+    global: {},
+  },
 });

@@ -410,9 +410,9 @@ import { InterivieweeMeetAcess } from "@/redux/store/actions/common/IntervieweeM
 const MeetRoom: React.FC = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   const dispatch = useAppDispatch();
+  const { uniqueId } = useParams<{ uniqueId: string }>();
   const [interviewerJoined, setInterviewerJoined] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const { uniqueId } = useParams<{ uniqueId: string }>();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [remoteStreams, setRemoteStreams] = useState<{
@@ -420,14 +420,22 @@ const MeetRoom: React.FC = () => {
   }>({});
   const [micMuted, setMicMuted] = useState(false);
   const [videoOff, setVideoOff] = useState(false);
+   const [userData, setUserData] = useState<{
+     username: string;
+     email: string;
+     userId: string | null;
+   }>({
+     username: "",
+     email: "",
+     userId: null,
+   });
   const [userId, setUserId] = useState<string | null>(null);
-  const [isInterviewer, setIsInterviewer] = useState(false);
   const peerConnections = useRef<{ [key: string]: RTCPeerConnection }>({});
   const myVideoRef = useRef<HTMLVideoElement>(null);
-  const remoteVideoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>(
+  const partnerVideoRef = useRef<{ [key: string]: HTMLVideoElement | null }>(
     {}
   );
-  // const userId = uuidv4(); 
+
   useEffect(() => {
     let storedUserId = localStorage.getItem("userId");
     if (!storedUserId) {
@@ -436,12 +444,6 @@ const MeetRoom: React.FC = () => {
     }
     setUserId(storedUserId);
   }, []);
-
-  useEffect(() => {
-    // Determine if the user is an interviewer based on your app's logic
-    // For example, you might check if the user has a certain role in your user data
-    setIsInterviewer(data?.role === "interviewer");
-  }, [data]);
 
   useEffect(() => {
     const newSocket = io("http://localhost:4002");
@@ -455,24 +457,14 @@ const MeetRoom: React.FC = () => {
   useEffect(() => {
     if (!socket || !uniqueId) return;
 
-    const handleRoomJoined = ({
-      roomId,
-      userId: assignedUserId,
-    }: {
-      roomId: string;
-      userId: string;
-    }) => {
-      setUserId(assignedUserId);
-      toast.success(`Joined room ${roomId}`);
-    };
-
     const handleUserConnected = (newUserId: string) => {
       toast.info(`User ${newUserId} connected`);
       if (localStream) {
         createPeerConnection(newUserId, true);
       }
     };
-    const handleExistingParticipants = (existingUsers: any) => {
+
+    const handleExistingParticipants = (existingUsers: string[]) => {
       existingUsers.forEach((existingUserId: string) => {
         if (existingUserId !== userId) {
           const pc = createPeerConnection(existingUserId, false);
@@ -497,12 +489,7 @@ const MeetRoom: React.FC = () => {
         await pc.setRemoteDescription(new RTCSessionDescription(datas.signal));
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
-        socket.emit("webrtc-signal", {
-          type: "answer",
-          signal: answer,
-          to: datas.from,
-          from: userId,
-        });
+        socket.emit("webRTC-answer", { callerSocketId: datas.from, answer });
       } else if (datas.type === "answer") {
         await pc.setRemoteDescription(new RTCSessionDescription(datas.signal));
       } else if (datas.type === "candidate") {
@@ -523,26 +510,23 @@ const MeetRoom: React.FC = () => {
       });
     };
 
-    socket.on("room-joined", handleRoomJoined);
     socket.on("user-connected", handleUserConnected);
     socket.on("existing-participants", handleExistingParticipants);
     socket.on("webrtc-signal", handleWebRTCSignal);
     socket.on("user-disconnected", handleUserDisconnected);
 
-    if (isInterviewer) {
-      socket.emit("create-room", uniqueId, data?._id || "interviewer");
-    } else {
-      socket.emit("join-room", uniqueId);
-    }
+    socket.emit("group-call-register", {
+      peerId: userId,
+      username: data?.username,
+    });
 
     return () => {
-      socket.off("room-joined", handleRoomJoined);
       socket.off("user-connected", handleUserConnected);
       socket.off("existing-participants", handleExistingParticipants);
       socket.off("webrtc-signal", handleWebRTCSignal);
       socket.off("user-disconnected", handleUserDisconnected);
     };
-  }, [socket, uniqueId, userId, localStream, isInterviewer, data]);
+  }, [socket, uniqueId, userId, localStream, data]);
 
   const createPeerConnection = useCallback(
     (peerId: string, isInitiator: boolean) => {
@@ -553,21 +537,15 @@ const MeetRoom: React.FC = () => {
 
       pc.onicecandidate = (event) => {
         if (event.candidate) {
-          socket?.emit("webrtc-signal", {
-            type: "candidate",
-            signal: event.candidate,
-            to: peerId,
-            from: userId,
+          socket?.emit("webRTC-candidate", {
+            connectedUserSocketId: peerId,
+            candidate: event.candidate,
           });
         }
       };
 
       pc.ontrack = (event) => {
-        console.log("Received remote track:", event.streams[0]);
-        setRemoteStreams((prev) => ({
-          ...prev,
-          [peerId]: event.streams[0],
-        }));
+        setRemoteStreams((prev) => ({ ...prev, [peerId]: event.streams[0] }));
       };
 
       if (localStream) {
@@ -579,12 +557,7 @@ const MeetRoom: React.FC = () => {
       if (isInitiator) {
         pc.createOffer().then((offer) => {
           pc.setLocalDescription(offer);
-          socket?.emit("webrtc-signal", {
-            type: "offer",
-            signal: offer,
-            to: peerId,
-            from: userId,
-          });
+          socket?.emit("webRTC-offer", { calleeSocketId: peerId, offer });
         });
       }
 
@@ -593,6 +566,22 @@ const MeetRoom: React.FC = () => {
     },
     [socket, userId, localStream]
   );
+
+  const checkInterviewerStatus = async () => {
+    if (uniqueId && data?._id) {
+      const response = await dispatch(
+        verifyIntervewe({ uniqueId, userId: data._id })
+      );
+      if (response.payload.success) {
+        setInterviewerJoined(true);
+         setIsFormSubmitted(true);
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkInterviewerStatus();
+  }, [uniqueId, dispatch, data]);
 
   useEffect(() => {
     const startLocalStream = async () => {
@@ -620,29 +609,6 @@ const MeetRoom: React.FC = () => {
     };
   }, []);
 
-  const checkInterviewerStatus = async () => {
-    if (uniqueId && data?._id) {
-      const response = await dispatch(
-        verifyIntervewe({ uniqueId, userId: data._id })
-      );
-      if (response.payload.success) {
-        setInterviewerJoined(true);
-        setIsFormSubmitted(true);
-      }
-    }
-  };
-
-  useEffect(() => {
-    checkInterviewerStatus();
-  }, [uniqueId, dispatch, data]);
-  useEffect(() => {
-    Object.keys(remoteStreams).forEach((peerId) => {
-      if (remoteVideoRefs.current[peerId]) {
-        remoteVideoRefs.current[peerId].srcObject = remoteStreams[peerId];
-      }
-    });
-  }, [remoteStreams]);
-
   const toggleMic = () => {
     if (localStream) {
       localStream
@@ -660,276 +626,342 @@ const MeetRoom: React.FC = () => {
       setVideoOff(!videoOff);
     }
   };
-  const handleFormSubmit = async (formData: {
-    username: string;
-    email: string;
-  }) => {
-    const { username, email } = formData;
-    sessionStorage.setItem("username", username);
-    sessionStorage.setItem("email", email);
+    const handleFormSubmit = async (formData: {
+      username: string;
+      email: string;
+    }) => {
+      const { username, email } = formData;
+      sessionStorage.setItem("username", username);
+      sessionStorage.setItem("email", email);
 
-    const response = await dispatch(
-      InterivieweeMeetAcess({
-        uniqueId: uniqueId as string,
-        email: email as string,
-      })
-    );
+      const response = await dispatch(
+        InterivieweeMeetAcess({
+          uniqueId: uniqueId as string,
+          email: email as string,
+        })
+      );
 
-    if (response.payload.success) {
-      setInterviewerJoined(true);
-      setIsFormSubmitted(true);
-    } else {
-      toast.error("Session has not started yet");
-    }
-  };
+      if (response.payload.success) {
+        setInterviewerJoined(true);
+        setIsFormSubmitted(true);
+      } else {
+        toast.error("Session has not started yet");
+      }
+    };
 
-  if (!data && !isFormSubmitted) {
-    return (
-      <MeetValidation RoomID={uniqueId || ""} onSubmit={handleFormSubmit} />
-    );
-  }
-  if (interviewerJoined && isFormSubmitted) {
-    return (
-      <div className="h-screen flex flex-col">
-        <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+   if (!data && !isFormSubmitted) {
+     return (
+       <MeetValidation RoomID={uniqueId || ""} onSubmit={handleFormSubmit} />
+     );
+   }
+
+ if (interviewerJoined && isFormSubmitted) {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
+      {/* <div className="local-video"> */}
+      <div className="relative w-full h-full max-w-6xl max-h-[90vh] flex flex-col justify-between p-4">
+        <div className="relative flex-grow overflow-hidden rounded-lg shadow-lg"></div>
+        <video
+          ref={myVideoRef}
+          autoPlay
+          playsInline
+          muted
+          className="w-full bg-gray-800 rounded-md"
+        />
+      {/* </div> */}
+      <div className="remote-videos">
+        {Object.entries(remoteStreams).map(([peerId, stream]) => (
           <video
-            ref={myVideoRef}
+            key={peerId}
             autoPlay
             playsInline
-            muted
-            className="w-full h-full bg-gray-800 rounded-md"
-          />
-          {Object.entries(remoteStreams).map(([peerId, stream]) => (
-            <video
-              key={peerId}
-              autoPlay
-              playsInline
-              className="w-full h-full bg-gray-800 rounded-md"
-              ref={(el) => {
-                if (el) el.srcObject = stream;
-              }}
-            />
-          ))}
-        </div>
-        <div className="flex justify-center items-center py-4 bg-gray-900">
-          <button
-            onClick={toggleMic}
-            className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700"
-          >
-            {micMuted ? (
-              <IoMicOffOutline size={24} />
-            ) : (
-              <IoMicOutline size={24} />
-            )}
-          </button>
-          <button
-            onClick={toggleVideo}
-            className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700"
-          >
-            {videoOff ? (
-              <IoVideocamOffOutline size={24} />
-            ) : (
-              <IoVideocamOutline size={24} />
-            )}
-          </button>
-          <button
-            className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500"
-            onClick={() => {
-              // Implement leave call functionality
+            className="w-full bg-gray-800 rounded-md"
+            ref={(el) => {
+              if (el && stream) {
+                partnerVideoRef.current[peerId] = el;
+                el.srcObject = stream;
+              }
             }}
-          >
-            <IoCallOutline size={24} />
-          </button>
-        </div>
+          />
+        ))}
       </div>
-    );
-  }
+      </div>
+      <div className="flex justify-center items-center py-4 bg-gray-900">
+        <button
+          onClick={toggleMic}
+          className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700"
+        >
+          {micMuted ? (
+            <IoMicOffOutline size={24} />
+          ) : (
+            <IoMicOutline size={24} />
+          )}
+        </button>
+        <button
+          onClick={toggleVideo}
+          className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700"
+        >
+          {videoOff ? (
+            <IoVideocamOffOutline size={24} />
+          ) : (
+            <IoVideocamOutline size={24} />
+          )}
+        </button>
+        <button
+          className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500"
+          onClick={() => {
+            /* Implement leave call functionality */
+          }}
+        >
+          <IoCallOutline size={24} />
+        </button>
+      </div>
+    </div>
+  );
+}
 };
 
 export default MeetRoom;
 
-// import React, { useContext, useEffect, useRef, useState } from "react";
+// import React, { useCallback, useEffect, useRef, useState } from "react";
 // import { useParams } from "react-router-dom";
+// import { io, Socket } from "socket.io-client";
 // import {
 //   IoMicOffOutline,
 //   IoMicOutline,
 //   IoVideocamOffOutline,
 //   IoVideocamOutline,
 // } from "react-icons/io5";
-// import Peer, { MediaConnection, Peer as PeerJS } from "peerjs";
-// import { SocketContext } from "@/context/SocketProvider";
+// import { toast } from "sonner";
+// import { servers } from "@/common/WebRTCserver";
+// import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+// import { RooteState } from "@/redux/store";
+// import { MeetValidation } from "@/components/common/Meet/MeetValidation";
+// import { InterivieweeMeetAcess } from "@/redux/store/actions/common/IntervieweeMeetAccessAction";
+// import { verifyIntervewe } from "@/redux/store/actions/common/verifyHost";
 
-// interface GroupCallJoinRequestData {
+// interface Participant {
 //   peerId: string;
-//   streamId: string;
-//   roomId: string;
+//   username: string;
+//   socketId: string;
 // }
 
 // const MeetRoom: React.FC = () => {
+//   const { data } = useAppSelector((state: RooteState) => state.user);
+//   const dispatch = useAppDispatch();
 //   const { uniqueId } = useParams<{ uniqueId: string }>();
-//   const { socket } = useContext(SocketContext) || {};
-//   const myPeer = useRef<PeerJS | null>(null);
-//   const myStream = useRef<MediaStream | null>(null);
-//   const [remoteStreams, setRemoteStreams] = useState<{
-//     [key: string]: MediaStream;
-//   }>({});
-//   const [isMicOn, setMicOn] = useState(true);
-//   const [isCameraOn, setCameraOn] = useState(true);
-
+//   const [socket, setSocket] = useState<Socket | null>(null);
+//   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+//   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+//   const [micMuted, setMicMuted] = useState(false);
+//   const [videoOff, setVideoOff] = useState(false);
+//   const [interviewerJoined, setInterviewerJoined] = useState(false);
+//   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+//   const peerConnection = useRef<RTCPeerConnection | null>(null);
+//   const myVideoRef = useRef<HTMLVideoElement>(null);
+//   const partnerVideoRef = useRef<HTMLVideoElement | null>(null);
 //   useEffect(() => {
-//     if (!socket || !uniqueId) return;
+//     if (socket) return; // Prevent re-creating the socket if it already exists
 
-//     // Initialize Peer
-//     myPeer.current = new Peer();
-
-//     // Event when peer is open
-//     myPeer.current.on("open", (id: string) => {
-//       console.log("My peer ID is: " + id);
-
-//       if (myStream.current) {
-//         socket.emit("group-call-register", {
-//           peerId: id,
-//           roomId: uniqueId,
-//         });
-
-//         socket.emit("group-call-join-request", {
-//           roomId: uniqueId,
-//           peerId: id,
-//           streamId: myStream.current.id,
-//         });
-//       }
-//     });
-
-//     // Event when receiving an incoming call
-//     myPeer.current.on("call", (call: MediaConnection) => {
-//       console.log("Incoming call from peer:", call.peer);
-
-//       if (myStream.current) {
-//         call.answer(myStream.current);
-//         call.on("stream", (remoteStream: MediaStream) => {
-//           console.log("Received remote stream from peer:", call.peer);
-//           setRemoteStreams((prev) => ({ ...prev, [call.peer]: remoteStream }));
-//         });
-//       }
-//     });
-
-//     // Socket event when another user requests to join
-//     socket.on("group-call-join-request", (data: GroupCallJoinRequestData) => {
-//       console.log("Received join request from peer:", data.peerId);
-
-//       if (myPeer.current) {
-//         const call = myPeer.current.call(
-//           data.peerId,
-//           myStream.current as MediaStream
-//         );
-//         call.on("stream", (remoteStream: MediaStream) => {
-//           console.log("Received remote stream for peer:", data.peerId);
-//           setRemoteStreams((prev) => ({
-//             ...prev,
-//             [data.peerId]: remoteStream,
-//           }));
-//         });
-//       }
-//     });
-
-//     // Get user media
-//     navigator.mediaDevices
-//       .getUserMedia({ video: true, audio: true })
-//       .then((stream) => {
-//         myStream.current = stream;
-//         console.log("Local stream acquired");
-//       })
-//       .catch((err) => console.error("Failed to get local stream", err));
+//     const newSocket = io("http://localhost:4002");
+//     setSocket(newSocket);
 
 //     return () => {
-//       if (myStream.current) {
-//         myStream.current.getTracks().forEach((track) => track.stop());
-//       }
-//       if (myPeer.current) {
-//         myPeer.current.destroy();
+//       newSocket.disconnect();
+//     };
+//   }, [socket]); // Only run this effect when the socket is `null`
+
+//   const createPeerConnection = useCallback(() => {
+//     if (peerConnection.current) return;
+
+//     const pc = new RTCPeerConnection(servers);
+
+//     pc.onicecandidate = (event) => {
+//       if (event.candidate) {
+//         socket?.emit("webRTC-candidate", {
+//           candidate: event.candidate,
+//         });
 //       }
 //     };
-//   }, [uniqueId, socket]);
+
+//     pc.ontrack = (event) => {
+//       setRemoteStream(event.streams[0]);
+//     };
+
+//     if (localStream) {
+//       localStream.getTracks().forEach((track) => {
+//         pc.addTrack(track, localStream);
+//       });
+//     }
+
+//     peerConnection.current = pc;
+//   }, [localStream, socket]);
+
+//   const handleWebRTCOffer = async (data: {
+//     offer: RTCSessionDescriptionInit;
+//   }) => {
+//     if (!peerConnection.current) return;
+//     await peerConnection.current.setRemoteDescription(
+//       new RTCSessionDescription(data.offer)
+//     );
+//     const answer = await peerConnection.current.createAnswer();
+//     await peerConnection.current.setLocalDescription(answer);
+//     socket?.emit("webRTC-answer", { answer });
+//   };
+
+//   const handleWebRTCAnswer = async (data: {
+//     answer: RTCSessionDescriptionInit;
+//   }) => {
+//     if (!peerConnection.current) return;
+//     await peerConnection.current.setRemoteDescription(
+//       new RTCSessionDescription(data.answer)
+//     );
+//   };
+
+//   const handleWebRTCCandidate = async (data: {
+//     candidate: RTCIceCandidateInit;
+//   }) => {
+//     if (!peerConnection.current) return;
+//     await peerConnection.current.addIceCandidate(
+//       new RTCIceCandidate(data.candidate)
+//     );
+//   };
+
+//   useEffect(() => {
+//     const newSocket = io("http://localhost:4002");
+//     setSocket(newSocket);
+
+//     return () => {
+//       newSocket.disconnect();
+//     };
+//   }, []);
+
+//  useEffect(() => {
+//    if (!socket || !uniqueId || !data) return;
+
+//    socket.on("webRTC-offer", handleWebRTCOffer);
+//    socket.on("webRTC-answer", handleWebRTCAnswer);
+//    socket.on("webRTC-candidate", handleWebRTCCandidate);
+
+//    return () => {
+//      socket.off("webRTC-offer", handleWebRTCOffer);
+//      socket.off("webRTC-answer", handleWebRTCAnswer);
+//      socket.off("webRTC-candidate", handleWebRTCCandidate);
+//    };
+//  }, [socket, uniqueId, data, localStream]);
+
+
+//   useEffect(() => {
+//     const startLocalStream = async () => {
+//       try {
+//         const stream = await navigator.mediaDevices.getUserMedia({
+//           video: true,
+//           audio: true,
+//         });
+//         setLocalStream(stream);
+//         if (myVideoRef.current) {
+//           myVideoRef.current.srcObject = stream;
+//         }
+//         createPeerConnection();
+//       } catch (err) {
+//         console.error("Error accessing media devices:", err);
+//         toast.error(
+//           "Failed to access camera and microphone. Please check your permissions."
+//         );
+//       }
+//     };
+
+//     startLocalStream();
+
+//     return () => {
+//       localStream?.getTracks().forEach((track) => track.stop());
+//     };
+//   }, [createPeerConnection, localStream]);
 
 //   const toggleMic = () => {
-//     if (myStream.current) {
-//       myStream.current
+//     if (localStream) {
+//       localStream
 //         .getAudioTracks()
-//         .forEach((track) => (track.enabled = !track.enabled));
-//       setMicOn((prev) => !prev);
+//         .forEach((track) => (track.enabled = !micMuted));
+//       setMicMuted(!micMuted);
 //     }
 //   };
 
-//   const toggleCamera = () => {
-//     if (myStream.current) {
-//       myStream.current
+//   const toggleVideo = () => {
+//     if (localStream) {
+//       localStream
 //         .getVideoTracks()
-//         .forEach((track) => (track.enabled = !track.enabled));
-//       setCameraOn((prev) => !prev);
+//         .forEach((track) => (track.enabled = !videoOff));
+//       setVideoOff(!videoOff);
 //     }
 //   };
 
-//   return (
-//     <div className="p-4 flex flex-col h-screen">
-//       <h2 className="text-2xl font-semibold mb-4">Meet Room</h2>
-//       <div className="flex-grow flex flex-wrap gap-4">
-//         {myStream.current && (
-//           <video
-//             id="myVideo"
-//             autoPlay
-//             muted
-//             playsInline
-//             className="w-64 h-48 bg-gray-800 rounded-md border-2 border-green-500"
-//             ref={(el) => {
-//               if (el) {
-//                 el.srcObject = myStream.current;
-//               }
-//             }}
-//           />
-//         )}
-//         {Object.entries(remoteStreams).map(([peerId, stream]) => (
-//           <video
-//             key={peerId}
-//             id={`remote-${peerId}`}
-//             autoPlay
-//             playsInline
-//             className="w-64 h-48 bg-gray-800 rounded-md border-2 border-blue-500"
-//             ref={(el) => {
-//               if (el) {
-//                 el.srcObject = stream;
-//               }
-//             }}
-//           />
-//         ))}
+//   const checkInterviewerStatus = async () => {
+//     if (uniqueId && data?._id) {
+//       const response = await dispatch(
+//         verifyIntervewe({ uniqueId, userId: data._id })
+//       );
+//       if (response.payload.success) {
+//         setInterviewerJoined(true);
+//         setIsFormSubmitted(true);
+//       }
+//     }
+//   };
+
+//   useEffect(() => {
+//     checkInterviewerStatus();
+//   }, [uniqueId, dispatch, data]);
+
+//   const handleFormSubmit = async (formData: {
+//     username: string;
+//     email: string;
+//   }) => {
+//     const { username, email } = formData;
+//     sessionStorage.setItem("username", username);
+//     sessionStorage.setItem("email", email);
+
+//     const response = await dispatch(
+//       InterivieweeMeetAcess({
+//         uniqueId: uniqueId as string,
+//         email: email as string,
+//       })
+//     );
+
+//     if (response.payload.success) {
+//       setInterviewerJoined(true);
+//       setIsFormSubmitted(true);
+//     } else {
+//       toast.error("Session has not started yet");
+//     }
+//   };
+
+//   if (!data && !isFormSubmitted) {
+//     return (
+//       <MeetValidation RoomID={uniqueId || ""} onSubmit={handleFormSubmit} />
+//     );
+//   }
+
+//   if (interviewerJoined && isFormSubmitted) {
+//     return (
+//       <div className="meet-room">
+//         <video ref={myVideoRef} autoPlay muted className="local-video" />
+//         <video ref={partnerVideoRef} autoPlay className="remote-video" />
+
+//         <div className="controls">
+//           <button onClick={toggleMic}>
+//             {micMuted ? <IoMicOffOutline /> : <IoMicOutline />}
+//           </button>
+//           <button onClick={toggleVideo}>
+//             {videoOff ? <IoVideocamOffOutline /> : <IoVideocamOutline />}
+//           </button>
+//         </div>
 //       </div>
-//       <div className="mt-4 flex justify-center gap-4">
-//         <button
-//           onClick={toggleMic}
-//           className={`p-2 rounded-full ${
-//             isMicOn ? "bg-green-500" : "bg-gray-500"
-//           }`}
-//         >
-//           {isMicOn ? (
-//             <IoMicOutline className="text-white" size={24} />
-//           ) : (
-//             <IoMicOffOutline className="text-white" size={24} />
-//           )}
-//         </button>
-//         <button
-//           onClick={toggleCamera}
-//           className={`p-2 rounded-full ${
-//             isCameraOn ? "bg-blue-500" : "bg-gray-500"
-//           }`}
-//         >
-//           {isCameraOn ? (
-//             <IoVideocamOutline className="text-white" size={24} />
-//           ) : (
-//             <IoVideocamOffOutline className="text-white" size={24} />
-//           )}
-//         </button>
-//       </div>
-//     </div>
-//   );
+//     );
+//   }
+
+//   return null;
 // };
 
 // export default MeetRoom;
+
+

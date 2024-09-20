@@ -121,6 +121,7 @@ import { InterViewerRoutes } from "./routes/InterViewerRoutes";
 import { Contact } from "./pages/common/Contact";
 import { AboutUs } from "./pages/common/AboutUs";
 import MeetRoom  from "./pages/Meet/MeetRoom";
+import ConnectRoom from "./pages/Meet/ConnectRoom";
 
 // import { SuccessPage } from "./components/common/Interviewer/SuccessPage";
 
@@ -223,6 +224,15 @@ const App = () => {
           element={
             <PublicRoute
               element={<Room />}
+              allowedRoles={["interviewer", "pending", ""]}
+            />
+          }
+        /> */}
+        {/* <Route
+          path="/Meet-HireHub/:uniqueId"
+          element={
+            <PublicRoute
+              element={<ConnectRoom />}
               allowedRoles={["interviewer", "pending", ""]}
             />
           }
