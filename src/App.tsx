@@ -120,8 +120,9 @@ import { InterViewerRoutes } from "./routes/InterViewerRoutes";
 // import { Room } from "./pages/Meet/Room";
 import { Contact } from "./pages/common/Contact";
 import { AboutUs } from "./pages/common/AboutUs";
-import MeetRoom  from "./pages/Meet/MeetRoom";
+import MeetRoom from "./pages/Meet/MeetRoom";
 import ConnectRoom from "./pages/Meet/ConnectRoom";
+
 
 // import { SuccessPage } from "./components/common/Interviewer/SuccessPage";
 
@@ -242,17 +243,18 @@ const App = () => {
           element={
             <PublicRoute
               element={<MeetRoom />}
+              // element={<Dummy />}
               allowedRoles={["interviewer", "pending", ""]}
             />
           }
         />
         <Route
           path="/contact"
-          element={<PublicRoute element={<Contact/>} allowedRoles={[]} />}
+          element={<PublicRoute element={<Contact />} allowedRoles={[]} />}
         />
         <Route
           path="/About"
-          element={<PublicRoute element={<AboutUs/>} allowedRoles={[]} />}
+          element={<PublicRoute element={<AboutUs />} allowedRoles={[]} />}
         />
       </Routes>
     </Router>

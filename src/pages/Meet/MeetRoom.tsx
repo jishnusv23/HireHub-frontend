@@ -24,6 +24,7 @@ const MeetRoom = () => {
   const [roomUsers, setRoomUsers] = useState<string[]>([]);
   const [interviewerJoined, setInterviewerJoined] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+
   const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
   const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
   const [userAccepted, setUserAccepted] = useState<boolean>(false);
@@ -52,27 +53,40 @@ const MeetRoom = () => {
 
   useEffect(() => {
     const peer = new Peer();
-   navigator.mediaDevices
-     .getUserMedia({ video: true, audio: true })
-     .then((stream) => {
-       if (MyVideoRef.current) {
-         MyVideoRef.current.srcObject = stream;
-       }
-       setStream(stream);
-     })
-     .catch((err) => console.error("Error getting user media:", err));
+    let mounted = true;
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        if (mounted && MyVideoRef.current) {
+          console.log("__________&&&&&&&&&&&&&&&&&&&&&&&");
 
+          MyVideoRef.current.srcObject = stream;
+          console.log(
+            "🚀 ~ file: MeetRoom.tsx:60 ~ .then ~ MyVideoRef.current.srcObject = stream;:",
+            stream
+          );
+        }
+        setStream(stream);
+      })
+      .catch((err) => console.error("Error getting user media:", err));
 
-      peer.on("open", (id) => {
-        setPeerId(id);
-        socket && socket.emit("room-joined", { roomId, id });
-      });
+    peer.on("open", (id) => {
+      setPeerId(id);
+      socket && socket.emit("room-joined", { roomId, id });
+    });
     peerInstance.current = peer;
 
     return () => {
+      mounted = false;
       peerInstance.current?.destroy();
     };
   }, []);
+  useEffect(() => {
+    if (MyVideoRef.current) {
+      console.log("Video element rendered:", MyVideoRef.current);
+      MyVideoRef.current.srcObject = stream
+    }
+  }, [stream]);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
@@ -151,10 +165,8 @@ const MeetRoom = () => {
       if (stream) {
         call.answer(stream);
         call.on("stream", (remoteVideoStream) => {
-          console.log("Received remote stream", remoteVideoStream);
           if (RemoteVideoRef.current) {
             RemoteVideoRef.current.srcObject = remoteVideoStream;
-            console.log("Set remote video source");
           }
         });
       }
@@ -173,32 +185,32 @@ const MeetRoom = () => {
   console.log("Local stream:", stream);
   console.log("Remote video stream:", RemoteVideoRef.current?.srcObject);
 
-    const call = (remotePeerId: string) => {
-      if (peerInstance.current && stream) {
-        const call = peerInstance.current.call(remotePeerId, stream);
-        call.on("stream", (remoteStream: MediaStream) => {
-          if (RemoteVideoRef.current) {
-            RemoteVideoRef.current.srcObject = remoteStream;
-          }
-        });
-      }
-    };
+  const call = (remotePeerId: string) => {
+    if (peerInstance.current && stream) {
+      const call = peerInstance.current.call(remotePeerId, stream);
+      call.on("stream", (remoteStream: MediaStream) => {
+        if (RemoteVideoRef.current) {
+          RemoteVideoRef.current.srcObject = remoteStream;
+        }
+      });
+    }
+  };
 
-   const toggleVideo = () => {
-     const tracks = stream
-       ?.getTracks()
-       .filter((track) => track.kind === "video");
-     tracks?.forEach((track) => (track.enabled = !videoEnabled));
-     setVideoEnabled(!videoEnabled);
-   };
+  const toggleVideo = () => {
+    const tracks = stream
+      ?.getTracks()
+      .filter((track) => track.kind === "video");
+    tracks?.forEach((track) => (track.enabled = !videoEnabled));
+    setVideoEnabled(!videoEnabled);
+  };
 
-   const toggleAudio = () => {
-     const tracks = stream
-       ?.getTracks()
-       .filter((track) => track.kind === "audio");
-     tracks?.forEach((track) => (track.enabled = !audioEnabled));
-     setAudioEnabled(!audioEnabled);
-   };
+  const toggleAudio = () => {
+    const tracks = stream
+      ?.getTracks()
+      .filter((track) => track.kind === "audio");
+    tracks?.forEach((track) => (track.enabled = !audioEnabled));
+    setAudioEnabled(!audioEnabled);
+  };
 
   const leaveRoom = () => {
     setIsLeaveRoom(true);
@@ -333,14 +345,14 @@ const MeetRoom = () => {
           </button>
         </div>
 
-        <div>
-          {/* <h3>Users in Room:</h3>
+        {/* <div>
+          <h3>Users in Room:</h3>
           <ul>
             {roomUsers.map((userId, index) => (
               <li key={index}>{userId}</li>
             ))}
-          </ul> */}
-        </div>
+          </ul>
+        </div> */}
       </>
     );
   }
