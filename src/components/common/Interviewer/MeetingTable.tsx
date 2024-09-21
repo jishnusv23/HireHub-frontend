@@ -142,7 +142,7 @@ export const MeetingTable = ({
                         to={`/Meet-HireHub/${row.uniqueId}`}
                         className="flex-1 mb-2 sm:mb-0"
                       >
-                        <Button className="bg-green-500 hover:bg-green-400">
+                        <Button className="bg-green-500 hover:bg-green-400" >
                           JOIN
                         </Button>
                       </Link>
