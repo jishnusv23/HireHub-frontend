@@ -13,16 +13,13 @@ export const VideoPlayer: React.FC<{
   }, [stream]);
 
   return (
-
-
     <video
       data-testid="peer-video"
-      className="w-full"
+      className="w-full border border-white"
       ref={videoRef}
       autoPlay
       playsInline
       muted={muted}
-      />
-    
+    />
   );
 };

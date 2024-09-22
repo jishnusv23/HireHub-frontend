@@ -22,6 +22,7 @@ interface MultipleSelectProps {
     value: string;
   };
   options: string[];
+  heading?: string;
 }
 
 function getStyles(name: string, selectedValue: string, theme: Theme) {
@@ -35,7 +36,9 @@ function getStyles(name: string, selectedValue: string, theme: Theme) {
 
 export default function MultipleSelect({
   field,
+
   options,
+  heading,
 }: MultipleSelectProps) {
   const theme = useTheme();
 
@@ -46,7 +49,14 @@ export default function MultipleSelect({
   return (
     <FormControl sx={{ m: 1, width: "100%", mt: 3 }} className="h-12">
       {""}
-      <p className="text-sm font-bold text-black">interviewType</p>
+
+      <p
+        className={`text-sm font-bold ${heading ? "text-white" : "text-black"}`}
+      >
+        {heading || "InterviewType"}
+      </p>
+
+      {/* <p className=`text-sm font-bold text-white`>{heading?:heading,"interviewType"}</p> */}
 
       <Select
         value={field.value}
@@ -61,9 +71,10 @@ export default function MultipleSelect({
         }}
         MenuProps={MenuProps}
         inputProps={{ "aria-label": "Without label" }}
+        className="h-8 bg-white"
       >
         <MenuItem disabled value="">
-          <em>Placeholder</em>
+          <em>select</em>
         </MenuItem>
         {options.map((name) => (
           <MenuItem

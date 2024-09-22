@@ -121,6 +121,7 @@ import { InterViewerRoutes } from "./routes/InterViewerRoutes";
 import { Contact } from "./pages/common/Contact";
 import { AboutUs } from "./pages/common/AboutUs";
 import MeetRoom from "./pages/Meet/MeetRoom";
+import CodeEditor from "./components/common/editor/CodeEditor";
 // import ConnectRoom from "./pages/Meet/ConnectRoom";
 
 
@@ -250,7 +251,7 @@ const App = () => {
         />
         <Route
           path="/contact"
-          element={<PublicRoute element={<Contact />} allowedRoles={[]} />}
+          element={<PublicRoute element={<CodeEditor />} allowedRoles={[]} />}
         />
         <Route
           path="/About"

@@ -50,13 +50,8 @@ export const peersReducer = (state: PeerState, action: PeerAction) => {
         },
       };
     case REMOVE_PEER_STRESAM:
-      return {
-        ...state,
-        [action.payload.peerId]: {
-          ...state[action.payload.peerId],
-          stream: undefined,
-        },
-      };
+     const { [action.payload.peerId]: removedPeer, ...remainingPeers } = state;
+      return remainingPeers
 
     case ADD_ALL_PEER: {
       return { ...state, ...action.payload.peers };

@@ -192,7 +192,11 @@ export const InterviewScheduleForm: React.FC<MeetDataProps> = ({
                 control={form.control}
                 name="interviewType"
                 render={({ field }) => (
-                  <MultipleSelect field={field} options={interviewTypes} />
+                  <MultipleSelect
+                    field={field}
+                    options={interviewTypes}
+                    // heading="InterviewType"
+                  />
                 )}
               />
             </div>

@@ -32,6 +32,7 @@ import {
   removePeerStreamAction,
   addAllPeersAction,
 } from "@/redux/store/actions/Room/peerAction";
+import CodeEditor from "@/components/common/editor/CodeEditor";
 
 const MeetRoom = () => {
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -39,63 +40,62 @@ const MeetRoom = () => {
   const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
   const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+  const [isOpenTerminal, setIsOpenTerminal] = useState(false);
   const [interviewerJoined, setInterviewerJoined] = useState<boolean>(false);
-  const location=useLocation()
+  const location = useLocation();
   const { uniqueId } = useParams();
   const roomId = uniqueId || "";
   const navigate = useNavigate();
   const appDispatch = useAppDispatch();
   const { socket } = useContext(SocketContext) || {};
   const { data } = useAppSelector((state: RooteState) => state.user);
-   const [userData, setUserData] = useState<{
-     username: string;
-     email: string;
-     userId: string | null;
-   }>({
-     username: "",
-     email: "",
-     userId: null,
-   });
+  const [userData, setUserData] = useState<{
+    username: string;
+    email: string;
+    userId: string | null;
+  }>({
+    username: "",
+    email: "",
+    userId: null,
+  });
 
   const peerInstance = useRef<Peer | null>(null);
   const myVideoRef = useRef<HTMLVideoElement | null>(null);
 
-    useEffect(() => {
-      const storedUserId = localStorage.getItem("userId");
-      const storedUsername = localStorage.getItem("username");
-      const storedEmail = localStorage.getItem("email");
-      const isGuest = !data;
-      if (isGuest && storedUserId && storedUsername && storedEmail) {
-        setUserData({
-          userId: storedUserId,
-          username: storedUsername,
-          email: storedEmail,
-        });
-        setIsFormSubmitted(true);
-       
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    const storedUsername = localStorage.getItem("username");
+    const storedEmail = localStorage.getItem("email");
+    const isGuest = !data;
+    if (isGuest && storedUserId && storedUsername && storedEmail) {
+      setUserData({
+        userId: storedUserId,
+        username: storedUsername,
+        email: storedEmail,
+      });
+      setIsFormSubmitted(true);
+    }
+  }, []);
+  useEffect(() => {
+    const preventNavigation = (event: PopStateEvent) => {
+      // Push the current state again to prevent navigation
+      navigate(location.pathname, { replace: true });
+      // Show a warning to the user
+      event.preventDefault();
+      const confirmMessage = "Are you sure you want to leave the meeting?";
+      if (window.confirm(confirmMessage)) {
+        // If the user confirms, you can handle the exit here
+        leaveRoom();
       }
-    }, []);
-      useEffect(() => {
-        const preventNavigation = (event: PopStateEvent) => {
-          // Push the current state again to prevent navigation
-          navigate(location.pathname, { replace: true });
-          // Show a warning to the user
-          event.preventDefault();
-          const confirmMessage = "Are you sure you want to leave the meeting?";
-          if (window.confirm(confirmMessage)) {
-            // If the user confirms, you can handle the exit here
-            leaveRoom();
-          }
-        };
+    };
 
-        window.history.pushState(null, "", location.pathname);
-        window.addEventListener("popstate", preventNavigation);
+    window.history.pushState(null, "", location.pathname);
+    window.addEventListener("popstate", preventNavigation);
 
-        return () => {
-          window.removeEventListener("popstate", preventNavigation);
-        };
-      }, [navigate, location]);
-
+    return () => {
+      window.removeEventListener("popstate", preventNavigation);
+    };
+  }, [navigate, location]);
 
   useEffect(() => {
     const initializePeerConnection = async () => {
@@ -187,6 +187,10 @@ const MeetRoom = () => {
       stream.getTracks().forEach((track) => track.stop());
     }
     socket?.emit("leave-room", { roomId, peerId: peerInstance.current?.id });
+    socket?.on("user-disconnected", (peerId) => {
+      dispatch(removePeerStreamAction(peerId));
+    });
+    localStorage.clear();
   };
 
   const handleFormSubmit = async (formData: {
@@ -206,11 +210,11 @@ const MeetRoom = () => {
       localStorage.setItem("userId", userId);
       localStorage.setItem("username", username);
       localStorage.setItem("email", email);
-       setUserData({
-         username,
-         email,
-         userId,
-       });
+      setUserData({
+        username,
+        email,
+        userId,
+      });
     } else {
       toast.error("Session has not started yet");
     }
@@ -223,13 +227,16 @@ const MeetRoom = () => {
       );
       if (response.payload.success) {
         setInterviewerJoined(true);
-         setUserData({
-           username:data?.username as string,
-           email:data?.email as string,
-           userId:data?._id,
-         });
+        setUserData({
+          username: data?.username as string,
+          email: data?.email as string,
+          userId: data?._id,
+        });
       }
     }
+  };
+  const OpenTerminal = () => {
+    setIsOpenTerminal(true);
   };
 
   useEffect(() => {
@@ -240,32 +247,57 @@ const MeetRoom = () => {
     return <MeetValidation RoomID={roomId} onSubmit={handleFormSubmit} />;
   }
 
+  
+
   return (
     <div className="relative h-screen w-full bg-black">
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="grid gap-4 grid-cols-4">
-          <div>
-            <VideoPlayer stream={stream} muted />
-            <div>{data?.username || "You"}</div>
+      <div
+        className={`absolute inset-0 flex ${
+          isOpenTerminal ? "flex-row" : "items-center justify-center"
+        }`}
+      >
+        {isOpenTerminal && (
+          <div className="w-[70%] h-full border-r-2 border-gray-600">
+            <CodeEditor />
           </div>
-          {Object.entries(peers as PeerState).map(([peerId, peer]) => {
-            if (userData.username !== peer.userName) {
-              return (
-                <div key={peerId} className="">
-                  <VideoPlayer stream={peer.stream} />
-                  <div className="bg-primary">
-                    {peer.userName || "Participant"}
+        )}
+        <div className={`${isOpenTerminal ? "w-[30%]" : "w-full"} h-full p-4`}>
+          <div
+            className={`grid gap-4 h-full ${
+              isOpenTerminal
+                ? "grid-cols-1 sm:grid-cols-2"
+                : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+            }`}
+          >
+            <div className="relative">
+              <VideoPlayer stream={stream} muted />
+              <div className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
+                {userData?.username || "You"}
+              </div>
+            </div>
+
+            {Object.entries(peers as PeerState).map(([peerId, peer]) => {
+              if (userData.username !== peer.userName) {
+                return (
+                  <div key={peerId} className="">
+                    <VideoPlayer stream={peer.stream} />
+                    <div className="bg-primary">
+                      {peer.userName || "Participant"}
+                    </div>
                   </div>
-                </div>
-              );
-            }
-            return null; // Don't render anything if it's the local user
-          })}
+                );
+              }
+              return null; // Don't render anything if it's the local user
+            })}
+          </div>
         </div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center py-4 bg-gray-900 bg-opacity-75">
-        <button className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
+        <button
+          className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
+          onClick={OpenTerminal}
+        >
           <TerminalIcon />
         </button>
         <button
@@ -278,9 +310,8 @@ const MeetRoom = () => {
             <IoVideocamOffOutline size={24} />
           )}
         </button>
-
         <button
-          className="text-white mx-4 p-3 rounded-full bg-lightgreen hover:bg-green-500 transition-colors"
+          className="text-white mx-4 p-3 rounded-full bg-green-600 hover:bg-green-500 transition-colors"
           onClick={toggleAudio}
         >
           {audioEnabled ? (
@@ -289,7 +320,6 @@ const MeetRoom = () => {
             <IoMicOffOutline size={24} />
           )}
         </button>
-
         <button
           className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
           onClick={leaveRoom}

@@ -31,3 +31,7 @@ export const interviewTypes = [
   "Panel",
   "Case Study",
 ];
+export const LangauageType=[
+  "javascript",
+  "paython"
+]
