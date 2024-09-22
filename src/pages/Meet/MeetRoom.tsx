@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import Peer from "peerjs";
 import { v4 as uuidv4 } from "uuid";
@@ -23,6 +23,7 @@ import { MeetValidation } from "@/components/common/Meet/MeetValidation";
 import { InterivieweeMeetAcess } from "@/redux/store/actions/common/IntervieweeMeetAccessAction";
 import { verifyIntervewe } from "@/redux/store/actions/common/verifyHost";
 import { SignupFormData } from "@/types/IForm";
+import TerminalIcon from "@mui/icons-material/Terminal";
 import { VideoPlayer } from "@/components/common/Meet/VideoPlayer";
 import { peersReducer, PeerState } from "@/reducers/peerReducer";
 import {
@@ -39,16 +40,62 @@ const MeetRoom = () => {
   const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [interviewerJoined, setInterviewerJoined] = useState<boolean>(false);
-
+  const location=useLocation()
   const { uniqueId } = useParams();
   const roomId = uniqueId || "";
   const navigate = useNavigate();
   const appDispatch = useAppDispatch();
   const { socket } = useContext(SocketContext) || {};
   const { data } = useAppSelector((state: RooteState) => state.user);
+   const [userData, setUserData] = useState<{
+     username: string;
+     email: string;
+     userId: string | null;
+   }>({
+     username: "",
+     email: "",
+     userId: null,
+   });
 
   const peerInstance = useRef<Peer | null>(null);
   const myVideoRef = useRef<HTMLVideoElement | null>(null);
+
+    useEffect(() => {
+      const storedUserId = localStorage.getItem("userId");
+      const storedUsername = localStorage.getItem("username");
+      const storedEmail = localStorage.getItem("email");
+      const isGuest = !data;
+      if (isGuest && storedUserId && storedUsername && storedEmail) {
+        setUserData({
+          userId: storedUserId,
+          username: storedUsername,
+          email: storedEmail,
+        });
+        setIsFormSubmitted(true);
+       
+      }
+    }, []);
+      useEffect(() => {
+        const preventNavigation = (event: PopStateEvent) => {
+          // Push the current state again to prevent navigation
+          navigate(location.pathname, { replace: true });
+          // Show a warning to the user
+          event.preventDefault();
+          const confirmMessage = "Are you sure you want to leave the meeting?";
+          if (window.confirm(confirmMessage)) {
+            // If the user confirms, you can handle the exit here
+            leaveRoom();
+          }
+        };
+
+        window.history.pushState(null, "", location.pathname);
+        window.addEventListener("popstate", preventNavigation);
+
+        return () => {
+          window.removeEventListener("popstate", preventNavigation);
+        };
+      }, [navigate, location]);
+
 
   useEffect(() => {
     const initializePeerConnection = async () => {
@@ -69,7 +116,7 @@ const MeetRoom = () => {
           socket?.emit("join-room", {
             roomId,
             peerId,
-            userName: data?.username || "Guest",
+            userName: data?.username || userData?.username,
           });
         });
 
@@ -159,6 +206,11 @@ const MeetRoom = () => {
       localStorage.setItem("userId", userId);
       localStorage.setItem("username", username);
       localStorage.setItem("email", email);
+       setUserData({
+         username,
+         email,
+         userId,
+       });
     } else {
       toast.error("Session has not started yet");
     }
@@ -171,6 +223,11 @@ const MeetRoom = () => {
       );
       if (response.payload.success) {
         setInterviewerJoined(true);
+         setUserData({
+           username:data?.username as string,
+           email:data?.email as string,
+           userId:data?._id,
+         });
       }
     }
   };
@@ -191,16 +248,26 @@ const MeetRoom = () => {
             <VideoPlayer stream={stream} muted />
             <div>{data?.username || "You"}</div>
           </div>
-          {Object.entries(peers as PeerState).map(([peerId, peer]) => (
-            <div key={peerId}>
-              <VideoPlayer stream={peer.stream} />
-              <div>{peer.userName || "Participant"}</div>
-            </div>
-          ))}
+          {Object.entries(peers as PeerState).map(([peerId, peer]) => {
+            if (userData.username !== peer.userName) {
+              return (
+                <div key={peerId} className="">
+                  <VideoPlayer stream={peer.stream} />
+                  <div className="bg-primary">
+                    {peer.userName || "Participant"}
+                  </div>
+                </div>
+              );
+            }
+            return null; // Don't render anything if it's the local user
+          })}
         </div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center py-4 bg-gray-900 bg-opacity-75">
+        <button className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
+          <TerminalIcon />
+        </button>
         <button
           className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
           onClick={toggleVideo}

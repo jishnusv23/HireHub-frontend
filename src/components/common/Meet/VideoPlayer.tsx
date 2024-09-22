@@ -13,6 +13,8 @@ export const VideoPlayer: React.FC<{
   }, [stream]);
 
   return (
+
+
     <video
       data-testid="peer-video"
       className="w-full"
@@ -20,6 +22,7 @@ export const VideoPlayer: React.FC<{
       autoPlay
       playsInline
       muted={muted}
-    />
+      />
+    
   );
 };

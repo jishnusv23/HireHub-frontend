@@ -121,7 +121,7 @@ import { InterViewerRoutes } from "./routes/InterViewerRoutes";
 import { Contact } from "./pages/common/Contact";
 import { AboutUs } from "./pages/common/AboutUs";
 import MeetRoom from "./pages/Meet/MeetRoom";
-import ConnectRoom from "./pages/Meet/ConnectRoom";
+// import ConnectRoom from "./pages/Meet/ConnectRoom";
 
 
 // import { SuccessPage } from "./components/common/Interviewer/SuccessPage";
