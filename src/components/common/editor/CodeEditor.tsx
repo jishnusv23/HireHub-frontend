@@ -1,13 +1,20 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { Button } from "@/components/ui/button";
 import OutPut from "./OutPut";
 import LanguageSelector from "./LanguageSelector";
-
-const CodeEditor = () => {
+import { SocketContext } from "@/context/SocketProvider";
+interface CodeEditorProps{
+  roomId:string
+}
+const CodeEditor:React.FC<CodeEditorProps> = ({roomId}) => {
   const editorRef = useRef(null);
   const [language, setLanguage] = useState("javascript");
+  const [content, setContent] = useState('');
+  console.log("🚀 ~ file: CodeEditor.tsx:14 ~ content:", content)
+
   const [showOutput, setShowOutput] = useState(false);
+  const {socket}=useContext(SocketContext)||{}
 
   const onMount = (editor: any) => {
     editorRef.current = editor;
@@ -17,6 +24,13 @@ const CodeEditor = () => {
   const handleRunClick = () => {
     setShowOutput(true);
   };
+  const handleEditorChange=(value:string|undefined)=>{
+    if(value!=undefined){
+      setContent(value)
+      socket?.emit("code-change", { roomId, value });
+    }
+
+  }
 
   return (
     <div className="relative h-screen">
@@ -41,6 +55,8 @@ const CodeEditor = () => {
             height="100%"
             language={language}
             onMount={onMount}
+            value={content}
+            onChange={handleEditorChange}
           />
         </div>
 

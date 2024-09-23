@@ -97,6 +97,13 @@ const MeetRoom = () => {
     };
   }, [navigate, location]);
 
+
+   const OpenTerminal = () => {
+     socket?.emit("open-codeEditor", { roomId });
+     setIsOpenTerminal(true);
+   };
+
+   
   useEffect(() => {
     const initializePeerConnection = async () => {
       try {
@@ -109,7 +116,7 @@ const MeetRoom = () => {
           myVideoRef.current.srcObject = stream;
         }
 
-        const peer = new Peer(uuidv4());
+        const peer = new Peer(userData.userId as string);
         peerInstance.current = peer;
 
         peer.on("open", (peerId) => {
@@ -132,6 +139,12 @@ const MeetRoom = () => {
           dispatch(addPeerNameAction(peerId, userName));
         });
 
+        //auto-open setup
+         socket?.on("auto-openTerminal", (isOpen) => {
+           console.log("Terminal state received from server:", isOpen);
+           setIsOpenTerminal(isOpen);
+         });
+
         socket?.on("user-disconnected", (peerId) => {
           dispatch(removePeerStreamAction(peerId));
         });
@@ -145,6 +158,7 @@ const MeetRoom = () => {
           socket?.off("user-joined");
           socket?.off("user-disconnected");
           socket?.off("get-users");
+          socket?.off("auto-openTerminal");
           peer.destroy();
         };
       } catch (err) {
@@ -235,9 +249,7 @@ const MeetRoom = () => {
       }
     }
   };
-  const OpenTerminal = () => {
-    setIsOpenTerminal(true);
-  };
+ 
 
   useEffect(() => {
     checkInterviewerStatus();
@@ -246,8 +258,6 @@ const MeetRoom = () => {
   if (!data && !isFormSubmitted) {
     return <MeetValidation RoomID={roomId} onSubmit={handleFormSubmit} />;
   }
-
-  
 
   return (
     <div className="relative h-screen w-full bg-black">
@@ -258,7 +268,7 @@ const MeetRoom = () => {
       >
         {isOpenTerminal && (
           <div className="w-[70%] h-full border-r-2 border-gray-600">
-            <CodeEditor />
+            <CodeEditor roomId={roomId} />
           </div>
         )}
         <div className={`${isOpenTerminal ? "w-[30%]" : "w-full"} h-full p-4`}>
@@ -272,7 +282,7 @@ const MeetRoom = () => {
             <div className="relative">
               <VideoPlayer stream={stream} muted />
               <div className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
-                {userData?.username || "You"}
+                {userData?.username ? "Host" : "You"}
               </div>
             </div>
 
