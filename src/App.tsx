@@ -122,6 +122,7 @@ import { Contact } from "./pages/common/Contact";
 import { AboutUs } from "./pages/common/AboutUs";
 import MeetRoom from "./pages/Meet/MeetRoom";
 import CodeEditor from "./components/common/editor/CodeEditor";
+
 // import ConnectRoom from "./pages/Meet/ConnectRoom";
 
 
@@ -251,7 +252,7 @@ const App = () => {
         />
         <Route
           path="/contact"
-          element={<PublicRoute element={<CodeEditor />} allowedRoles={[]} />}
+          element={<PublicRoute element={<CodeEditor roomId="12"/>} allowedRoles={[]} />}
         />
         <Route
           path="/About"

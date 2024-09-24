@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import OutPut from "./OutPut";
 import LanguageSelector from "./LanguageSelector";
 import { SocketContext } from "@/context/SocketProvider";
-import { debounce } from "lodash"; 
+import { debounce } from "lodash";
 interface CodeEditorProps {
   roomId: string;
 }
@@ -16,10 +16,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
 
   const [showOutput, setShowOutput] = useState(false);
   const { socket } = useContext(SocketContext) || {};
-    const isUpdatingRef = useRef(false);
+  const isUpdatingRef = useRef(false);
 
-
-  const onMount = (editor: any) => {
+  const onMountData = (editor: any) => {
+    console.log(
+      editor,
+      "______________________________&&&&&&&&&&&&&&&&&&&&&&&&_________________________________________________"
+    );
     editorRef.current = editor;
     editor.focus();
   };
@@ -29,8 +32,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
   };
   useEffect(() => {
     if (socket) {
-      socket?.on("update-code", (newContent ) => {
-        console.log(newContent,'________________________________')
+      socket?.on("update-code", (newContent) => {
+        console.log(newContent, "________________________________");
         if (editorRef.current) {
           isUpdatingRef.current = true;
           const editor = editorRef.current as any;
@@ -42,22 +45,22 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
         }
       });
 
-      return ()=>{
-        socket?.off('update-code')
-      }
+      return () => {
+        socket?.off("update-code");
+      };
     }
   }, [socket]);
-    const debouncedEmit = useRef(
-      debounce((content: string) => {
-        if (!isUpdatingRef.current) {
-          socket?.emit("code-change", { roomId, content });
-        }
-      }, 500)
-    ).current;
+  const debouncedEmit = useRef(
+    debounce((content: string) => {
+      if (!isUpdatingRef.current) {
+        socket?.emit("code-change", { roomId, content });
+      }
+    }, 500)
+  ).current;
   const handleEditorChange = (value: string | undefined) => {
     if (value != undefined && !isUpdatingRef.current) {
       setContent(value);
-      debouncedEmit(value)
+      debouncedEmit(value);
     }
   };
 
@@ -83,9 +86,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
             theme="vs-dark"
             height="100%"
             language={language}
-            onMount={onMount}
+          
             value={content}
             onChange={handleEditorChange}
+            onMount={onMountData}
           />
         </div>
 
@@ -95,6 +99,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
               editorRef={editorRef}
               language={language}
               setShowOutput={setShowOutput}
+              code={content}
+              roomId={roomId}
             />
           </div>
         )}

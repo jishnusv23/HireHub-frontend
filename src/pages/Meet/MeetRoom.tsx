@@ -15,7 +15,8 @@ import {
   IoVideocamOffOutline,
   IoVideocamOutline,
 } from "react-icons/io5";
-import { MdCallEnd } from "react-icons/md";
+
+import { MdCallEnd, MdOutlineMoreVert } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { RooteState } from "@/redux/store";
 import { SocketContext } from "@/context/SocketProvider";
@@ -103,7 +104,7 @@ const MeetRoom = () => {
      setIsOpenTerminal(true);
    };
 
-   
+
   useEffect(() => {
     const initializePeerConnection = async () => {
       try {
@@ -281,8 +282,8 @@ const MeetRoom = () => {
           >
             <div className="relative">
               <VideoPlayer stream={stream} muted />
-              <div className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
-                {userData?.username ? "Host" : "You"}
+              <div className="absolute  left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
+                {userData?.username || "You"}
               </div>
             </div>
 
@@ -291,7 +292,7 @@ const MeetRoom = () => {
                 return (
                   <div key={peerId} className="">
                     <VideoPlayer stream={peer.stream} />
-                    <div className="bg-primary">
+                    <div className="absolute  text-white bg-black bg-opacity-50 px-2 py-1 rounded">
                       {peer.userName || "Participant"}
                     </div>
                   </div>
@@ -329,6 +330,9 @@ const MeetRoom = () => {
           ) : (
             <IoMicOffOutline size={24} />
           )}
+        </button>
+        <button className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
+          <MdOutlineMoreVert />
         </button>
         <button
           className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
