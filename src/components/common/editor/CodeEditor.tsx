@@ -5,14 +5,18 @@ import OutPut from "./OutPut";
 import LanguageSelector from "./LanguageSelector";
 import { SocketContext } from "@/context/SocketProvider";
 import { debounce } from "lodash";
+import { DefaultShowing } from "@/utils/ws/DefaultPrint";
 interface CodeEditorProps {
   roomId: string;
 }
+type Language = keyof typeof DefaultShowing;
+
 const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
   const editorRef = useRef(null);
   const [language, setLanguage] = useState("javascript");
   const [content, setContent] = useState("");
   console.log("🚀 ~ file: CodeEditor.tsx:14 ~ content:", content);
+ 
 
   const [showOutput, setShowOutput] = useState(false);
   const { socket } = useContext(SocketContext) || {};
@@ -67,7 +71,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
   return (
     <div className="relative h-screen">
       <div className="flex justify-between  mb-4">
-        <LanguageSelector language={language} setLanguage={setLanguage} />
+        <LanguageSelector language={language} setLanguage={setLanguage}  />
         <Button
           className="bg-green-700 hover:bg-green-900"
           onClick={handleRunClick}

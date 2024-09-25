@@ -6,7 +6,7 @@ import { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { RoomContext } from "@/context/RoomContext";
 // import { UserContext } from "@/context/UserContext ";
-import { ws } from "@/utils/ws/Ws";
+// import { ws } from "@/utils/ws/Ws";
 import { VideoPlayer } from "@/components/common/Meet/VideoPlayer";
 import { PeerState } from "@/reducers/peerReducer";
 
@@ -26,9 +26,9 @@ export const ConnectRoom = () => {
   // const { userName, userId } = useContext(UserContext);
 
 
-  useEffect(() => {
-    if (stream) ws.emit("join-room", { roomId: id, peerId: userId, userName });
-  }, [id, userId, stream, userName]);
+  // useEffect(() => {
+  //   // if (stream) ws.emit("join-room", { roomId: id, peerId: userId, userName });
+  // }, [id, userId, stream, userName]);
 
   useEffect(() => {
     setRoomId(id || "");

@@ -17,7 +17,7 @@ export const SubmissionAction=createAsyncThunk(
             }
 
         }catch(error:any){
-            console.error('Something wrong in Submission',error);
+            console.error('Something wrong in Submission',error.message);
             
         }
 

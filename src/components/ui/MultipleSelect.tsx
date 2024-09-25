@@ -74,7 +74,7 @@ export default function MultipleSelect({
         className="h-8 bg-white"
       >
         <MenuItem disabled value="">
-          <em>select</em>
+          {/* <em>select</em> */}
         </MenuItem>
         {options.map((name) => (
           <MenuItem
