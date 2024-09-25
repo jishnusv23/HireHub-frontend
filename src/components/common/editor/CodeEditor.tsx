@@ -32,7 +32,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
   };
 
   const handleRunClick = () => {
-    setShowOutput(true);
+      setShowOutput((prev) => {
+        const newState = !prev; // Toggle the output state (true/false)
+        socket?.emit("open-outputBox", { roomId, showOutput: newState }); // Emit socket event with roomId and new output state
+        return newState; // Return the toggled state
+      });
   };
   useEffect(() => {
     if (socket) {
@@ -48,9 +52,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
           isUpdatingRef.current = false;
         }
       });
+      socket?.on("outputBox-open",(isOPen)=>{
+        console.log('output box open for each users ',isOPen)
+        setShowOutput(isOPen)
+      });
 
       return () => {
         socket?.off("update-code");
+        socket?.off("outputBox-open");
       };
     }
   }, [socket]);
@@ -71,7 +80,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
   return (
     <div className="relative h-screen">
       <div className="flex justify-between  mb-4">
-        <LanguageSelector language={language} setLanguage={setLanguage} setContent={setContent} />
+        <LanguageSelector
+          language={language}
+          setLanguage={setLanguage}
+          setContent={setContent}
+        />
         <Button
           className="bg-green-700 hover:bg-green-900"
           onClick={handleRunClick}
@@ -90,7 +103,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
             theme="vs-dark"
             height="100%"
             language={language}
-          
             value={content}
             onChange={handleEditorChange}
             onMount={onMountData}
@@ -102,7 +114,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
             <OutPut
               editorRef={editorRef}
               language={language}
-              setShowOutput={setShowOutput}
+              setShowOutput={handleRunClick}
               code={content}
               roomId={roomId}
             />

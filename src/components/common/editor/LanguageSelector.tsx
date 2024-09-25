@@ -3,7 +3,6 @@ import { LangauageType } from "@/types/Common";
 import { DefaultShowing } from "@/utils/ws/DefaultPrint";
 
 import React, { useEffect } from "react";
-import { DefaultContext } from "react-icons/lib";
 
 interface LanguageSelectorProps {
   language: string;

@@ -8,7 +8,7 @@ import Loading from "../Loading/Loading";
 interface OutpuProps {
   editorRef: RefObject<any>;
   language: string;
-  setShowOutput: (show: boolean) => void;
+  setShowOutput: () => void;
   code: string;
   roomId: string;
 }
@@ -59,7 +59,7 @@ const OutPut: React.FC<OutpuProps> = ({
     codeSubmission();
   }, [code, dispatch, language]);
   const handleOutputShow = () => {
-    setShowOutput(false);
+    setShowOutput();
   };
   return (
     <div>
