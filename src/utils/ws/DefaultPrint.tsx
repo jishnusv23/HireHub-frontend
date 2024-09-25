@@ -2,12 +2,15 @@ type Language = "javascript" | "python";
 
 // DefaultShowing.ts
 export const DefaultShowing: Record<Language, string> = {
-  javascript: `// Online Javascript Editor for free
-// Write, Edit and Run your Javascript code using JS Online Compiler
+  javascript: `// Welcome to the HireHub Online Compiler!  
+// This is your space to Write, Edit, and Execute your JavaScript code with ease. 
+// Let's create something amazing together!
 
-console.log("Try HireHub.pro");`,
-  python: `# Python Editor for free
-# Write, Edit and Run your Python code using Python Online Compiler
+console.log("Happy coding with HireHub.pro!");`,
 
-print('Hello World')`,
+  python: `# Welcome to the HireHub Python Compiler!  
+# Here, you can Write, Edit, and Run your Python code effortlessly. 
+# Embrace the challenge and showcase your skills!
+
+print('Happy coding with HireHub.pro!')`,
 };

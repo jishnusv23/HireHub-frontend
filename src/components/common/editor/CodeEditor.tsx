@@ -71,7 +71,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
   return (
     <div className="relative h-screen">
       <div className="flex justify-between  mb-4">
-        <LanguageSelector language={language} setLanguage={setLanguage}  />
+        <LanguageSelector language={language} setLanguage={setLanguage} setContent={setContent} />
         <Button
           className="bg-green-700 hover:bg-green-900"
           onClick={handleRunClick}

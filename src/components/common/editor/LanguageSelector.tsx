@@ -1,21 +1,29 @@
 import MultipleSelect from "@/components/ui/MultipleSelect";
 import { LangauageType } from "@/types/Common";
+import { DefaultShowing } from "@/utils/ws/DefaultPrint";
 
 import React, { useEffect } from "react";
-
+import { DefaultContext } from "react-icons/lib";
 
 interface LanguageSelectorProps {
   language: string;
   setLanguage: (value: string) => void;
-  
+  setContent: (value: string) => void;
 }
 
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   language,
   setLanguage,
-
+  setContent,
 }) => {
- 
+  useEffect(() => {
+    if (language == "javascript") {
+      setContent(DefaultShowing.javascript);
+    } else if (language === "python") {
+      setContent(DefaultShowing.python);
+    }
+  }, [setContent, language]);
+
   return (
     <div className="w-32">
       <div>
