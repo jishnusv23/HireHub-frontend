@@ -54,9 +54,9 @@ export const InterviewerSideBar = ({ open }: { open: boolean }) => {
       path: "/interviewer/analytics",
     },
     {
-      name: "Question Bank",
+      name: "Question-Bank",
       icon: <FaFileAlt />,
-      path: "/interviewer/reports",
+      path: "/interviewer/Question-Bank",
     },
     { name: "profile", icon: <FaCog />, path: "/interviewer/profile" },
   ];

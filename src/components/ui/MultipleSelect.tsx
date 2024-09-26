@@ -53,7 +53,7 @@ export default function MultipleSelect({
       <p
         className={`text-sm font-bold ${heading ? "text-white" : "text-black"}`}
       >
-        {heading || "InterviewType"}
+        {heading || "Types"}
       </p>
 
       {/* <p className=`text-sm font-bold text-white`>{heading?:heading,"interviewType"}</p> */}

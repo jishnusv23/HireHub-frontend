@@ -5,6 +5,7 @@ import {
   FaTachometerAlt,
   FaChartBar,
   FaFileAlt,
+  FaUserGraduate,
 } from "react-icons/fa"; // Add other icons
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -29,6 +30,11 @@ export const AdminSideBar = ({ open }: { open: boolean }) => {
   const adminMenuItems = [
     { name: "Dashboard", icon: <FaTachometerAlt />, path: "/admin/dashboard" },
     { name: "Interviewee", icon: <FaUsers />, path: "/admin/interviewee" },
+    {
+      name: "Interviewer",
+      icon: <FaUserGraduate />,
+      path: "/admin/Interviewer",
+    },
     { name: "Analytics", icon: <AutoStoriesIcon />, path: "/admin/dashboard" },
     { name: "Reports", icon: <FaFileAlt />, path: "/admin/dashboard" },
     { name: "Settings", icon: <FaCog />, path: "/admin/dashboard" },

@@ -37,7 +37,7 @@ export const CustomModal: React.FC<CustomModalProps> = ({
         </TransitionChild>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-full p-4 md:p-8 text-center">
+          <div className="flex items-center justify-center h-fitp-4 md:p-8 text-center">
             <TransitionChild
               as={Fragment}
               enter="ease-out duration-300"
@@ -63,9 +63,7 @@ export const CustomModal: React.FC<CustomModalProps> = ({
 
                 <div className="mt-4 w-full p-4 rounded-md">{children}</div>
 
-                <div className="mt-6 flex justify-end">
-                
-                </div>
+                <div className="mt-6 flex justify-end"></div>
               </DialogPanel>
             </TransitionChild>
           </div>

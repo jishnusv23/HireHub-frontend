@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 export const VideoPlayer: React.FC<{
   stream: MediaStream | null | undefined;
   muted?: boolean;
-}> = ({ stream, muted = true }) => {
+}> = ({ stream, muted = false }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const VideoPlayer: React.FC<{
       ref={videoRef}
       autoPlay
       playsInline
-      muted={muted}
+      muted={false}
     />
   );
 };

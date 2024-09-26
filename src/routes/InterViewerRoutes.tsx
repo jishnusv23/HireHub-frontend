@@ -7,6 +7,7 @@ import { Meetings } from "@/components/interviewer/Meetings";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { SingleInterviewDetails } from "@/components/common/Interviewer/SingleInterviewDetails";
+import InterviewerQuestions from "@/components/interviewer/InterviewerQuestions";
 
 export const InterViewerRoutes = () => {
   return (
@@ -16,7 +17,11 @@ export const InterViewerRoutes = () => {
         <Route path="Dashboard" element={<InterviewerDashboard />} />
         <Route path="profile" element={<InterviewerProfile />} />
         <Route path="MyInterviews" element={<Meetings />} />
-        <Route path="MyInterviews/singleDetails" element={<SingleInterviewDetails />} />
+        <Route path="Question-Bank" element={<InterviewerQuestions />} />
+        <Route
+          path="MyInterviews/singleDetails"
+          element={<SingleInterviewDetails />}
+        />
       </Route>
     </Routes>
   );

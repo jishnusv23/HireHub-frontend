@@ -26,6 +26,8 @@ export const getAllMeetDetails=createAsyncThunk(
             console.log("🚀 ~ file: getAllMeetingsDetails.tsx:23 ~ async ~ response:", response)
             if(response.data){
                 return response.data
+            }else{
+              return rejectWithValue(response.data)
             }
 
         }catch(error:any){
