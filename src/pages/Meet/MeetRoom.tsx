@@ -34,6 +34,7 @@ import {
   addAllPeersAction,
 } from "@/redux/store/actions/Room/peerAction";
 import CodeEditor from "@/components/common/editor/CodeEditor";
+import { number } from "zod";
 
 const MeetRoom = () => {
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -41,6 +42,8 @@ const MeetRoom = () => {
   const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
   const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+  const [roomLength,setRoomLength]=useState<number>(0)
+  console.log("🚀 ~ file: MeetRoom.tsx:46 ~ MeetRoom ~ roomLength:", roomLength)
   const [isOpenTerminal, setIsOpenTerminal] = useState(false);
   const [interviewerJoined, setInterviewerJoined] = useState<boolean>(false);
   const location = useLocation();
@@ -126,6 +129,7 @@ const MeetRoom = () => {
             peerId,
             userName: data?.username || userData?.username,
           });
+          socket?.emit('find-roomlength',{roomId})
         });
 
         peer.on("call", (call) => {
@@ -139,6 +143,12 @@ const MeetRoom = () => {
           connectToNewUser(peerId, stream);
           dispatch(addPeerNameAction(peerId, userName));
         });
+        //room -length
+        socket?.on("room-length",(Roomlegnth)=>{
+          console.log(`its current leght of the room ${Roomlegnth}`)
+          setRoomLength(Roomlegnth)
+
+      });
 
         //auto-open setup
          socket?.on("auto-openTerminal", (isOpen) => {
@@ -230,6 +240,7 @@ const MeetRoom = () => {
         email,
         userId,
       });
+      
     } else {
       toast.error("Session has not started yet");
     }
@@ -298,7 +309,7 @@ const MeetRoom = () => {
                   </div>
                 );
               }
-              return null; // Don't render anything if it's the local user
+              return null;
             })}
           </div>
         </div>

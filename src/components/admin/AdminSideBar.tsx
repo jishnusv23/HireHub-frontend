@@ -7,6 +7,7 @@ import {
   FaFileAlt,
   FaUserGraduate,
 } from "react-icons/fa"; // Add other icons
+import { MdContentCut } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import HireHub from "../common/HireHub";
@@ -36,7 +37,7 @@ export const AdminSideBar = ({ open }: { open: boolean }) => {
       path: "/admin/Interviewer",
     },
     { name: "Analytics", icon: <AutoStoriesIcon />, path: "/admin/dashboard" },
-    { name: "Reports", icon: <FaFileAlt />, path: "/admin/dashboard" },
+    { name: "Blogs", icon: <MdContentCut />, path: "/admin/blogs" },
     { name: "Settings", icon: <FaCog />, path: "/admin/dashboard" },
   ];
 

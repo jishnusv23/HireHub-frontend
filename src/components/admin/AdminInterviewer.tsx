@@ -131,7 +131,7 @@ export const AdminInterviewer: React.FC = () => {
         />
       )}
 
-      <h1 className="text-3xl font-bold ml-10 mb-10 ">Interviewee</h1>
+      <h1 className="text-3xl font-bold ml-10 mb-10 ">Interviewer</h1>
 
       {/* Search Bar */}
       <div className="flex justify-end items-center">

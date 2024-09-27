@@ -54,7 +54,7 @@ export const AdminInterviewee: React.FC = () => {
       } catch (error: any) {
         console.error("Error updating interviewee status", error);
 
-        // Display error toast
+       
         throw new Error(
           "An error occurred while updating the interviewee status."
         );
