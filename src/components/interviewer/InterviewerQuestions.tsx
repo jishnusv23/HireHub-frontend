@@ -42,7 +42,7 @@ const InterviewerQuestions = () => {
       }
     };
     getallQuestion();
-  }, [dispatch, data?._id, currentPage]);
+  }, [dispatch, data?._id, currentPage,isModalOpen]);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -63,7 +63,7 @@ const InterviewerQuestions = () => {
         <div className="flex justify-end pr-5 mb-4">
           <Button onClick={handleOpenModal}>Add</Button>
         </div>
-        <TechQuestion questions={questions} />
+        <TechQuestion questions={questions} handleOpenModal={handleOpenModal} />
         <CustomModal
           isOpen={isModalOpen}
           onClose={closeModal}

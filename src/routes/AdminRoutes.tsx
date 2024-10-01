@@ -5,8 +5,8 @@ import AdminDashboard from "@/components/admin/AdminDashboard ";
 import AdminInterviewee from "@/components/admin/AdminInterviewee";
 import AdminInterviewer from "@/components/admin/AdminInterviewer";
 import AdminBlogs from "@/components/admin/AdminBlogs";
-import AddBlogsAdmin from "@/components/common/Admin/AddBlogsAdmin";
-
+import AdminContentRequest from "@/components/admin/AdminContentRequest";
+// import AddBlogsAdmin from "@/components/common/Admin/AddBlogsAdmin";
 
 export const AdminRoutes = () => {
   return (
@@ -17,7 +17,7 @@ export const AdminRoutes = () => {
         <Route path="Interviewee" element={<AdminInterviewee />} />
         <Route path="Interviewer" element={<AdminInterviewer />} />
         <Route path="blogs" element={<AdminBlogs />} />
-        <Route path="blogs/addcontent" element={<AddBlogsAdmin />} />
+        <Route path="blogs/request" element={<AdminContentRequest />} />
       </Route>
     </Routes>
   );

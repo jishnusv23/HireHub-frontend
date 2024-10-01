@@ -1,3 +1,12 @@
+// import React from 'react'
+
+// const Blogs = () => {
+//   return (
+//     <div>Blogs</div>
+//   )
+// }
+
+// export default Blogs
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +24,7 @@ import { updateHandClappAction } from "@/redux/store/actions/common/updateHandCl
 import Header from "../common/users/Header";
 import Footer from "../common/Footer";
 
-const AdminBlogs = () => {
+const Blogs = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -51,7 +60,6 @@ const AdminBlogs = () => {
   };
   const handleRequest = () => {
     console.log("first");
-    navigate("/admin/blogs/request");
   };
   const handleHandClappResponse = async (
     responseHandClap: number,
@@ -88,7 +96,8 @@ const AdminBlogs = () => {
   return (
     <>
       {!data && <Header />}
-      <div className="bg-background pr-10 pt-4">
+
+      <div className="bg-background pr-10 pt-24">
         <div className="flex justify-end gap-4">
           {data && <Button onClick={handleAddBlog}>AddNew</Button>}
           {data?.role == "admin" && (
@@ -115,4 +124,4 @@ const AdminBlogs = () => {
   );
 };
 
-export default AdminBlogs;
+export default Blogs;

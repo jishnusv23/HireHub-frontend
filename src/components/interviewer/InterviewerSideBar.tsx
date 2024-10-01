@@ -16,6 +16,7 @@ import {
   FaChartBar,
   FaFileAlt,
 } from "react-icons/fa"; // Add other icons
+import { MdContentCut } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import HireHub from "../common/HireHub";
@@ -52,6 +53,11 @@ export const InterviewerSideBar = ({ open }: { open: boolean }) => {
       name: "Analytics",
       icon: <AutoStoriesIcon />,
       path: "/interviewer/analytics",
+    },
+    {
+      name: "blogs",
+      icon: <MdContentCut />,
+      path: "/interviewer/blogs",
     },
     {
       name: "Question-Bank",

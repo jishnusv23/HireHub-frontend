@@ -1,5 +1,5 @@
-export interface dataType{
-    page:number|string|null
+export interface dataType {
+  page: number | string | null;
 }
 
 export interface InterviewType {
@@ -13,7 +13,7 @@ export interface InterviewType {
   meetingLink: string;
   startTime: string;
   uniqueId: string;
-  instantMeet:boolean;
+  instantMeet: boolean;
   reminded: boolean;
   interviewerEmail: string;
   interviewType: string;
@@ -32,3 +32,30 @@ export const interviewTypes = [
   "Case Study",
 ];
 export const LangauageType = ["javascript", "python"];
+
+export const ContentType = [
+  "Career Advice",
+  "Technical Tips",
+  "Industry Trends",
+  "Interview Prep",
+  "Overcoming Fear",
+  "Coding Best Practices",
+
+  "Developer Tools",
+  "Feedback",
+];
+
+
+
+export interface contentEntities {
+  _id?:string
+  userId?:string;
+  title: string;
+  author: string;
+  date: Date;
+  content: string;
+  tag: string;
+  AdminAccept: boolean;
+  response: number;
+  Imgurl: string;
+}

@@ -13,9 +13,13 @@ interface Question {
 
 interface TechQuestionProps {
   questions: Question[];
+  handleOpenModal: () => void;
 }
 
-const TechQuestion: React.FC<TechQuestionProps> = ({ questions }) => {
+const TechQuestion: React.FC<TechQuestionProps> = ({
+  questions,
+  handleOpenModal,
+}) => {
   const [copiedQuestion, setCopied] = useState<string | null>(null);
 
   const handleCopy = (question: string) => {
@@ -43,7 +47,9 @@ const TechQuestion: React.FC<TechQuestionProps> = ({ questions }) => {
               className="w-80 mx-auto"
             />
             <div className="mt-4">
-              <Button className="mr-2">Add Now</Button>
+              <Button className="mr-2" onClick={handleOpenModal}>
+                Add Now
+              </Button>
             </div>
           </div>
         </div>

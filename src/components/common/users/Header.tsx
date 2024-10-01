@@ -67,7 +67,12 @@ const Header = () => {
           >
             Contact Us
           </div>
-          <div className="hover-text font-bold">Blog</div>
+          <div
+            className="hover-text font-bold"
+            onClick={() => navigate("/Blogs")}
+          >
+            Blog
+          </div>
           {data ? (
             <div
               className="hover-text font-bold"
@@ -132,7 +137,7 @@ const Header = () => {
                 className="hover-text font-bold"
                 onClick={() => {
                   navigate("/About");
-                  toggleMenu()
+                  toggleMenu();
                 }}
               >
                 Overview
@@ -146,7 +151,13 @@ const Header = () => {
               >
                 Contact Us
               </div>
-              <div className="hover-text font-bold" onClick={toggleMenu}>
+              <div
+                className="hover-text font-bold"
+                onClick={() => {
+                  navigate("/Blogs");
+                  toggleMenu();
+                }}
+              >
                 Blog
               </div>
               {data ? (

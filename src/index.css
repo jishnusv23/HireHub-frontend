@@ -1,4 +1,4 @@
-
+@import url("https://fonts.googleapis.com/css2?family=Questrial&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,7 +8,7 @@
   --foreground: 72 11% 9%;
   --foregroundAccent: 0 0% 65%;
 
-   --border-color: hsl(0, 0%, 0%);
+  --border-color: hsl(0, 0%, 0%);
   --test: 360 89% 19%;
 
   --card: 0 0% 100%;
@@ -76,7 +76,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground
+    @apply bg-background text-foreground;
   }
 }
 .hover-text {
@@ -89,9 +89,13 @@
 }
 
 .no-spinner {
-  -moz-appearance: textfield; 
+  -moz-appearance: textfield;
 }
 .border-designColor {
-  border-color: var(--border-color); 
+  border-color: var(--border-color);
 }
-
+* {
+  font-family: "Questrial", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}

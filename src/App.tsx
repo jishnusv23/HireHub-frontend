@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -27,8 +26,7 @@ import { InterViewerRoutes } from "./routes/InterViewerRoutes";
 import { Contact } from "./pages/common/Contact";
 import { AboutUs } from "./pages/common/AboutUs";
 import MeetRoom from "./pages/Meet/MeetRoom";
-
-
+import Blogs from "./components/customs/Blogs";
 
 const App = () => {
   const { data, loading } = useAppSelector((state: RooteState) => state.user);
@@ -154,11 +152,15 @@ const App = () => {
         />
         <Route
           path="/contact"
-          element={<PublicRoute element={<Contact/>} allowedRoles={[]} />}
+          element={<PublicRoute element={<Contact />} allowedRoles={[]} />}
         />
         <Route
           path="/About"
           element={<PublicRoute element={<AboutUs />} allowedRoles={[]} />}
+        />
+        <Route
+          path="/Blogs"
+          element={<PublicRoute element={<Blogs />} allowedRoles={[]} />}
         />
       </Routes>
     </Router>

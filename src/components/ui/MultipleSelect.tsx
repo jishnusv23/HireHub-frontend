@@ -47,7 +47,7 @@ export default function MultipleSelect({
   };
 
   return (
-    <FormControl sx={{ m: 1, width: "100%", mt: 3 }} className="h-12">
+    <FormControl sx={{ m: 1, width: "100%", mt: 3 }} className="h-12 ">
       {""}
 
       <p
@@ -71,7 +71,7 @@ export default function MultipleSelect({
         }}
         MenuProps={MenuProps}
         inputProps={{ "aria-label": "Without label" }}
-        className="h-8 bg-white"
+        className="h-8  "
       >
         <MenuItem disabled value="">
           {/* <em>select</em> */}
