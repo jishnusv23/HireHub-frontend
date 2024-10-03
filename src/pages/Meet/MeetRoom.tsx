@@ -35,15 +35,20 @@ import {
 } from "@/redux/store/actions/Room/peerAction";
 import CodeEditor from "@/components/common/editor/CodeEditor";
 import { number } from "zod";
+import ConfirmModal from "@/components/common/users/ConfirmModal";
 
 const MeetRoom = () => {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [peers, dispatch] = useReducer(peersReducer, {});
   const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
-  const [roomLength,setRoomLength]=useState<number>(0)
-  console.log("🚀 ~ file: MeetRoom.tsx:46 ~ MeetRoom ~ roomLength:", roomLength)
+  const [roomLength, setRoomLength] = useState<number>(0);
+  console.log(
+    "🚀 ~ file: MeetRoom.tsx:46 ~ MeetRoom ~ roomLength:",
+    roomLength
+  );
   const [isOpenTerminal, setIsOpenTerminal] = useState(false);
   const [interviewerJoined, setInterviewerJoined] = useState<boolean>(false);
   const location = useLocation();
@@ -101,12 +106,10 @@ const MeetRoom = () => {
     };
   }, [navigate, location]);
 
-
-   const OpenTerminal = () => {
-     socket?.emit("open-codeEditor", { roomId });
-     setIsOpenTerminal(true);
-   };
-
+  const OpenTerminal = () => {
+    socket?.emit("open-codeEditor", { roomId });
+    setIsOpenTerminal(true);
+  };
 
   useEffect(() => {
     const initializePeerConnection = async () => {
@@ -129,7 +132,7 @@ const MeetRoom = () => {
             peerId,
             userName: data?.username || userData?.username,
           });
-          socket?.emit('find-roomlength',{roomId})
+          socket?.emit("find-roomlength", { roomId });
         });
 
         peer.on("call", (call) => {
@@ -144,17 +147,16 @@ const MeetRoom = () => {
           dispatch(addPeerNameAction(peerId, userName));
         });
         //room -length
-        socket?.on("room-length",(Roomlegnth)=>{
-          console.log(`its current leght of the room ${Roomlegnth}`)
-          setRoomLength(Roomlegnth)
-
-      });
+        socket?.on("room-length", (Roomlegnth) => {
+          console.log(`its current leght of the room ${Roomlegnth}`);
+          setRoomLength(Roomlegnth);
+        });
 
         //auto-open setup
-         socket?.on("auto-openTerminal", (isOpen) => {
-           console.log("Terminal state received from server:", isOpen);
-           setIsOpenTerminal(isOpen);
-         });
+        socket?.on("auto-openTerminal", (isOpen) => {
+          console.log("Terminal state received from server:", isOpen);
+          setIsOpenTerminal(isOpen);
+        });
 
         socket?.on("user-disconnected", (peerId) => {
           dispatch(removePeerStreamAction(peerId));
@@ -213,14 +215,14 @@ const MeetRoom = () => {
     }
     socket?.emit("leave-room", { roomId, peerId: peerInstance.current?.id });
     socket?.on("user-disconnected", (peerId) => {
-      dispatch(removePeerStreamAction(peerId));
-    });
-    localStorage.clear();
+      dispatch(removePeerStreamAction(peerId))
+    })
+    localStorage.clear()
   };
 
   const handleFormSubmit = async (formData: {
-    username: string;
-    email: string;
+    username: string
+    email: string
   }) => {
     const { username, email } = formData;
     const userId = uuidv4();
@@ -240,7 +242,6 @@ const MeetRoom = () => {
         email,
         userId,
       });
-      
     } else {
       toast.error("Session has not started yet");
     }
@@ -261,7 +262,9 @@ const MeetRoom = () => {
       }
     }
   };
- 
+  const handleLeaveInterivewer = () => {
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     checkInterviewerStatus();
@@ -270,89 +273,116 @@ const MeetRoom = () => {
   if (!data && !isFormSubmitted) {
     return <MeetValidation RoomID={roomId} onSubmit={handleFormSubmit} />;
   }
+  const handleConfirm = () => {
+    setIsModalOpen(false);
+    leaveRoom();
+  };
+  const handleCancel = () => {
+     setIsModalOpen(false);
+  };
 
   return (
-    <div className="relative h-screen w-full bg-black">
-      <div
-        className={`absolute inset-0 flex ${
-          isOpenTerminal ? "flex-row" : "items-center justify-center"
-        }`}
-      >
-        {isOpenTerminal && (
-          <div className="w-[70%] h-full border-r-2 border-gray-600">
-            <CodeEditor roomId={roomId} />
-          </div>
-        )}
-        <div className={`${isOpenTerminal ? "w-[30%]" : "w-full"} h-full p-4`}>
-          <div
-            className={`grid gap-4 h-full ${
-              isOpenTerminal
-                ? "grid-cols-1 sm:grid-cols-2"
-                : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
-            }`}
-          >
-            <div className="relative">
-              <VideoPlayer stream={stream} muted />
-              <div className="absolute  left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
-                {userData?.username || "You"}
-              </div>
+    <>
+      {isModalOpen && (
+        <ConfirmModal
+          message={`leave this meet`}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+      )}
+      <div className="relative h-screen w-full bg-black">
+        <div
+          className={`absolute inset-0 flex ${
+            isOpenTerminal ? "flex-row" : "items-center justify-center"
+          }`}
+        >
+          {isOpenTerminal && (
+            <div className="w-[70%] h-full border-r-2 border-gray-600">
+              <CodeEditor roomId={roomId} />
             </div>
+          )}
+          <div
+            className={`${isOpenTerminal ? "w-[30%]" : "w-full"} h-full p-4`}
+          >
+            <div
+              className={`grid gap-4 h-full ${
+                isOpenTerminal
+                  ? "grid-cols-1 sm:grid-cols-2"
+                  : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+              }`}
+            >
+              <div className="relative">
+                <VideoPlayer stream={stream} muted />
+                <div className="absolute  left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
+                  {userData?.username || "You"}
+                </div>
+              </div>
 
-            {Object.entries(peers as PeerState).map(([peerId, peer]) => {
-              if (userData.username !== peer.userName) {
-                return (
-                  <div key={peerId} className="">
-                    <VideoPlayer stream={peer.stream} />
-                    <div className="absolute  text-white bg-black bg-opacity-50 px-2 py-1 rounded">
-                      {peer.userName || "Participant"}
+              {Object.entries(peers as PeerState).map(([peerId, peer]) => {
+                if (userData.username !== peer.userName) {
+                  return (
+                    <div key={peerId} className="">
+                      <VideoPlayer stream={peer.stream} />
+                      <div className="absolute  text-white bg-black bg-opacity-50 px-2 py-1 rounded">
+                        {peer.userName || "Participant"}
+                      </div>
                     </div>
-                  </div>
-                );
-              }
-              return null;
-            })}
+                  );
+                }
+                return null;
+              })}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center py-4 bg-gray-900 bg-opacity-75">
-        <button
-          className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
-          onClick={OpenTerminal}
-        >
-          <TerminalIcon />
-        </button>
-        <button
-          className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
-          onClick={toggleVideo}
-        >
-          {videoEnabled ? (
-            <IoVideocamOutline size={24} />
+        <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center py-4 bg-gray-900 bg-opacity-75">
+          <button
+            className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
+            onClick={OpenTerminal}
+          >
+            <TerminalIcon />
+          </button>
+          <button
+            className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
+            onClick={toggleVideo}
+          >
+            {videoEnabled ? (
+              <IoVideocamOutline size={24} />
+            ) : (
+              <IoVideocamOffOutline size={24} />
+            )}
+          </button>
+          <button
+            className="text-white mx-4 p-3 rounded-full bg-green-600 hover:bg-green-500 transition-colors"
+            onClick={toggleAudio}
+          >
+            {audioEnabled ? (
+              <IoMicOutline size={24} />
+            ) : (
+              <IoMicOffOutline size={24} />
+            )}
+          </button>
+          <button className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
+            <MdOutlineMoreVert />
+          </button>
+          {data?.role === "interviewer" || data?.role === "pending" ? (
+            <button
+              className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
+              onClick={handleLeaveInterivewer}
+            >
+              <MdCallEnd size={24} />
+            </button>
           ) : (
-            <IoVideocamOffOutline size={24} />
+            <button
+              className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
+              onClick={leaveRoom}
+            >
+              <MdCallEnd size={24} />
+            </button>
           )}
-        </button>
-        <button
-          className="text-white mx-4 p-3 rounded-full bg-green-600 hover:bg-green-500 transition-colors"
-          onClick={toggleAudio}
-        >
-          {audioEnabled ? (
-            <IoMicOutline size={24} />
-          ) : (
-            <IoMicOffOutline size={24} />
-          )}
-        </button>
-        <button className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
-          <MdOutlineMoreVert />
-        </button>
-        <button
-          className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
-          onClick={leaveRoom}
-        >
-          <MdCallEnd size={24} />
-        </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
