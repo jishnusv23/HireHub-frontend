@@ -216,6 +216,7 @@ export const SingleInterviewDetails = () => {
         </div>
       </div>
 
+
       <InterviewModal isOpen={isModalOpen} onClose={closeModal} title="edit">
         <InterviewScheduleForm MeetData={singleInterview} />
       </InterviewModal>

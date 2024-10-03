@@ -6,6 +6,7 @@ import AdminInterviewee from "@/components/admin/AdminInterviewee";
 import AdminInterviewer from "@/components/admin/AdminInterviewer";
 import AdminBlogs from "@/components/admin/AdminBlogs";
 import AdminContentRequest from "@/components/admin/AdminContentRequest";
+import {AdminSettings} from "@/components/admin/AdminSettings";
 // import AddBlogsAdmin from "@/components/common/Admin/AddBlogsAdmin";
 
 export const AdminRoutes = () => {
@@ -18,6 +19,7 @@ export const AdminRoutes = () => {
         <Route path="Interviewer" element={<AdminInterviewer />} />
         <Route path="blogs" element={<AdminBlogs />} />
         <Route path="blogs/request" element={<AdminContentRequest />} />
+        <Route path="settings" element={<AdminSettings />} />
       </Route>
     </Routes>
   );

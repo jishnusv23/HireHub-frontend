@@ -10,12 +10,13 @@ interface Profile{
 export interface SignupFormData {
   _id?: string;
   username?: string;
-   email?: string;
+  email?: string;
   password?: string;
   role: Role;
   isBlocked?: boolean;
   isVerified?: boolean;
-  isGAuth?: boolean
+  isGAuth?: boolean;
+  createdAt:Date
   profile?: Profile;
 }
 

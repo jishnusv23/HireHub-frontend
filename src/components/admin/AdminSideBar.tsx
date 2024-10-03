@@ -36,9 +36,9 @@ export const AdminSideBar = ({ open }: { open: boolean }) => {
       icon: <FaUserGraduate />,
       path: "/admin/Interviewer",
     },
-    { name: "Analytics", icon: <AutoStoriesIcon />, path: "/admin/dashboard" },
+    // { name: "Analytics", icon: <AutoStoriesIcon />, path: "/admin/dashboard" },
     { name: "Blogs", icon: <MdContentCut />, path: "/admin/blogs" },
-    { name: "Settings", icon: <FaCog />, path: "/admin/dashboard" },
+    { name: "Settings", icon: <FaCog />, path: "/admin/settings" },
   ];
 
   return (

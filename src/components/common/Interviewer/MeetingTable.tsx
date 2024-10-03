@@ -18,6 +18,8 @@ import { InstantMeetAction } from "@/redux/store/actions/common/InstantMeetActio
 import { RooteState } from "@/redux/store";
 import { CustomModal } from "@/components/customs/CustomModal";
 import { SuccessPage } from "./SuccessPage";
+import InterviewView from "../Admin/InterviewView";
+import { Interviewee } from "@/types/IInterview";
 export const MeetingTable = ({
   Interviewdata,
 }: {
@@ -27,13 +29,12 @@ export const MeetingTable = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [responsePayload, setResponsePayload] = useState<any>(null);
   const [isModalOpenCustom, setIsModalOpenCustom] = useState(false);
+  const [isModalOpenAdmin, setIsModalOpenAdmin] = useState(false);
+  const [selectedInterview, setSelectedInterview] = useState<InterviewType|null>(null);
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // const testStartTime = "16:05";
-  // const testDateString = "2024-09-03T15:35:00Z"; // Adjust if needed
-
-  // console.log(isActive(testStartTime, testDateString), "oooooo");
-
+ 
   const handleInterview = () => {
     setIsModalOpen(true);
   };
@@ -41,6 +42,7 @@ export const MeetingTable = ({
   const closeModal = async () => {
     setIsModalOpen(false);
     setIsModalOpenCustom(false);
+    setIsModalOpenAdmin(false);
   };
   const handleView = (rowData: any) => {
     navigate("/interviewer/MyInterviews/singleDetails", {
@@ -57,14 +59,22 @@ export const MeetingTable = ({
     if (response.payload.success) {
       setIsModalOpenCustom(true);
       setResponsePayload(response.payload.data);
-      // navigate('/Meet-now',{state:{data:response.payload.data}});
+     
     }
+  };
+  const handleadmin = (interviewData:InterviewType) => {
+    setSelectedInterview(interviewData);
+    setIsModalOpenAdmin(true);
   };
   return (
     <>
       <div className="flex justify-end mb-4 gap-4">
-        <Button onClick={handleInstantMeet}>Start Meet</Button>
-        <Button onClick={handleInterview}>Schedule</Button>
+        {data?.role !== "admin" && (
+          <>
+            <Button onClick={handleInstantMeet}>Start Meet</Button>
+            <Button onClick={handleInterview}>Schedule</Button>
+          </>
+        )}
       </div>
       {Interviewdata.length === 0 && (
         <div className="flex items-center justify-center  min-h-[calc(100vh-4rem)]">
@@ -142,7 +152,7 @@ export const MeetingTable = ({
                         to={`/Meet-HireHub/${row.uniqueId}`}
                         className="flex-1 mb-2 sm:mb-0"
                       >
-                        <Button className="bg-green-500 hover:bg-green-400" >
+                        <Button className="bg-green-500 hover:bg-green-400">
                           JOIN
                         </Button>
                       </Link>
@@ -157,7 +167,14 @@ export const MeetingTable = ({
                 )}
 
                 <div className="flex-1 mb-2 sm:mb-0">
-                  <Button onClick={() => handleView(row)}>Detail View</Button>
+                  {data?.role == "admin" ? (
+                    <Button onClick={() => handleadmin(row)}>
+                      Detail View
+                    </Button>
+                  ) : (
+                    <Button onClick={() => handleView(row)}>Detail View</Button>
+                  )}
+                  {/* <Button onClick={() => handleView(row)}>Detail View</Button> */}
 
                   {/* <Link to={`/MyInterviews/singleDetails`}>link</Link> */}
                 </div>
@@ -174,6 +191,14 @@ export const MeetingTable = ({
       >
         <InterviewScheduleForm MeetData={null} />
       </InterviewModal>
+      {/* <CustomModal */}
+      <CustomModal
+        isOpen={isModalOpenAdmin}
+        onClose={closeModal}
+        title="Details"
+      >
+        <InterviewView interview={selectedInterview} />
+      </CustomModal>
       <CustomModal
         isOpen={isModalOpenCustom}
         onClose={closeModal}

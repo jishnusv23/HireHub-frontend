@@ -22,15 +22,16 @@ import { logoutAction } from "./redux/store/actions/auth/logoutAction";
 import ForgotPasswrod from "./pages/auth/ForgotPasswrod";
 import { ForgotPassLogin } from "./pages/auth/ForgotPassLogin";
 import { InterViewerRoutes } from "./routes/InterViewerRoutes";
-// import { Room } from "./pages/Meet/Room";
+
 import { Contact } from "./pages/common/Contact";
 import { AboutUs } from "./pages/common/AboutUs";
 import MeetRoom from "./pages/Meet/MeetRoom";
 import Blogs from "./components/customs/Blogs";
+import Unauthorized from "./pages/common/Unauthorized";
 
 const App = () => {
-  const { data, loading } = useAppSelector((state: RooteState) => state.user);
-  // console.log("🚀 ~ file: App.tsx:116 ~ App ~ data:", data);
+  const { data } = useAppSelector((state: RooteState) => state.user);
+ 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -162,6 +163,8 @@ const App = () => {
           path="/Blogs"
           element={<PublicRoute element={<Blogs />} allowedRoles={[]} />}
         />
+
+        <Route path="*" element={<Unauthorized />} />
       </Routes>
     </Router>
   );
