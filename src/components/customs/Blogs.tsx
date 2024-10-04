@@ -1,12 +1,3 @@
-// import React from 'react'
-
-// const Blogs = () => {
-//   return (
-//     <div>Blogs</div>
-//   )
-// }
-
-// export default Blogs
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
@@ -23,10 +14,13 @@ import { toast } from "sonner";
 import { updateHandClappAction } from "@/redux/store/actions/common/updateHandClappAction";
 import Header from "../common/users/Header";
 import Footer from "../common/Footer";
+import LoadingPopUp from "../common/skeleton/LandingPoup";
+import BlogSkeletonLoader from "../common/skeleton/BlogSkeletonLoader";
 
 const Blogs = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [handleClapp, setHandClapp] = useState<number>(0);
@@ -49,6 +43,7 @@ const Blogs = () => {
 
       if (ContentAction.fulfilled.match(response)) {
         const responseData = response.payload.data;
+        setIsLoading(false);
         setAllBlogs(responseData.data);
         setTotalPages(responseData.totalPages);
       }
@@ -96,29 +91,29 @@ const Blogs = () => {
   return (
     <>
       {!data && <Header />}
-
-      <div className="bg-background pr-10 pt-24">
-        <div className="flex justify-end gap-4">
-          {data && <Button onClick={handleAddBlog}>AddNew</Button>}
-          {data?.role == "admin" && (
-            <Button onClick={handleRequest}>Request</Button>
-          )}
-        </div>
-        <TipsContent
-          allBlogs={allBlogs}
-          handleHandClappResponse={handleHandClappResponse}
-        />
-        <div className="flex justify-center mt-6 ">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
+      {isLoading ? (
+        <BlogSkeletonLoader />
+      ) : (
+        <div className="bg-background pr-10 pt-24">
+          <div className="flex justify-end gap-4">
+            {data && <Button onClick={handleAddBlog}>AddNew</Button>}
+            {data?.role === "admin" && (
+              <Button onClick={handleRequest}>Request</Button>
+            )}
+          </div>
+          <TipsContent
+            allBlogs={allBlogs}
+            handleHandClappResponse={handleHandClappResponse}
           />
+          <div className="flex justify-center mt-6">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
         </div>
-      </div>
-      <CustomModal isOpen={isModalOpen} onClose={closeModal} title="Add Blog">
-        <ContentAdd setIsModalOpen={setIsModalOpen} />
-      </CustomModal>
+      )}
       {!data && <Footer />}
     </>
   );
