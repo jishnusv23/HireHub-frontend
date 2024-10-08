@@ -28,6 +28,7 @@ import { AboutUs } from "./pages/common/AboutUs";
 import MeetRoom from "./pages/Meet/MeetRoom";
 import Blogs from "./components/customs/Blogs";
 import Unauthorized from "./pages/common/Unauthorized";
+import FeedBack from "./pages/Interviewee/FeedBack";
 
 const App = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
@@ -160,6 +161,10 @@ const App = () => {
         <Route
           path="/About"
           element={<PublicRoute element={<AboutUs />} allowedRoles={['pending','']} />}
+        />
+        <Route
+          path="/Feedback/:roomId"
+          element={<PublicRoute element={<FeedBack />} allowedRoles={[]} />}
         />
         <Route
           path="/Blogs"

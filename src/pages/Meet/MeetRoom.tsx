@@ -153,6 +153,12 @@ const MeetRoom = () => {
           setRoomLength(Roomlegnth);
         });
 
+         socket?.on("feedback-received", ({ email }) => {
+          console.log(email,'__________________________________________________')
+           toast.success(`New feedback received from ${email}`);
+          //  setLastFeedbackCheck(Date.now());
+         });
+
         //auto-open setup
         socket?.on("auto-openTerminal", (isOpen) => {
           console.log("Terminal state received from server:", isOpen);
@@ -173,7 +179,7 @@ const MeetRoom = () => {
           //  socket?.on("user-disconnected", (peerId) => {
           //    dispatch(removePeerStreamAction(peerId));
           //  });
-          navigate("/");
+          navigate(`/Feedback/${roomId}`,{state:{data:{roomId,email:userData.email}}});
           localStorage.clear();
           // leaveRoom()
         });
@@ -236,7 +242,9 @@ const MeetRoom = () => {
     socket?.on("user-disconnected", (peerId) => {
       dispatch(removePeerStreamAction(peerId));
     });
-    navigate("/");
+      navigate(`/Feedback/${roomId}`, {
+        state: { data: { roomId, email: userData.email } },
+      });
     localStorage.clear();
   };
 
@@ -379,11 +387,7 @@ const MeetRoom = () => {
                 ([peerId, peer], index) => {
                   if (userData.username !== peer.userName) {
                     return (
-                      // <div
-                      //   className={`w-full h-full ${
-                      //     isOpenTerminal ? "max-w-[400px]" : "max-w-full"
-                      //   } mx-auto`}
-                      // >
+                     
                       <div
                         className={`${
                           isOpenTerminal ? "h-[60%]" : "w-full h-full "
@@ -457,7 +461,11 @@ const MeetRoom = () => {
 };
 
 export default MeetRoom;
-
+ // <div
+                      //   className={`w-full h-full ${
+                      //     isOpenTerminal ? "max-w-[400px]" : "max-w-full"
+                      //   } mx-auto`}
+                      // >
 // MeetRoom.tsx
 // import React, { useContext, useEffect, useState, useRef } from "react";
 // import { useLocation, useNavigate, useParams } from "react-router-dom";
