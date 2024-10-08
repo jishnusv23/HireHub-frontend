@@ -47,11 +47,11 @@ export default function MultipleSelect({
   };
 
   return (
-    <FormControl sx={{ m: 1, width: "100%", mt: 3 }} className="h-12 ">
+    <FormControl sx={{ m: 1, width: "100%", mt: 3 }} className="h-12">
       {""}
 
       <p
-        className={`text-sm font-bold ${heading ? "text-white" : "text-black"}`}
+        className={`text-sm font-bold ${heading ? "text-black" : "text-black"}`}
       >
         {heading || "Types"}
       </p>

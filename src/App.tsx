@@ -33,8 +33,10 @@ const App = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
  
   const dispatch = useAppDispatch();
+   
 
   useEffect(() => {
+   
     if (!data) {
       dispatch(getUserData());
     } else if (data.isBlocked) {
@@ -153,15 +155,15 @@ const App = () => {
         />
         <Route
           path="/contact"
-          element={<PublicRoute element={<Contact />} allowedRoles={[]} />}
+          element={<PublicRoute element={<Contact />} allowedRoles={['pending','']} />}
         />
         <Route
           path="/About"
-          element={<PublicRoute element={<AboutUs />} allowedRoles={[]} />}
+          element={<PublicRoute element={<AboutUs />} allowedRoles={['pending','']} />}
         />
         <Route
           path="/Blogs"
-          element={<PublicRoute element={<Blogs />} allowedRoles={[]} />}
+          element={<PublicRoute element={<Blogs />} allowedRoles={['pending','']} />}
         />
 
         <Route path="*" element={<Unauthorized />} />

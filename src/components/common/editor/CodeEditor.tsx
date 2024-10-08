@@ -8,15 +8,18 @@ import { debounce } from "lodash";
 import { DefaultShowing } from "@/utils/ws/DefaultPrint";
 interface CodeEditorProps {
   roomId: string;
+  setIsOpenTerminal: (isClose: boolean) => void;
 }
 type Language = keyof typeof DefaultShowing;
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({
+  roomId,
+  setIsOpenTerminal,
+}) => {
   const editorRef = useRef(null);
   const [language, setLanguage] = useState("javascript");
   const [content, setContent] = useState("");
   console.log("🚀 ~ file: CodeEditor.tsx:14 ~ content:", content);
- 
 
   const [showOutput, setShowOutput] = useState(false);
   const { socket } = useContext(SocketContext) || {};
@@ -32,11 +35,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
   };
 
   const handleRunClick = () => {
-      setShowOutput((prev) => {
-        const newState = !prev; // Toggle the output state (true/false)
-        socket?.emit("open-outputBox", { roomId, showOutput: newState }); // Emit socket event with roomId and new output state
-        return newState; // Return the toggled state
-      });
+    setShowOutput((prev) => {
+      const newState = !prev; // Toggle the output state (true/false)
+      socket?.emit("open-outputBox", { roomId, showOutput: newState }); // Emit socket event with roomId and new output state
+      return newState; // Return the toggled state
+    });
   };
   useEffect(() => {
     if (socket) {
@@ -52,9 +55,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
           isUpdatingRef.current = false;
         }
       });
-      socket?.on("outputBox-open",(isOPen)=>{
-        console.log('output box open for each users ',isOPen)
-        setShowOutput(isOPen)
+      socket?.on("outputBox-open", (isOPen) => {
+        console.log("output box open for each users ", isOPen);
+        setShowOutput(isOPen);
       });
 
       return () => {
@@ -76,21 +79,32 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ roomId }) => {
       debouncedEmit(value);
     }
   };
+  const handleTerminalClose = () => {
+    setIsOpenTerminal(false);
+  };
 
   return (
     <div className="relative h-screen">
-      <div className="flex justify-between  mb-4">
+      <div className="flex justify-between  mb-4 bg-white">
         <LanguageSelector
           language={language}
           setLanguage={setLanguage}
           setContent={setContent}
         />
-        <Button
-          className="bg-green-700 hover:bg-green-900"
-          onClick={handleRunClick}
-        >
-          Run
-        </Button>
+        <div className="flex justify-between gap-4">
+          <Button
+            className="bg-green-700 hover:bg-green-900"
+            onClick={handleRunClick}
+          >
+            Run
+          </Button>
+          <Button
+            className="bg-red-700 hover:bg-red-900"
+            onClick={handleTerminalClose}
+          >
+            close
+          </Button>
+        </div>
       </div>
 
       <div className="relative h-screen">

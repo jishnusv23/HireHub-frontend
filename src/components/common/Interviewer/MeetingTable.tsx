@@ -20,29 +20,37 @@ import { CustomModal } from "@/components/customs/CustomModal";
 import { SuccessPage } from "./SuccessPage";
 import InterviewView from "../Admin/InterviewView";
 import { Interviewee } from "@/types/IInterview";
+import { getAllMeetDetails } from "@/redux/store/actions/interviewer/getAllMeetingsDetails";
 export const MeetingTable = ({
   Interviewdata,
+  setAllMeetData,
 }: {
   Interviewdata: InterviewType[];
+  setAllMeetData: () => Promise<void>;
 }) => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [responsePayload, setResponsePayload] = useState<any>(null);
   const [isModalOpenCustom, setIsModalOpenCustom] = useState(false);
   const [isModalOpenAdmin, setIsModalOpenAdmin] = useState(false);
-  const [selectedInterview, setSelectedInterview] = useState<InterviewType|null>(null);
+  const [selectedInterview, setSelectedInterview] =
+    useState<InterviewType | null>(null);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
- 
+
   const handleInterview = () => {
     setIsModalOpen(true);
   };
 
   const closeModal = async () => {
     setIsModalOpen(false);
-    setIsModalOpenCustom(false);
     setIsModalOpenAdmin(false);
+  };
+  const instantMeetCloseModl = async () => {
+    setIsModalOpenCustom(false);
+
+   await setAllMeetData();
   };
   const handleView = (rowData: any) => {
     navigate("/interviewer/MyInterviews/singleDetails", {
@@ -59,10 +67,9 @@ export const MeetingTable = ({
     if (response.payload.success) {
       setIsModalOpenCustom(true);
       setResponsePayload(response.payload.data);
-     
     }
   };
-  const handleadmin = (interviewData:InterviewType) => {
+  const handleadmin = (interviewData: InterviewType) => {
     setSelectedInterview(interviewData);
     setIsModalOpenAdmin(true);
   };
@@ -201,7 +208,7 @@ export const MeetingTable = ({
       </CustomModal>
       <CustomModal
         isOpen={isModalOpenCustom}
-        onClose={closeModal}
+        onClose={instantMeetCloseModl}
         title="Invite participants to join meeting"
       >
         <SuccessPage response={responsePayload} InstantMeet={true} />

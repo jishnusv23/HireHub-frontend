@@ -32,6 +32,7 @@ import {
   addPeerNameAction,
   removePeerStreamAction,
   addAllPeersAction,
+  removeAllPeerStream,
 } from "@/redux/store/actions/Room/peerAction";
 import CodeEditor from "@/components/common/editor/CodeEditor";
 import { number } from "zod";
@@ -158,6 +159,25 @@ const MeetRoom = () => {
           setIsOpenTerminal(isOpen);
         });
 
+        //close the meet
+        socket?.on("meet-close", (message) => {
+          toast.info(message);
+          if (stream) {
+            stream.getTracks().forEach((track) => track.stop());
+          }
+          //  socket?.emit("leave-room", {
+          //    roomId,
+          //    peerId: peerInstance.current?.id,
+          //  });
+          dispatch(removeAllPeerStream());
+          //  socket?.on("user-disconnected", (peerId) => {
+          //    dispatch(removePeerStreamAction(peerId));
+          //  });
+          navigate("/");
+          localStorage.clear();
+          // leaveRoom()
+        });
+
         socket?.on("user-disconnected", (peerId) => {
           dispatch(removePeerStreamAction(peerId));
         });
@@ -209,20 +229,20 @@ const MeetRoom = () => {
   };
 
   const leaveRoom = () => {
-    navigate("/");
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
     }
     socket?.emit("leave-room", { roomId, peerId: peerInstance.current?.id });
     socket?.on("user-disconnected", (peerId) => {
-      dispatch(removePeerStreamAction(peerId))
-    })
-    localStorage.clear()
+      dispatch(removePeerStreamAction(peerId));
+    });
+    navigate("/");
+    localStorage.clear();
   };
 
   const handleFormSubmit = async (formData: {
-    username: string
-    email: string
+    username: string;
+    email: string;
   }) => {
     const { username, email } = formData;
     const userId = uuidv4();
@@ -243,8 +263,11 @@ const MeetRoom = () => {
         userId,
       });
     } else {
-      toast.error("Session has not started yet");
+      toast.error(
+        "Session has not started yet or Maximum participant limit reached. Cannot join the meeting."
+      );
     }
+    console.log("🚀 ~ file: MeetRoom.tsx:261 ~ MeetRoom ~ response:", response);
   };
 
   const checkInterviewerStatus = async () => {
@@ -270,15 +293,40 @@ const MeetRoom = () => {
     checkInterviewerStatus();
   }, [roomId, appDispatch, data]);
 
+  const getGridClass = () => {
+    if (isOpenTerminal) {
+      return "grid grid-cols-1 md:grid-cols-2  auto-rows-fr";
+    }
+    switch (roomLength) {
+      case 0:
+        return "flex items-center justify-center";
+      case 1:
+        return "flex items-center justify-center";
+      case 2:
+        return "grid grid-cols-2 gap-4";
+      case 3:
+        return "grid grid-cols-2 grid-rows-2 gap-4";
+      default:
+        return "grid grid-cols-3 gap-4";
+    }
+  };
+
+  const getItemClass = (index: number) => {
+    if (roomLength === 3) {
+      // First video takes up two columns (bigger), the others are smaller
+      return index === 0 ? "col-span-2 row-span-2" : "w-48 h-36";
+    }
+    return ""; // Default, no special class for 4 participants
+  };
   if (!data && !isFormSubmitted) {
     return <MeetValidation RoomID={roomId} onSubmit={handleFormSubmit} />;
   }
   const handleConfirm = () => {
     setIsModalOpen(false);
-    leaveRoom();
+    socket?.emit("Interviewer-left", { roomId });
   };
   const handleCancel = () => {
-     setIsModalOpen(false);
+    setIsModalOpen(false);
   };
 
   return (
@@ -298,43 +346,65 @@ const MeetRoom = () => {
         >
           {isOpenTerminal && (
             <div className="w-[70%] h-full border-r-2 border-gray-600">
-              <CodeEditor roomId={roomId} />
+              <CodeEditor
+                roomId={roomId}
+                setIsOpenTerminal={setIsOpenTerminal}
+              />
             </div>
           )}
-          <div
-            className={`${isOpenTerminal ? "w-[30%]" : "w-full"} h-full p-4`}
-          >
-            <div
-              className={`grid gap-4 h-full ${
-                isOpenTerminal
-                  ? "grid-cols-1 sm:grid-cols-2"
-                  : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
-              }`}
-            >
-              <div className="relative">
-                <VideoPlayer stream={stream} muted />
-                <div className="absolute  left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
-                  {userData?.username || "You"}
-                </div>
-              </div>
 
-              {Object.entries(peers as PeerState).map(([peerId, peer]) => {
-                if (userData.username !== peer.userName) {
-                  return (
-                    <div key={peerId} className="">
-                      <VideoPlayer stream={peer.stream} />
-                      <div className="absolute  text-white bg-black bg-opacity-50 px-2 py-1 rounded">
-                        {peer.userName || "Participant"}
+          <div
+            className={`${isOpenTerminal ? "w-[40%]" : "w-full"} h-full p-4`}
+          >
+            <div className={`h-full ${getGridClass()}`}>
+              {/* <div
+                className={`w-full h-full ${
+                  isOpenTerminal ? "max-w-[400px]" : "max-w-full"
+                } mx-auto`}
+              > */}
+              <div
+                className={`${
+                  isOpenTerminal ? "h-[60%]" : "w-full h-full "
+                } mx-auto`}
+              >
+                <VideoPlayer
+                  stream={stream}
+                  username={userData.username as string}
+                  className={`${
+                    isOpenTerminal ? "w-full h-full" : "w-[80%] h-[60%]"
+                  } mx-auto `}
+                />
+              </div>
+              {Object.entries(peers as PeerState).map(
+                ([peerId, peer], index) => {
+                  if (userData.username !== peer.userName) {
+                    return (
+                      // <div
+                      //   className={`w-full h-full ${
+                      //     isOpenTerminal ? "max-w-[400px]" : "max-w-full"
+                      //   } mx-auto`}
+                      // >
+                      <div
+                        className={`${
+                          isOpenTerminal ? "h-[60%]" : "w-full h-full "
+                        } mx-auto`}
+                      >
+                        <VideoPlayer
+                          stream={peer.stream}
+                          username={peer.userName as string}
+                          className={`${
+                            isOpenTerminal ? "w-full h-full" : "w-[80%] h-[60%]"
+                          } mx-auto `}
+                        />
                       </div>
-                    </div>
-                  );
+                    );
+                  }
+                  return null;
                 }
-                return null;
-              })}
+              )}
             </div>
           </div>
         </div>
-
         <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center py-4 bg-gray-900 bg-opacity-75">
           <button
             className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
@@ -387,3 +457,276 @@ const MeetRoom = () => {
 };
 
 export default MeetRoom;
+
+// MeetRoom.tsx
+// import React, { useContext, useEffect, useState, useRef } from "react";
+// import { useLocation, useNavigate, useParams } from "react-router-dom";
+// import { toast } from "sonner";
+// import { v4 as uuidv4 } from "uuid";
+// import {
+//   IoMicOffOutline,
+//   IoMicOutline,
+//   IoVideocamOffOutline,
+//   IoVideocamOutline,
+// } from "react-icons/io5";
+// import { MdCallEnd, MdOutlineMoreVert } from "react-icons/md";
+// import TerminalIcon from "@mui/icons-material/Terminal";
+
+// import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+// import { RooteState } from "@/redux/store";
+// import { SocketContext } from "@/context/SocketProvider";
+// import { MeetValidation } from "@/components/common/Meet/MeetValidation";
+// import { InterivieweeMeetAcess } from "@/redux/store/actions/common/IntervieweeMeetAccessAction";
+// import { verifyIntervewe } from "@/redux/store/actions/common/verifyHost";
+// import { VideoPlayer } from "@/components/common/Meet/VideoPlayer";
+// import CodeEditor from "@/components/common/editor/CodeEditor";
+// import ConfirmModal from "@/components/common/users/ConfirmModal";
+
+// import { useMediaStream } from "@/hooks/useMediaStream";
+// import { usePeerConnection } from "@/hooks/usePeerConnection";
+// import { useRoomManagement } from "@/hooks/useRoomManagement";
+// import { PeerState } from "@/reducers/peerReducer";
+
+// const MeetRoom = () => {
+//   const { uniqueId } = useParams();
+//   const roomId = uniqueId || "";
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const appDispatch = useAppDispatch();
+//   const { socket } = useContext(SocketContext) || {};
+//   const { data } = useAppSelector((state: RooteState) => state.user);
+
+//   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+//   const [interviewerJoined, setInterviewerJoined] = useState<boolean>(false);
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [userData, setUserData] = useState<{
+//     username: string;
+//     email: string;
+//     userId: string | null;
+//   }>({
+//     username: "",
+//     email: "",
+//     userId: null,
+//   });
+
+//   const myVideoRef = useRef<HTMLVideoElement | null>(null);
+
+//   // Moved to local state to control stream initialization
+//   const [streamInitialized, setStreamInitialized] = useState<boolean>(false);
+//   const { stream, videoEnabled, audioEnabled, toggleVideo, toggleAudio } =
+//     useMediaStream(streamInitialized);
+//   const { peers, peerInstance } = usePeerConnection(
+//     socket,
+//     roomId,
+//     userData.userId as string,
+//     userData.username,
+//     stream
+//   );
+//   const { isOpenTerminal, openTerminal, leaveRoom, roomLength } =
+//     useRoomManagement(socket, roomId);
+
+//   useEffect(() => {
+//     const storedUserId = localStorage.getItem("userId");
+//     const storedUsername = localStorage.getItem("username");
+//     const storedEmail = localStorage.getItem("email");
+//     const isGuest = !data;
+//     if (isGuest && storedUserId && storedUsername && storedEmail) {
+//       setUserData({
+//         userId: storedUserId,
+//         username: storedUsername,
+//         email: storedEmail,
+//       });
+//       setIsFormSubmitted(true);
+//     }
+//   }, [data]);
+
+//   useEffect(() => {
+//     const preventNavigation = (event: PopStateEvent) => {
+//       navigate(location.pathname, { replace: true });
+//       event.preventDefault();
+//       const confirmMessage = "Are you sure you want to leave the meeting?";
+//       if (window.confirm(confirmMessage)) {
+//         leaveRoom();
+//       }
+//     };
+
+//     window.history.pushState(null, "", location.pathname);
+//     window.addEventListener("popstate", preventNavigation);
+
+//     return () => {
+//       window.removeEventListener("popstate", preventNavigation);
+//     };
+//   }, [navigate, location, leaveRoom]);
+
+//   useEffect(() => {
+//     if (stream && myVideoRef.current) {
+//       myVideoRef.current.srcObject = stream;
+//     }
+//   }, [stream]);
+
+//   const handleFormSubmit = async (formData: {
+//     username: string;
+//     email: string;
+//   }) => {
+//     const { username, email } = formData;
+//     const userId = uuidv4();
+//     const response = await appDispatch(
+//       InterivieweeMeetAcess({
+//         uniqueId: roomId,
+//         email: email,
+//       })
+//     );
+//     if (response.payload.success) {
+//       setIsFormSubmitted(true);
+//       setStreamInitialized(true);
+//       localStorage.setItem("userId", userId);
+//       localStorage.setItem("username", username);
+//       localStorage.setItem("email", email);
+//       setUserData({
+//         username,
+//         email,
+//         userId,
+//       });
+//     } else {
+//       toast.error("Session has not started yet");
+//     }
+//   };
+
+//   const checkInterviewerStatus = async () => {
+//     if (roomId && data?._id) {
+//       const response = await appDispatch(
+//         verifyIntervewe({ uniqueId: roomId, userId: data._id })
+//       );
+//       if (response.payload.success) {
+//         setStreamInitialized(true)
+//         setInterviewerJoined(true);
+//         setUserData({
+//           username: data?.username as string,
+//           email: data?.email as string,
+//           userId: data?._id,
+//         });
+//       }
+//     }
+//   };
+
+//   useEffect(() => {
+//     checkInterviewerStatus();
+//   }, [roomId, appDispatch, data]);
+
+//   const handleLeaveInterviewer = () => {
+//     setIsModalOpen(true);
+//   };
+
+//   const handleConfirm = () => {
+//     setIsModalOpen(false);
+//     socket?.emit("Interviewer-left", { roomId });
+//     leaveRoom();
+//   };
+
+//   const handleLeaveRoom = () => {
+//     leaveRoom();
+//   };
+
+//   const handleCancel = () => {
+//     setIsModalOpen(false);
+//   };
+
+//   if (!data && !isFormSubmitted) {
+//     return <MeetValidation RoomID={roomId} onSubmit={handleFormSubmit} />;
+//   }
+
+//   return (
+//     <>
+//       {isModalOpen && (
+//         <ConfirmModal
+//           message={`leave this meet`}
+//           onConfirm={handleConfirm}
+//           onCancel={handleCancel}
+//         />
+//       )}
+//       <div className="relative h-screen w-full bg-black">
+//         <div
+//           className={`absolute inset-0 flex ${
+//             isOpenTerminal ? "flex-row" : "items-center justify-center"
+//           }`}
+//         >
+//           {isOpenTerminal && (
+//             <div className="w-[70%] h-full border-r-2 border-gray-600">
+//               <CodeEditor roomId={roomId} />
+//             </div>
+//           )}
+//           <div
+//             className={`${isOpenTerminal ? "w-[30%]" : "w-full"} h-full p-4`}
+//           >
+//             <div
+//               className={`grid gap-4 h-full ${
+//                 isOpenTerminal
+//                   ? "grid-cols-1 sm:grid-cols-2"
+//                   : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+//               }`}
+//             >
+//               <div className="relative">
+//                 <VideoPlayer stream={stream} muted />
+//                 <div className="absolute left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
+//                   {userData?.username || "You"}
+//                 </div>
+//               </div>
+//               {Object.entries(peers as PeerState).map(([peerId, peer]) => {
+//                 if (
+//                   userData.username !== peer.userName &&
+//                   peer.userName !== "participant"
+//                 ) {
+//                   return (
+//                     <div key={peerId} className="">
+//                       <VideoPlayer stream={peer.stream} />
+//                       <div className="absolute text-white bg-black bg-opacity-50 px-2 py-1 rounded">
+//                         {peer.userName || "Participant"}
+//                       </div>
+//                     </div>
+//                   );
+//                 }
+//                 return null;
+//               })}
+//             </div>
+//           </div>
+//         </div>
+//         <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center py-4 bg-gray-900 bg-opacity-75">
+//           <button
+//             className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
+//             onClick={openTerminal}
+//           >
+//             <TerminalIcon />
+//           </button>
+//           <button
+//             className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
+//             onClick={toggleVideo}
+//           >
+//             {videoEnabled ? (
+//               <IoVideocamOutline size={24} />
+//             ) : (
+//               <IoVideocamOffOutline size={24} />
+//             )}
+//           </button>
+//           <button
+//             className="text-white mx-4 p-3 rounded-full bg-green-600 hover:bg-green-500 transition-colors"
+//             onClick={toggleAudio}
+//           >
+//             {audioEnabled ? (
+//               <IoMicOutline size={24} />
+//             ) : (
+//               <IoMicOffOutline size={24} />
+//             )}
+//           </button>
+//           <button
+//             className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
+//             onClick={handleLeaveInterviewer}
+//           >
+//             <MdCallEnd size={24} />
+//           </button>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default MeetRoom;

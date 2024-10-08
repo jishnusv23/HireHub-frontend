@@ -35,6 +35,16 @@ interface CustomLabelProps {
   value: number;
 }
 
+const YAxisWrapper = ({
+  yAxisId = "left",
+  orientation = "left",
+  width = 60,
+  height = 0,
+  ...props
+}) => {
+  return <YAxis yAxisId={yAxisId} width={width} height={height} {...props} />;
+};
+
 const renderCustomLabel = (props: CustomLabelProps) => {
   const { cx, cy, midAngle, innerRadius, outerRadius, percent, name } = props;
   const RADIAN = Math.PI / 180;
@@ -87,7 +97,8 @@ const InterviewerDashboard: React.FC = () => {
       value: totalInterviews - completedInterviews - pendingInterviews,
     },
   ].filter((item) => item.value > 0);
-  // Grouping interviews by type for the BarChart
+
+  //* Grouping interviews by type for the BarChart
   const interviewTypeCount = interviews.reduce((acc, interview) => {
     const type = interview.interviewType;
     if (type) {
@@ -106,7 +117,7 @@ const InterviewerDashboard: React.FC = () => {
       name: type,
       value: interviewTypeCount[type],
     }))
-    .sort((a, b) => b.value - a.value); // Sort by value in descending order
+    .sort((a, b) => b.value - a.value);
 
   return (
     <div className="p-6 max-w-full mx-auto bg-background shadow-md overflow-hidden">
@@ -165,7 +176,7 @@ const InterviewerDashboard: React.FC = () => {
             <BarChart data={interviewTypeData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
-              <YAxis />
+              <YAxisWrapper />
               <Tooltip />
               <Legend />
               <Bar dataKey="value" fill="#8884d8" name="Count" />

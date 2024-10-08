@@ -36,11 +36,12 @@ export const SuccessPage: React.FC<SuccessPageProps> = ({
 
   const handleChanges = async () => {
     await dispatch(getUserData());
+    navigate(-1);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md sm:max-w-lg p-4 sm:p-6 lg:p-8 bg-background shadow-lg rounded-lg">
+    <div className=" px-4 sm:px-6 lg:px-8">
+      <div className=" sm:max-w-lg p-4 sm:p-6 lg:p-8 bg-background ">
         <div className="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 mt-6">
           {!InstantMeet && (
             <>

@@ -90,7 +90,7 @@ const Blogs = () => {
   };
   return (
     <>
-      {!data && <Header />}
+      {(!data ||data.role=='pending' )&&  <Header />}
       {isLoading ? (
         <BlogSkeletonLoader />
       ) : (

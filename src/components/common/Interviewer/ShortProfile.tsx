@@ -12,11 +12,11 @@ import { InterviewerProfileForm } from "./InterviewerProfileForm";
 
 export const ShortProfile = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleProfile=()=>{
-    setIsModalOpen(true)
-  }
+  const handleProfile = () => {
+    setIsModalOpen(true);
+  };
   const closeModal = async () => {
     setIsModalOpen(false);
     // await dispatch(getUserData());
@@ -54,12 +54,12 @@ export const ShortProfile = () => {
 
           <div className="bg-transparent w-32 h-12 flex items-center justify-center rounded-lg shadow-sm border border-b-gray-500 hover:bg-primary">
             <MessageIcon color="inherit" />
-            <h1 className="text-sm ml-2">My Message</h1>
+            <h1 className="text-sm ml-2">My Interviewes</h1>
           </div>
 
           <div className="bg-transparent w-32 h-12 flex items-center justify-center rounded-lg shadow-sm border border-b-gray-500 hover:bg-primary">
             <LocalActivityIcon color="inherit" />
-            <h1 className="text-sm ml-2">My Activity</h1>
+            <h1 className="text-sm ml-2">My Blogs</h1>
           </div>
 
           <div className="bg-transparent w-32 h-12 flex items-center justify-center rounded-lg shadow-sm border border-b-gray-500 hover:bg-primary">
@@ -74,8 +74,7 @@ export const ShortProfile = () => {
         </div>
       </div>
       <CustomModal isOpen={isModalOpen} onClose={closeModal} title="Profile">
-        <InterviewerProfileForm/>
-       
+        <InterviewerProfileForm />
       </CustomModal>
     </>
   );

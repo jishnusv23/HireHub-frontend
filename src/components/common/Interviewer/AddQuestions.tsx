@@ -21,7 +21,7 @@ const formSchema = z.object({
     .min(2, {
       message: "Name must be at least 2 characters.",
     })
-    .max(10, { message: "Name max is 10 characters." }),
+    .max(20, { message: "Name max is 20 characters." }),
   questionType: z.string().nonempty({ message: "Interview type is required." }),
   questions: z
     .string()

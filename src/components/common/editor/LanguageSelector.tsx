@@ -24,7 +24,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   }, [setContent, language]);
 
   return (
-    <div className="w-32">
+    <div className="w-40 ">
       <div>
         <MultipleSelect
           field={{ value: language, onChange: setLanguage }}

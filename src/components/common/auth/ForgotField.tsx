@@ -70,6 +70,8 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
     toast.success("OTP Sent", {
       description: "Please check your email for the one-time password.",
     });
+    form.reset()
+    
   } else {
     toast.error("Email Not Found", {
       description:

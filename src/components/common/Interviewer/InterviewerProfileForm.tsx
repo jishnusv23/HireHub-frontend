@@ -1,26 +1,27 @@
 import { Form, FormField } from "@/components/ui/form";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FiUser, FiKey, FiUserCheck } from "react-icons/fi";
+import { FiUserCheck, FiUser } from "react-icons/fi";
+import { GiPositionMarker } from "react-icons/gi";
 
 import { Button } from "@/components/ui/button";
 import FormInputWithIcon from "../FormInuprWithIcon";
-import { GiPositionMarker } from "react-icons/gi";
 import { ProfileImg } from "./ProfileImg";
-import { useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { RooteState } from "@/redux/store";
+import { ChangeUsernameAction } from "@/redux/store/actions/interviewer/changeUsernameAction";
+import { getUserData } from "@/redux/store/actions/auth";
+import { toast } from "sonner";
 
+
+// Define schema for form validation
 const formSchema = z.object({
   email: z
     .string()
-    .min(2, { message: "First name must be at least 2 characters." })
-    .max(30, { message: "First name should be less than 30 characters." }),
-  //   lastName: z
-  //     .string()
-  //     .min(2, { message: "Last name must be at least 2 characters." })
-  //     .max(30, { message: "Last name should be less than 30 characters." }),
+    .min(2, { message: "Email must be at least 2 characters." })
+    .max(30, { message: "Email should be less than 30 characters." }),
   username: z
     .string()
     .min(2, { message: "Username must be at least 2 characters." })
@@ -33,20 +34,40 @@ const formSchema = z.object({
 });
 
 export const InterviewerProfileForm = () => {
+  const dispatch = useAppDispatch();
+
+  // Get the user data from the store
   const { data } = useAppSelector((state: RooteState) => state.user);
+
+  // Local state for holding the updated username and email
+  const [updatedUsername, setUpdatedUsername] = useState(data?.username || "");
+  const [updatedEmail, setUpdatedEmail] = useState(data?.email || "");
+  const [loading, setLoading] = useState(false);
+
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: data?.email || "",
-      //   lastName: "",
-      username: data?.username || "",
+      email: updatedEmail,
+      username: updatedUsername,
       role: "interviewer",
     },
   });
 
+  // Function to handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values, "this user email");
-    // Handle form submission logic here, e.g., send data to an API
+    setLoading(true);
+    const response = await dispatch(ChangeUsernameAction(values.username));
+
+    // Check if the dispatch was successful and update the state with new values
+    if (response.meta.requestStatus === "fulfilled") {
+      // console.log(response.payload.data.username,'___________________________________');
+         toast.success("Profile updated successfully.");
+      setUpdatedUsername(response.payload.data.username);
+      setUpdatedEmail(response.payload.data.email);
+      setLoading(false);
+      await dispatch(getUserData())
+    }
   }
 
   return (
@@ -57,33 +78,7 @@ export const InterviewerProfileForm = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 w-full"
         >
-          <div className="space-y-2 ">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormInputWithIcon
-                  field={field}
-                  icon={<FiUser />}
-                  placeholder="Enter your first name"
-                  title="Email"
-                  showTitle={true}
-                />
-              )}
-            />
-            {/* <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormInputWithIcon
-                  field={field}
-                  icon={<FiUser />}
-                  placeholder="Enter your last name"
-                  title="Last Name"
-                  showTitle={true}
-                />
-              )}
-            /> */}
+          <div className="space-y-2">
             <FormField
               control={form.control}
               name="username"
@@ -93,6 +88,19 @@ export const InterviewerProfileForm = () => {
                   icon={<FiUserCheck />}
                   placeholder="Enter your username"
                   title="Username"
+                  showTitle={true}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormInputWithIcon
+                  field={field}
+                  icon={<FiUser />}
+                  placeholder="Enter your email"
+                  title="Email"
                   showTitle={true}
                 />
               )}
@@ -115,7 +123,7 @@ export const InterviewerProfileForm = () => {
             type="submit"
             className="w-full bg-primary text-white font-bold py-2"
           >
-            Submit
+            {loading ? "loading" : "Submit"}
           </Button>
         </form>
       </Form>

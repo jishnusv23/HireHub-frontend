@@ -17,6 +17,7 @@ export interface Interviewee {
   isBlocked: boolean;
   isVerified?: boolean;
   isGAuth?: boolean;
+  meetParticipants?:number
   createdAt?: Date | string | undefined;
   profile?: Profile;
 }

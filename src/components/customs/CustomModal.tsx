@@ -44,7 +44,7 @@ export const CustomModal: React.FC<CustomModalProps> = ({
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
               leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
+              leaveFrom="opacity-100 scale-100  "
               leaveTo="opacity-0 scale-95"
             >
               <DialogPanel className="w-full max-w-md sm:max-w-lg md:max-w-2xl  transform overflow-hidden rounded-2xl bg-background p-6 text-left align-middle shadow-xl transition-all">

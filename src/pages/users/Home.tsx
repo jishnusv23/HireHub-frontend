@@ -23,6 +23,9 @@ export const Home = () => {
   useEffect(() => {
     setLoading(true);
   }, [dispatch]);
+  useEffect(() => {
+    setIsModalOpen(true);
+  }, []);
 
   const handleInterview = () => {
     setIsModalOpen(true);
@@ -79,7 +82,6 @@ export const Home = () => {
           title="Create a Meeting"
         >
           <InterviewChoice />
-          
         </CustomModal>
         <Contentsection />
         <Featuressection />

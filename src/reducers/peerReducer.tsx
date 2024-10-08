@@ -4,6 +4,7 @@ import {
   ADD_PEER_STREAM,
   ADD_PEER_NAME,
   REMOVE_PEER_STRESAM,
+  REMOVE_ALL_PEER_STREAM
 } from "@/redux/store/actions/Room/peerAction";
 
 export type PeerState = Record<
@@ -29,6 +30,10 @@ type PeerAction =
       payload: {
         peers: Record<string, IPeer>;
       };
+    }
+  | {
+      type: typeof REMOVE_ALL_PEER_STREAM;
+     
     };
 
 export const peersReducer = (state: PeerState, action: PeerAction) => {
@@ -56,6 +61,10 @@ export const peersReducer = (state: PeerState, action: PeerAction) => {
     case ADD_ALL_PEER: {
       return { ...state, ...action.payload.peers };
     }
+    case REMOVE_ALL_PEER_STREAM:{
+      return {}
+    }
+    
     default:
       return {...state};
   }

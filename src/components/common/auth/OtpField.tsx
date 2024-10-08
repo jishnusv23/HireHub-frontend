@@ -15,6 +15,7 @@ export const OtpField = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [isComplete, setIsComplete] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [canResend, setCanResend] = useState(false);
   const location = useLocation();
@@ -71,7 +72,7 @@ export const OtpField = () => {
       const mergeOtp = otp.join("");
       try {
         const response = await dispatch(
-          OtpverficationAction({ otp: mergeOtp, datas:location.state.data })
+          OtpverficationAction({ otp: mergeOtp, datas: location.state.data })
         );
         console.log(
           "🚀 ~ file: OtpField.tsx:103 ~ handleTheOtp ~ response:",
@@ -99,7 +100,11 @@ export const OtpField = () => {
     startTimer();
     toast.success("OTP resent to your Email", { duration: 4000 });
     try {
-      await dispatch(sendVerificationMail(location.state?.email));
+      console.log(
+        location.state.data.email,
+        "___________________________________________"
+      );
+      await dispatch(sendVerificationMail(location.state?.data.email));
     } catch (error) {
       console.error("Error during OTP resend:", error);
     }
@@ -108,8 +113,9 @@ export const OtpField = () => {
   return (
     <>
       <LoadingPopUp isLoading={loading} />
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="bg-white text-primary p-8 rounded-lg shadow-lg text-center">
+   
+      <div className="w-full md:w-1/2 flex flex-col items-center px-4 py-16  ">
+        <div className="bg-white text-primary p-6 md:p-8 lg:p-10 rounded-lg shadow-lg text-center w-full">
           <h1 className="text-2xl font-bold mb-6">OTP VERIFICATION</h1>
           <p className="mb-6">
             Enter the 4-digit verification code

@@ -20,42 +20,44 @@ export const Meetings = () => {
   const itemsPerPage = 5;
 
   useEffect(() => {
-    const fetchAllMeetDetails = async () => {
-      try {
-        setLoading(true);
-        const response = await dispatch(
-          getAllMeetDetails({
-            page: 1,
-            limit: 100,
-            search: "",
-            id: data?._id as string,
-          })
-        );
-        setLoading(false);
-        if (
-          response.payload.success &&
-          Array.isArray(response.payload.data.data)
-        ) {
-          const fetchedData = response.payload.data.data;
-          setAllMeetData(fetchedData);
-
-          const scheduledInterviews = fetchedData.filter(
-            (item: InterviewType) => item.interviewStatus === "Scheduled"
-          );
-          setCurrentTabData(scheduledInterviews);
-          setTotalPages(Math.ceil(scheduledInterviews.length / itemsPerPage));
-        } else {
-          setAllMeetData([]);
-          setCurrentTabData([]);
-          setTotalPages(1);
-        }
-      } catch (error: any) {
-        setLoading(false);
-        throw new Error(error?.message);
-      }
-    };
     fetchAllMeetDetails();
   }, [dispatch, data?._id]);
+  const fetchAllMeetDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await dispatch(
+        getAllMeetDetails({
+          page: 1,
+          limit: 100,
+          search: "",
+          id: data?._id as string,
+        })
+      );
+     
+      if (
+        response.payload.success &&
+        Array.isArray(response.payload.data.data)
+      ) {
+        const fetchedData = response.payload.data.data;
+        setAllMeetData(fetchedData);
+
+        const scheduledInterviews = fetchedData.filter(
+          (item: InterviewType) => item.interviewStatus === "Scheduled"
+        );
+        setCurrentTabData(scheduledInterviews);
+        setTotalPages(Math.ceil(scheduledInterviews.length / itemsPerPage));
+      } else {
+        setAllMeetData([]);
+        setCurrentTabData([]);
+        setTotalPages(1);
+      }
+    } catch (error: any) {
+      setLoading(false);
+      throw new Error(error?.message);
+    }finally{
+       setLoading(false);
+    }
+  };
 
   const handleTabChange = (status: string) => {
     const filteredData = allMeetData.filter(
@@ -90,15 +92,24 @@ export const Meetings = () => {
               </TabsList>
 
               <TabsContent value="Scheduled">
-                <MeetingTable Interviewdata={paginatedData} />
+                <MeetingTable
+                  Interviewdata={paginatedData}
+                  setAllMeetData={fetchAllMeetDetails}
+                />
               </TabsContent>
 
               <TabsContent value="Completed">
-                <MeetingTable Interviewdata={paginatedData} />
+                <MeetingTable
+                  Interviewdata={paginatedData}
+                  setAllMeetData={fetchAllMeetDetails}
+                />
               </TabsContent>
 
               <TabsContent value="Cancelled">
-                <MeetingTable Interviewdata={paginatedData} />
+                <MeetingTable
+                  Interviewdata={paginatedData}
+                  setAllMeetData={fetchAllMeetDetails}
+                />
               </TabsContent>
             </Tabs>
           </div>
