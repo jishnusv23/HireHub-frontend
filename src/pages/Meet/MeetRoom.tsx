@@ -153,11 +153,14 @@ const MeetRoom = () => {
           setRoomLength(Roomlegnth);
         });
 
-         socket?.on("feedback-received", ({ email }) => {
-          console.log(email,'__________________________________________________')
-           toast.success(`New feedback received from ${email}`);
+        socket?.on("feedback-received", ({ email }) => {
+          console.log(
+            email,
+            "__________________________________________________"
+          );
+          toast.success(`New feedback received from ${email}`);
           //  setLastFeedbackCheck(Date.now());
-         });
+        });
 
         //auto-open setup
         socket?.on("auto-openTerminal", (isOpen) => {
@@ -179,7 +182,9 @@ const MeetRoom = () => {
           //  socket?.on("user-disconnected", (peerId) => {
           //    dispatch(removePeerStreamAction(peerId));
           //  });
-          navigate(`/Feedback/${roomId}`,{state:{data:{roomId,email:userData.email}}});
+          navigate(`/Feedback/${roomId}`, {
+            state: { data: { roomId, email: userData.email } },
+          });
           localStorage.clear();
           // leaveRoom()
         });
@@ -242,9 +247,9 @@ const MeetRoom = () => {
     socket?.on("user-disconnected", (peerId) => {
       dispatch(removePeerStreamAction(peerId));
     });
-      navigate(`/Feedback/${roomId}`, {
-        state: { data: { roomId, email: userData.email } },
-      });
+    navigate(`/Feedback/${roomId}`, {
+      state: { data: { roomId, email: userData.email } },
+    });
     localStorage.clear();
   };
 
@@ -301,31 +306,29 @@ const MeetRoom = () => {
     checkInterviewerStatus();
   }, [roomId, appDispatch, data]);
 
-  const getGridClass = () => {
-    if (isOpenTerminal) {
-      return "grid grid-cols-1 md:grid-cols-2  auto-rows-fr";
-    }
-    switch (roomLength) {
-      case 0:
-        return "flex items-center justify-center";
-      case 1:
-        return "flex items-center justify-center";
-      case 2:
-        return "grid grid-cols-2 gap-4";
-      case 3:
-        return "grid grid-cols-2 grid-rows-2 gap-4";
-      default:
-        return "grid grid-cols-3 gap-4";
-    }
-  };
+   const getGridClass = () => {
+     if (isOpenTerminal) {
+       return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 auto-rows-fr";
+     }
+     switch (roomLength) {
+       case 0:
+       case 1:
+         return "flex items-center justify-center";
+       case 2:
+         return "grid grid-cols-1 sm:grid-cols-2 gap-2";
+       case 3:
+         return "grid grid-cols-1 sm:grid-cols-2 gap-2";
+       default:
+         return "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2";
+     }
+   };
 
-  const getItemClass = (index: number) => {
-    if (roomLength === 3) {
-      // First video takes up two columns (bigger), the others are smaller
-      return index === 0 ? "col-span-2 row-span-2" : "w-48 h-36";
-    }
-    return ""; // Default, no special class for 4 participants
-  };
+   const getItemClass = (index: number) => {
+     if (roomLength === 3 && index === 0) {
+       return "col-span-full sm:col-span-2 sm:row-span-2";
+     }
+     return "";
+   };
   if (!data && !isFormSubmitted) {
     return <MeetValidation RoomID={roomId} onSubmit={handleFormSubmit} />;
   }
@@ -348,12 +351,12 @@ const MeetRoom = () => {
       )}
       <div className="relative h-screen w-full bg-black">
         <div
-          className={`absolute inset-0 flex ${
-            isOpenTerminal ? "flex-row" : "items-center justify-center"
+          className={`absolute inset-0 flex flex-col ${
+            isOpenTerminal ? "md:flex-row" : ""
           }`}
         >
           {isOpenTerminal && (
-            <div className="w-[70%] h-full border-r-2 border-gray-600">
+            <div className="w-full md:w-[60%] h-1/2 md:h-full border-b-2 md:border-b-0 md:border-r-2 border-gray-600">
               <CodeEditor
                 roomId={roomId}
                 setIsOpenTerminal={setIsOpenTerminal}
@@ -362,56 +365,41 @@ const MeetRoom = () => {
           )}
 
           <div
-            className={`${isOpenTerminal ? "w-[40%]" : "w-full"} h-full p-4`}
+            className={`${
+              isOpenTerminal ? "w-full md:w-[40%]" : "w-full"
+            } h-full p-2 sm:p-4`}
           >
             <div className={`h-full ${getGridClass()}`}>
-              {/* <div
-                className={`w-full h-full ${
-                  isOpenTerminal ? "max-w-[400px]" : "max-w-full"
-                } mx-auto`}
-              > */}
-              <div
-                className={`${
-                  isOpenTerminal ? "h-[60%]" : "w-full h-full "
-                } mx-auto`}
-              >
+              <div className={`${isOpenTerminal ? "h-full" : "w-full h-full"}`}>
                 <VideoPlayer
                   stream={stream}
                   username={userData.username as string}
-                  className={`${
-                    isOpenTerminal ? "w-full h-full" : "w-[80%] h-[60%]"
-                  } mx-auto `}
+                  className="w-full h-full object-cover"
                 />
               </div>
               {Object.entries(peers as PeerState).map(
-                ([peerId, peer], index) => {
-                  if (userData.username !== peer.userName) {
-                    return (
-                     
-                      <div
-                        className={`${
-                          isOpenTerminal ? "h-[60%]" : "w-full h-full "
-                        } mx-auto`}
-                      >
-                        <VideoPlayer
-                          stream={peer.stream}
-                          username={peer.userName as string}
-                          className={`${
-                            isOpenTerminal ? "w-full h-full" : "w-[80%] h-[60%]"
-                          } mx-auto `}
-                        />
-                      </div>
-                    );
-                  }
-                  return null;
-                }
+                ([peerId, peer], index) =>
+                  userData.username !== peer.userName && (
+                    <div
+                      key={peerId}
+                      className={`${getItemClass(index)} ${
+                        isOpenTerminal ? "h-full" : "w-full h-full"
+                      }`}
+                    >
+                      <VideoPlayer
+                        stream={peer.stream}
+                        username={peer.userName as string}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )
               )}
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center py-4 bg-gray-900 bg-opacity-75">
+        <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center py-2 sm:py-4 bg-gray-900 bg-opacity-75">
           <button
-            className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
+            className="text-white mx-2 p-2 sm:p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
             onClick={OpenTerminal}
           >
             <TerminalIcon />
@@ -439,21 +427,17 @@ const MeetRoom = () => {
           <button className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
             <MdOutlineMoreVert />
           </button>
-          {data?.role === "interviewer" || data?.role === "pending" ? (
-            <button
-              className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
-              onClick={handleLeaveInterivewer}
-            >
-              <MdCallEnd size={24} />
-            </button>
-          ) : (
-            <button
-              className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
-              onClick={leaveRoom}
-            >
-              <MdCallEnd size={24} />
-            </button>
-          )}
+
+          <button
+            className="text-white mx-2 p-2 sm:p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
+            onClick={
+              data?.role === "interviewer" || data?.role === "pending"
+                ? handleLeaveInterivewer
+                : leaveRoom
+            }
+          >
+            <MdCallEnd size={24} />
+          </button>
         </div>
       </div>
     </>
@@ -461,11 +445,11 @@ const MeetRoom = () => {
 };
 
 export default MeetRoom;
- // <div
-                      //   className={`w-full h-full ${
-                      //     isOpenTerminal ? "max-w-[400px]" : "max-w-full"
-                      //   } mx-auto`}
-                      // >
+// <div
+//   className={`w-full h-full ${
+//     isOpenTerminal ? "max-w-[400px]" : "max-w-full"
+//   } mx-auto`}
+// >
 // MeetRoom.tsx
 // import React, { useContext, useEffect, useState, useRef } from "react";
 // import { useLocation, useNavigate, useParams } from "react-router-dom";

@@ -36,9 +36,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const handleRunClick = () => {
     setShowOutput((prev) => {
-      const newState = !prev; // Toggle the output state (true/false)
-      socket?.emit("open-outputBox", { roomId, showOutput: newState }); // Emit socket event with roomId and new output state
-      return newState; // Return the toggled state
+      const newState = !prev; 
+      socket?.emit("open-outputBox", { roomId, showOutput: newState });
+      return newState; 
     });
   };
   useEffect(() => {
@@ -60,12 +60,19 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         setShowOutput(isOPen);
       });
 
+      socket.on("setup-selected-language",(selectedlanguage)=>{
+        setLanguage(selectedlanguage);
+      });
+
       return () => {
         socket?.off("update-code");
         socket?.off("outputBox-open");
       };
     }
   }, [socket]);
+  useEffect(()=>{
+    socket?.emit('select-language',{language,roomId})
+  },[language,setLanguage])
   const debouncedEmit = useRef(
     debounce((content: string) => {
       if (!isUpdatingRef.current) {
