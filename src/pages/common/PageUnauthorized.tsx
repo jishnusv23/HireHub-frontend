@@ -1,14 +1,15 @@
-import React from "react";
+
+
+
 import { Player } from "@lottiefiles/react-lottie-player";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
-const Unauthorized = () => {
+const PageUnauthorized = () => {
   const navigate = useNavigate();
   return (
     <div className="flex justify-center items-center min-h-screen mx-auto">
       <div className="mx-auto max-w-screen-sm text-center">
-   
         <Player
           autoplay
           loop
@@ -22,7 +23,6 @@ const Unauthorized = () => {
 
         <div className="mt-6">
           <Button onClick={() => navigate("/")}>Back To Home</Button>
-        
         </div>
 
         <p className="mt-4 text-sm text-muted-foreground">
@@ -37,4 +37,4 @@ const Unauthorized = () => {
   );
 };
 
-export default Unauthorized;
+export default PageUnauthorized;
