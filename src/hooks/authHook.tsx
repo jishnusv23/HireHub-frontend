@@ -16,3 +16,5 @@ export const useGetUserRole = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   return data?.role || null;
 };
+
+//auth hooks
