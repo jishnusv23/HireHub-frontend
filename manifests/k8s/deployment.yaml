@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hirehib-frontend-deployment
+  labels:
+    app: hirehub-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hirehub-frontend
+  template:
+    metadata:
+      labels:
+        app: hirehub-frontend
+    spec:
+      containers:
+        - name: hirehub-frontend
+          image: jishnusv23/hirehub-client:latest
+          ports:
+            - containerPort: 5173
+          envFrom:
+            - configMapRef:
+                name: hirehub-frontend-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hirehub-frontend-service
+spec:
+  selector:
+    app: hirehub-frontend
+  ports:
+    - port: 5173
+      targetPort: 5173

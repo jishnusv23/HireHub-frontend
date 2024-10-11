@@ -13,6 +13,8 @@ dist-ssr
 *.local
 .env
 
+manifests/k8s/configMaps
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
