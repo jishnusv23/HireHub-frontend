@@ -1,4 +1,3 @@
-import React from "react";
 import Img from "@/assets/home/Legal-3.webp";
 import { ContactForm } from "./users/ContactForm";
 import { motion } from "framer-motion";

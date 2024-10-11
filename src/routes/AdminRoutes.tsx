@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { AHome } from "@/pages/admin/AHome";
 import AdminDashboard from "@/components/admin/AdminDashboard ";

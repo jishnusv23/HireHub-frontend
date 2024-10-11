@@ -1,7 +1,7 @@
 import { InterviewType } from "@/types/Common";
-// import { Button } from "@mui/material";
+
 import WbIncandescentOutlinedIcon from "@mui/icons-material/WbIncandescentOutlined";
-import React, { useState } from "react";
+import  { useState } from "react";
 import RotateRightOutlinedIcon from "@mui/icons-material/RotateRightOutlined";
 import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
@@ -19,8 +19,7 @@ import { RooteState } from "@/redux/store";
 import { CustomModal } from "@/components/customs/CustomModal";
 import { SuccessPage } from "./SuccessPage";
 import InterviewView from "../Admin/InterviewView";
-import { Interviewee } from "@/types/IInterview";
-import { getAllMeetDetails } from "@/redux/store/actions/interviewer/getAllMeetingsDetails";
+
 export const MeetingTable = ({
   Interviewdata,
   setAllMeetData,

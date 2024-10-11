@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TagsInput } from "react-tag-input-component";
 
 interface InputTagCompProps {

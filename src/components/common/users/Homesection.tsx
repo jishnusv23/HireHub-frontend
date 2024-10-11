@@ -1,14 +1,11 @@
-import React from "react";
 import { FaComputer } from "react-icons/fa6";
 import Webcall from "@/assets/logos/web-conferencing-logo.png";
 import Mentor from "@/assets/logos/consulting-computer-icons.png";
 import Salary from "@/assets/logos/salary-transparency-logo.jpg";
 import Resume from "@/assets/logos/resume-blue-icons.png";
-// import { FaFileCode } from "react-icons/fa";
 import { FaUserCog, FaRegSmile, FaHeadSideVirus } from "react-icons/fa";
 import { SiFuturelearn } from "react-icons/si";
 import { GiMaterialsScience } from "react-icons/gi";
-import { FcManager } from "react-icons/fc";
 
 import { MdDesignServices } from "react-icons/md";
 

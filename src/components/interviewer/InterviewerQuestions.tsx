@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import TechQuestion from "../common/Interviewer/TechQuestion";
 import { Button } from "../ui/button";
 import { CustomModal } from "../customs/CustomModal";

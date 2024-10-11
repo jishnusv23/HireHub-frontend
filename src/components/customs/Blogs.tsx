@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router-dom";
 import TipsContent from "../User/TipsContent";
-
-import ContentAdd from "../common/ContentAdd";
-import { CustomModal } from "../customs/CustomModal";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import Pagination from "../common/Admin/Pagination";
 import { ContentAction } from "@/redux/store/actions/common/ContentAction";
@@ -14,7 +10,6 @@ import { toast } from "sonner";
 import { updateHandClappAction } from "@/redux/store/actions/common/updateHandClappAction";
 import Header from "../common/users/Header";
 import Footer from "../common/Footer";
-import LoadingPopUp from "../common/skeleton/LandingPoup";
 import BlogSkeletonLoader from "../common/skeleton/BlogSkeletonLoader";
 
 const Blogs = () => {
@@ -23,15 +18,15 @@ const Blogs = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [handleClapp, setHandClapp] = useState<number>(0);
+  // const [handleClapp, setHandClapp] = useState<number>(0);
   const [allBlogs, setAllBlogs] = useState<contentEntities[]>([]);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const contentPerPage = 8;
 
-  const closeModal = async () => {
-    setIsModalOpen(false);
-  };
+  // const closeModal = async () => {
+  //   setIsModalOpen(false);
+  // };
   const handleAddBlog = () => {
     setIsModalOpen(true);
   };

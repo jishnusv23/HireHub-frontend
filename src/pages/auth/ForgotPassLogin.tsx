@@ -1,5 +1,4 @@
 import Header from "@/components/common/users/Header";
-import React from "react";
 import { motion } from "framer-motion";
 import { ForgotLoginField } from "@/components/common/auth/ForgotLoginField";
 import IMg from "@/assets/home/header.png";

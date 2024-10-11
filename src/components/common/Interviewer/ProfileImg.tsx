@@ -1,12 +1,9 @@
-import IMg from "@/assets/home/cartoon-little-boy.jpg";
 import { RooteState } from "@/redux/store";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import { ImageUpload } from "@/utils/cloudinary/ImageUpload";
 import AddIcon from "@mui/icons-material/Add";
-import { updateProfileAction } from "@/redux/store/actions/user/updateProfileAction";
 import { updateProfileImgAction } from "@/redux/store/actions/user/updateProfileImgAction";
 import { toast } from "sonner";
 import { storeUserData } from "@/redux/store/slices/users";
@@ -15,7 +12,7 @@ export const ProfileImg = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
   const [isEditing, setEditing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -24,9 +21,10 @@ export const ProfileImg = () => {
   ) => {
     if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0];
-      setFile(selectedFile);
+      // setFile(selectedFile);
       setEditing(false);
       setLoading(true);
+
 
       const IMGUrl = await ImageUpload(selectedFile);
       console.log(

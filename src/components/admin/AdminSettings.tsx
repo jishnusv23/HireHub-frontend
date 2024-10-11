@@ -1,22 +1,13 @@
-// import React from "react";
 
-// const AdminSettings = () => {
-//   return <div className="bg-background">AdminSettings</div>;
-// };
-
-// export default AdminSettings;
 import { useEffect, useState } from "react";
 import { MeetingTable } from "../common/Interviewer/MeetingTable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tab";
-
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import Pagination from "../common/Admin/Pagination";
 import { RooteState } from "@/redux/store";
-import { getAllMeetDetails } from "@/redux/store/actions/interviewer/getAllMeetingsDetails";
 import { InterviewType } from "@/types/Common";
 import Loading from "../common/Loading/Loading";
 import { AdminFetchAllInterivewes } from "@/redux/store/actions/admin/AdminFetchAllinterviewes";
-
 export const AdminSettings = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   const dispatch = useAppDispatch();
@@ -80,6 +71,9 @@ export const AdminSettings = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+  const handlesetAllData=async()=>{
+    console.log('warning')
+  }
 
   return (
     <>
@@ -97,15 +91,24 @@ export const AdminSettings = () => {
               </TabsList>
 
               <TabsContent value="Scheduled">
-                <MeetingTable Interviewdata={paginatedData} />
+                <MeetingTable
+                  Interviewdata={paginatedData}
+                  setAllMeetData={handlesetAllData}
+                />
               </TabsContent>
 
               <TabsContent value="Completed">
-                <MeetingTable Interviewdata={paginatedData} />
+                <MeetingTable
+                  Interviewdata={paginatedData}
+                  setAllMeetData={handlesetAllData}
+                />
               </TabsContent>
 
               <TabsContent value="Cancelled">
-                <MeetingTable Interviewdata={paginatedData} />
+                <MeetingTable
+                  Interviewdata={paginatedData}
+                  setAllMeetData={handlesetAllData}
+                />
               </TabsContent>
             </Tabs>
           </div>

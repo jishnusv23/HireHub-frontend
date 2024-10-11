@@ -1,9 +1,8 @@
 import MultipleSelect from "@/components/ui/MultipleSelect";
-import { SocketContext } from "@/context/SocketProvider";
 import { LangauageType } from "@/types/Common";
 import { DefaultShowing } from "@/utils/ws/DefaultPrint";
 
-import React, { useContext, useEffect } from "react";
+import React, {useEffect } from "react";
 
 interface LanguageSelectorProps {
   language: string;

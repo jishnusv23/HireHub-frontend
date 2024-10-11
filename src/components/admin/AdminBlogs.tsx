@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import TipsContent from "../User/TipsContent";
@@ -20,7 +20,6 @@ const AdminBlogs = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [handleClapp, setHandClapp] = useState<number>(0);
   const [allBlogs, setAllBlogs] = useState<contentEntities[]>([]);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

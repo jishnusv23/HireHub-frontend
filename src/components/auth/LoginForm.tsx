@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { FiUser, FiKey } from "react-icons/fi";
 import { Form, FormField } from "@/components/ui/form";
 import FormInputWithIcon from "../common/FormInuprWithIcon";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch } from "@/hooks/hooks";
 import { loginAction } from "@/redux/store/actions/auth";
-import { RooteState } from "@/redux/store";
+
 import { toast } from "sonner";
 import { storeUserData } from "@/redux/store/slices/users";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +31,6 @@ const formSchema = z.object({
 });
 
 export const LoginForm = () => {
-  const userData = useAppSelector((state: RooteState) => state.user);
   const navigate = useNavigate();
   //*dispatch
   const dispatch = useAppDispatch();
@@ -55,11 +54,12 @@ export const LoginForm = () => {
     // console.log("🚀 ~ file: LoginForm.tsx:46 ~ onSubmit ~ response:", response);
     if (!response.payload || !response.payload.success) {
       setLoading(false);
-      console.log(response.payload, "jfskfjskfjsf");
+      // console.log(response.payload, "jfskfjskfjsf");
 
       toast.error(
         response?.payload?.message || "The server might be down for maintenance"
       );
+      setError('Something wrong')
     } else {
       // console.log(response.payload.data.email, "lololololo");
 

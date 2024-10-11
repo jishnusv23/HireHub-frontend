@@ -3,7 +3,6 @@ import { formatDate } from "../lib/DateExtracting";
 import { PiHandsClappingLight } from "react-icons/pi";
 import { contentEntities } from "@/types/Common";
 
-import { useAppDispatch } from "@/hooks/hooks";
 
 import { Button } from "../ui/button";
 import { CustomModal } from "../customs/CustomModal";
@@ -17,7 +16,7 @@ const TipsContent: React.FC<Contentprops> = ({
   allBlogs,
   handleHandClappResponse,
 }) => {
-  const dispatch = useAppDispatch();
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<contentEntities | null>(
     null

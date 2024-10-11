@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { signupAction } from "../actions/auth/signupAction";
 import { getUserData, loginAction } from "../actions/auth";
-import { LoginFormData, SignupFormData } from "@/types/IForm";
+import {  SignupFormData } from "@/types/IForm";
 import { logoutAction } from "../actions/auth/logoutAction";
-import { SerializedError } from "@reduxjs/toolkit";
 import { OtpverficationAction } from "../actions/auth/OtpverificationAction";
 export interface UserState {
   loading: boolean;
@@ -100,7 +98,7 @@ const userSlice = createSlice({
         (state.loading = false), (state.data = null);
         state.error = action.error.message || "Logout Failed";
       })
-      .addCase(logoutAction.fulfilled, (state: UserState, action) => {
+      .addCase(logoutAction.fulfilled, (state: UserState) => {
         (state.loading = false), (state.data = null);
         state.error = null;
       })

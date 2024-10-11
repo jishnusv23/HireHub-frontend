@@ -3,7 +3,6 @@ import { useAppDispatch } from "@/hooks/hooks";
 import { SubmissionAction } from "@/redux/store/actions/Editor/SubmissionAction";
 import React, { RefObject, useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { useDispatch } from "react-redux";
 import Loading from "../Loading/Loading";
 interface OutpuProps {
   editorRef: RefObject<any>;

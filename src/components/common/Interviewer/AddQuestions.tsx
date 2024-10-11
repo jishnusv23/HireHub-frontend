@@ -53,7 +53,9 @@ const AddQuestions: React.FC<AddQuestionProps> = ({ setIsModalOpen }) => {
           userId: data?._id as string,
         })
       )
+      
       setIsModalOpen(false)
+      console.log("🚀 ~ file: AddQuestions.tsx:66 ~ onSubmit ~ response:", response)
     } catch (error: any) {
       console.error("something errror shwoing AddQUestions", error);
     } finally {
@@ -62,6 +64,8 @@ const AddQuestions: React.FC<AddQuestionProps> = ({ setIsModalOpen }) => {
   };
 
   return (
+    <>
+    {isLoading && <h1>is loading</h1>}
     <div className="p-6 min-h-screen">
       <h1 className="text-2xl font-bold mb-6">Add New Interview Question</h1>
 
@@ -78,14 +82,14 @@ const AddQuestions: React.FC<AddQuestionProps> = ({ setIsModalOpen }) => {
                 name="name"
                 render={({ field }) => (
                   <FormInputCustom
-                    placeholder="Question Name"
+                  placeholder="Question Name"
                     field={field}
                     type="text"
                     className="w-full"
                     showTitle={true}
+                    />
+                  )}
                   />
-                )}
-              />
             </div>
             <div className="w-full ">
               <FormField
@@ -105,12 +109,12 @@ const AddQuestions: React.FC<AddQuestionProps> = ({ setIsModalOpen }) => {
               name="questions"
               render={({ field }) => (
                 <FormInputCustom
-                  placeholder="Enter the question"
-                  field={field}
-                  type="text"
-                  title="Question"
-                  className="w-full h-44"
-                  showTitle={true}
+                placeholder="Enter the question"
+                field={field}
+                type="text"
+                title="Question"
+                className="w-full h-44"
+                showTitle={true}
                 />
               )}
             />
@@ -128,6 +132,7 @@ const AddQuestions: React.FC<AddQuestionProps> = ({ setIsModalOpen }) => {
         </form>
       </Form>
     </div>
+              </>
   );
 };
 

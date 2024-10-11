@@ -1,4 +1,4 @@
-import { format, isAfter, isBefore, addMinutes, subMinutes } from "date-fns";
+import { isAfter, isBefore, addMinutes, subMinutes } from "date-fns";
 export const isExpired = (startTime: string, dateString: string) => {
   const [startHours, startMinutes] = startTime.split(":");
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { RooteState } from "@/redux/store";
 import { Button } from "../ui/button";
@@ -45,9 +45,9 @@ const AdminDashboard = () => {
   const [selectedInterviews, setSelectedInterviews] = useState<InterviewType[]>(
     []
   );
-  const [allInterviews, setAllInterviews] = useState<InterviewType[]>([]);
+  // const [allInterviews, setAllInterviews] = useState<InterviewType[]>([]);
   const [totalInterviews, setTotalInterviews] = useState<number>(0);
-  const [allUsers, setAllUsers] = useState<any[]>([]);
+  // const [allUsers, setAllUsers] = useState<any[]>([]);
   const [totalInterviewers, setTotalInterviewers] = useState<number>(0);
   const [userChartData, setUserChartData] = useState<any[]>([]);
   const [interviewTypeData, setInterviewTypeData] = useState<any[]>([]);
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
 
     if (response.payload && response.payload.data) {
       const users = response.payload.data;
-      setAllUsers(users);
+      // setAllUsers(users);
       setTotalUsers(users.length);
 
       const interviewers = users.filter(
@@ -105,13 +105,13 @@ const AdminDashboard = () => {
 
     if (response.payload && response.payload.data) {
       const interviews = response.payload.data.data;
-      setAllInterviews(interviews);
+      // setAllInterviews(interviews);
       setSelectedInterviews(interviews.slice(0, 3)); // Only the first 3 interviews
       setTotalInterviews(response.payload.data.totalPages);
       processInterviewTypes(interviews);
     } else {
       console.error("No interview data found in the response.");
-      setAllInterviews([]);
+      // setAllInterviews([]);
       setSelectedInterviews([]);
     }
   };

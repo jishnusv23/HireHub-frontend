@@ -1,6 +1,5 @@
 import { ForgotField } from "@/components/common/auth/ForgotField";
 import Header from "@/components/common/users/Header";
-import React from "react";
 import { motion } from "framer-motion";
 import IMg from "@/assets/home/forget-pin2.png";
 

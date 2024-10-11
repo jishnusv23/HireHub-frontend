@@ -1,12 +1,11 @@
 
 
 import React from "react";
-import { format } from "date-fns";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { useTheme } from "../ui/theme-provider";
 
 const AdminUserDetails: React.FC = () => {
-  const location = useLocation();
+  // const location = useLocation();
 //   const user = location.state?.user[0];
 
   const { theme } = useTheme();

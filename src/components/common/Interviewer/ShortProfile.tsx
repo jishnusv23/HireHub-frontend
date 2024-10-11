@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import MessageIcon from "@mui/icons-material/Message";
 import LocalActivityIcon from "@mui/icons-material/LocalActivity";
-// import { Player } from "@lottiefiles/react-lottie-player";
+
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { useAppSelector } from "@/hooks/hooks";

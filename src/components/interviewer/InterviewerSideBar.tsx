@@ -1,19 +1,9 @@
-// import React from 'react'
 
-// const InterviewerSideBar = () => {
-//   return (
-//     <div>InterviewerSideBar</div>
-//   )
-// }
 
-// export default InterviewerSideBar
-
-import React from "react";
 import {
   FaUsers,
   FaCog,
   FaTachometerAlt,
-  FaChartBar,
   FaFileAlt,
 } from "react-icons/fa"; // Add other icons
 import { MdContentCut } from "react-icons/md";
@@ -21,7 +11,6 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import HireHub from "../common/HireHub";
 import Logo from "@/assets/logos/HireHub-r.png";
-import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 
 const sidebarVariants = {
   expanded: {

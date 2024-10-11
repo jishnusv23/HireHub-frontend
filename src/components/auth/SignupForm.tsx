@@ -5,16 +5,12 @@ import { FiUser, FiMail, FiKey } from "react-icons/fi";
 import FormInputWithIcon from "@/components/common/FormInuprWithIcon";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { signupAction } from "@/redux/store/actions/auth";
 import { useAppDispatch } from "@/hooks/hooks";
 import { toast } from "sonner";
 import { findEmailAction } from "@/redux/store/actions/auth/findEmailAction";
 import { useState } from "react";
-import { storeUserData } from "@/redux/store/slices/users";
 import { useNavigate } from "react-router-dom";
 import { sendVerificationMail } from "@/redux/store/actions/auth/Verification";
-
 const strongPassword =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -45,9 +41,7 @@ const formSchema = z
   });
 
 const SignupForm = () => {
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
- 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({

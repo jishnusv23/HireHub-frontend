@@ -2,7 +2,6 @@ import InterviewerDashboard from "@/components/interviewer/InterviewerDashboard"
 import { LayoutInterviewer } from "@/pages/interviewer/LayoutInterviewer";
 import { InterviewerProfile } from "@/components/interviewer/InterviewerProfile";
 import { Meetings } from "@/components/interviewer/Meetings";
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { SingleInterviewDetails } from "@/components/common/Interviewer/SingleInterviewDetails";
 import InterviewerQuestions from "@/components/interviewer/InterviewerQuestions";

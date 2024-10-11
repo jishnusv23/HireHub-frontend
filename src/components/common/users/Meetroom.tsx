@@ -14,7 +14,8 @@ export const Meetroom: React.FC<VideoCallProps> = ({
   remoteStreams,
 }) => {
   const localVideoRef = useRef<HTMLVideoElement>(null);
-  const remoteVideoRefs = useRef<HTMLVideoElement[]>([]); // Use a ref array for multiple remote streams
+  const remoteVideoRefs = useRef<HTMLVideoElement[]>([]); 
+  console.log(RoomID)
 
   useEffect(() => {
     if (localVideoRef.current && localStream) {

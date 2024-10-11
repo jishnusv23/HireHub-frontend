@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
@@ -13,8 +13,6 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { scheduleIntervieweActionAction } from "@/redux/store/actions/user/scheduleIntervieweAction";
 import { RooteState } from "@/redux/store";
 import { toast } from "sonner";
-import { useLocation, useNavigate } from "react-router-dom";
-import { InterviewModal } from "./InterviewModal";
 import { SuccessPage } from "../common/Interviewer/SuccessPage";
 import Loading from "../common/Loading/Loading";
 import { InterviewType, interviewTypes } from "@/types/Common";
@@ -33,10 +31,8 @@ export const InterviewScheduleForm: React.FC<MeetDataProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [responsePayload, setResponsePayload] = useState<any>(null);
-  const location = useLocation();
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof meetingSchema>>({
     resolver: zodResolver(meetingSchema),

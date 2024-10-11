@@ -1,4 +1,4 @@
-import React, {
+import  {
   useContext,
   useEffect,
   useReducer,
@@ -23,7 +23,6 @@ import { SocketContext } from "@/context/SocketProvider";
 import { MeetValidation } from "@/components/common/Meet/MeetValidation";
 import { InterivieweeMeetAcess } from "@/redux/store/actions/common/IntervieweeMeetAccessAction";
 import { verifyIntervewe } from "@/redux/store/actions/common/verifyHost";
-import { SignupFormData } from "@/types/IForm";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import { VideoPlayer } from "@/components/common/Meet/VideoPlayer";
 import { peersReducer, PeerState } from "@/reducers/peerReducer";
@@ -35,7 +34,7 @@ import {
   removeAllPeerStream,
 } from "@/redux/store/actions/Room/peerAction";
 import CodeEditor from "@/components/common/editor/CodeEditor";
-import { number } from "zod";
+
 import ConfirmModal from "@/components/common/users/ConfirmModal";
 
 const MeetRoom = () => {

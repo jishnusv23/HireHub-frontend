@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -28,11 +27,11 @@ export function FooterForm() {
       message: "",
     },
   });
-  const onSubmit = async(value:any) => {
-    // setMessage(value)
+  const onSubmit = async() => {
+    
     toast.success('Thank you for your response! Our team will review your submission and get back to you soon. ')
     form.reset()
-    // setMessage('')
+    
    
 
   };

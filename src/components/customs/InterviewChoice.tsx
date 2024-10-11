@@ -1,21 +1,17 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Button } from "../ui/button";
 import { InterviewModal } from "../User/InterviewModal";
 import { InterviewScheduleForm } from "../User/InterVieweScheduleForm";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { getUserData } from "@/redux/store/actions/auth";
-import { asyncThunkCreator } from "@reduxjs/toolkit";
 import { InstantMeetAction } from "@/redux/store/actions/common/InstantMeetAction";
-import { string } from "zod";
 import { RooteState } from "@/redux/store";
-import { useNavigate } from "react-router-dom";
 import { CustomModal } from "./CustomModal";
 import { SuccessPage } from "../common/Interviewer/SuccessPage";
 
 export const InterviewChoice = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [responsePayload, setResponsePayload] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenCustom, setIsModalOpenCustom] = useState(false);

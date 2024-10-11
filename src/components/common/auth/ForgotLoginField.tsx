@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { FiUser, FiKey } from "react-icons/fi";
+import {  FiKey } from "react-icons/fi";
 import { Form, FormField } from "@/components/ui/form";
 import FormInputWithIcon from "../FormInuprWithIcon";
 import Logo from "@/assets/logos/HireHub-r.png";

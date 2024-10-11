@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -7,12 +7,8 @@ import { FiUser } from "react-icons/fi";
 import { Form, FormField } from "@/components/ui/form";
 import FormInputWithIcon from "../FormInuprWithIcon"; // Adjust the import path as necessary
 import Logo from "@/assets/logos/HireHub-r.png"; // Adjust the import path as necessary
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-
-import { RooteState } from "@/redux/store";
+import { useAppDispatch } from "@/hooks/hooks";
 import { toast } from "sonner";
-import { storeUserData } from "@/redux/store/slices/users";
-import { useNavigate } from "react-router-dom";
 import { findEmailAction } from "@/redux/store/actions/auth/findEmailAction";
 import { forgotMailAction } from "@/redux/store/actions/auth/forgotMailAction";
 
@@ -27,8 +23,8 @@ const formSchema = z.object({
 });
 
 export const ForgotField = () => {
-  const userData = useAppSelector((state: RooteState) => state.user);
-  const navigate = useNavigate();
+  // const userData = useAppSelector((state: RooteState) => state.user);
+  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -56,6 +52,7 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
         description:
           "Your account has been blocked by the HireHub team. Please contact support for assistance.",
       });
+      setError('somethign wrong')
       return;
     }
 

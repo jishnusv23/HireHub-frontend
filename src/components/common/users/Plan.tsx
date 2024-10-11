@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { IoCheckmarkCircle } from "react-icons/io5";
 

@@ -1,18 +1,15 @@
-import React from "react";
+
 import {
   FaUsers,
   FaCog,
   FaTachometerAlt,
-  FaChartBar,
-  FaFileAlt,
   FaUserGraduate,
-} from "react-icons/fa"; // Add other icons
+} from "react-icons/fa"; 
 import { MdContentCut } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import HireHub from "../common/HireHub";
 import Logo from "@/assets/logos/HireHub-r.png";
-import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 
 const sidebarVariants = {
   expanded: {

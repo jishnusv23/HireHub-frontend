@@ -1,5 +1,4 @@
 import Header from "@/components/common/users/Header";
-import React from "react";
 import Logo from "@/assets/logos/HireHub-r.png";
 import HireHub from "@/components/common/HireHub";
 import { LoginForm } from "@/components/auth/LoginForm";

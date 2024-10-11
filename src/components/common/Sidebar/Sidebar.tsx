@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  AiOutlineDashboard,
-  AiOutlineUser,
-  AiOutlineSetting,
-} from "react-icons/ai"; // Example icons
+
 import { useLocation, NavLink } from "react-router-dom";
 import ToolTipWrapper from "@/components/ui/ToolTipWrapper";
 

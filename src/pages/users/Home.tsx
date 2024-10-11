@@ -7,10 +7,6 @@ import { Featuressection } from "@/components/common/users/Featuressection";
 import Footer from "@/components/common/Footer";
 import WavyText from "@/components/ui/wavyText";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { InterviewModal } from "@/components/User/InterviewModal";
-
-// import { InterviewScheduleForm } from "@/components/User/InterVieweScheduleForm";
 import { useAppDispatch } from "@/hooks/hooks";
 import { getUserData } from "@/redux/store/actions/auth";
 import { InterviewChoice } from "@/components/customs/InterviewChoice";
@@ -19,7 +15,6 @@ export const Home = () => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
   useEffect(() => {
     setLoading(true);
   }, [dispatch]);

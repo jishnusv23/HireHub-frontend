@@ -1,7 +1,5 @@
-import React from "react";
+
 import Logo from "@/assets/logos/HireHub-r.png";
-import InputWithIcon from "../customs/InputWithIcon";
-import { FiMail } from "react-icons/fi";
 import { FaArrowRight } from "react-icons/fa";
 import HireHub from "./HireHub";
 

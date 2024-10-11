@@ -1,7 +1,7 @@
 import { CLIENT_API } from "@/utils/axios";
 import { config } from "@/common/configuration";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { dataType } from "@/types/Common";
+
 import { interviewService } from "@/common/services/services";
 
 export const getAllMeetDetails=createAsyncThunk(

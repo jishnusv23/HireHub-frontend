@@ -5,12 +5,10 @@ import OutPut from "./OutPut";
 import LanguageSelector from "./LanguageSelector";
 import { SocketContext } from "@/context/SocketProvider";
 import { debounce } from "lodash";
-import { DefaultShowing } from "@/utils/ws/DefaultPrint";
 interface CodeEditorProps {
   roomId: string;
   setIsOpenTerminal: (isClose: boolean) => void;
 }
-type Language = keyof typeof DefaultShowing;
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
   roomId,

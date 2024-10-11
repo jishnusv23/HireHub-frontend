@@ -15,7 +15,6 @@ export const OtpField = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [isComplete, setIsComplete] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
-  const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [canResend, setCanResend] = useState(false);
   const location = useLocation();

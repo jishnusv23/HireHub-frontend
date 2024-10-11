@@ -16,9 +16,9 @@ interface UserJoinedData {
   userName: string;
 }
 
-interface GetUsersData {
-  participants: { peerId: string; userName: string }[];
-}
+// interface GetUsersData {
+//   participants: { peerId: string; userName: string }[];
+// }
 
 export const usePeerConnection = (
   socket: any,

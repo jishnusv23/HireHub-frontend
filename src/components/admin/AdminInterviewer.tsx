@@ -15,7 +15,6 @@ import {
 
 import Pagination from "../common/Admin/Pagination";
 import { useAppDispatch } from "@/hooks/hooks";
-import { getAllInterviewee } from "@/redux/store/actions/user/getAllInterviewee";
 import { SearchBar } from "../common/Admin/SearchBar";
 import { Interviewee } from "@/types/IInterview";
 import ConfirmModal from "../common/users/ConfirmModal";

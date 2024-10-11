@@ -6,7 +6,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { Button } from "../ui/button";
 import CloseIcon from "@mui/icons-material/Close";
 interface CustomModalProps {
   isOpen: boolean;

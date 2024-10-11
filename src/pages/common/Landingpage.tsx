@@ -1,7 +1,6 @@
 import Header from "@/components/common/users/Header";
 import { Button } from "@/components/ui/button";
 import { FaRegCirclePlay } from "react-icons/fa6";
-import React from "react";
 import BgImg from "@/assets/home/banner-image.png";
 import Communication from "@/assets/home/online-meeting-app2.png";
 import Management from "@/assets/home/enterprise2.png";

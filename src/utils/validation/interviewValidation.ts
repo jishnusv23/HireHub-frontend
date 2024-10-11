@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 export const meetingSchema = z.object({
   title: z

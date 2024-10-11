@@ -1,7 +1,6 @@
 import { OtpField } from "@/components/common/auth/OtpField";
-import Footer from "@/components/common/Footer";
 import Header from "@/components/common/users/Header";
-import React from "react";
+
 
 export const Otp = () => {
   return (

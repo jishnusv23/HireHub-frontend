@@ -1,5 +1,4 @@
 import {
-  UseDispatch,
   TypedUseSelectorHook,
   useSelector,
   useDispatch,

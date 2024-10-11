@@ -12,7 +12,7 @@ import MultipleSelect from "@/components/ui/MultipleSelect";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { RooteState } from "@/redux/store";
 import { AddContentAction } from "@/redux/store/actions/common/AddContentAction";
-import { useNavigate } from "react-router-dom";
+
 import Loading from "../common/Loading/Loading";
 import { Button } from "../ui/button";
 
@@ -44,12 +44,12 @@ const ContentAdd:React.FC<ContentAddProps> = ({setIsModalOpen}) => {
   const { data } = useAppSelector((state: RooteState) => state.user);
   const [loading, setLoading] = useState(false);
 
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [Imgurl, setImgUrl] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+ 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -90,7 +90,7 @@ const ContentAdd:React.FC<ContentAddProps> = ({setIsModalOpen}) => {
   ) => {
     if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0];
-      setFile(selectedFile);
+      // setFile(selectedFile);
       setLoading(true);
 
       const previewUrl = URL.createObjectURL(selectedFile);

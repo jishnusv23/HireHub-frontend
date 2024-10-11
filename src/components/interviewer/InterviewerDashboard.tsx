@@ -155,7 +155,7 @@ const InterviewerDashboard: React.FC = () => {
                 dataKey="value"
                 label={renderCustomLabel}
               >
-                {interviewStatusData.map((entry, index) => (
+                {interviewStatusData.map((_, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}

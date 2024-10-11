@@ -1,7 +1,6 @@
 import { Aboutus } from '@/components/common/Aboutus'
 import Footer from '@/components/common/Footer'
 import Header from '@/components/common/users/Header'
-import React from 'react'
 
 export const AboutUs = () => {
   return (

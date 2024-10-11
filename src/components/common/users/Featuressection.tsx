@@ -1,4 +1,3 @@
-import React from "react";
 import Firt from "@/assets/home/cartoon-little-boy2.png";
 import Second from "@/assets/home/handshake-image2.png";
 import Third from "@/assets/home/rocket-rocket2.png";

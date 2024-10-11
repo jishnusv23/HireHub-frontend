@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
+import  {  useState } from "react";
 import Meet from "@/assets/home/interview-scaled.jpeg";
 import ReviewRecord from "@/assets/home/review-record.png";
 import { Button } from "@/components/ui/button";
-import {motion} from 'framer-motion'
 import { useAppDispatch } from "@/hooks/hooks";
 import { getUserData } from "@/redux/store/actions/auth";
-import { useNavigate } from "react-router-dom";
+
 import { CustomModal } from "@/components/customs/CustomModal";
 import { InterviewChoice } from "@/components/customs/InterviewChoice";
 export const Contentsection = () => {
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-   const navigate = useNavigate();
-   useEffect(() => {
-     setLoading(true);
-   }, [dispatch]);
+  //  const navigate = useNavigate();
+  //  useEffect(() => {
+  //    setLoading(true);
+  //  }, [dispatch]);
 
    const handleInterview = () => {
      setIsModalOpen(true);

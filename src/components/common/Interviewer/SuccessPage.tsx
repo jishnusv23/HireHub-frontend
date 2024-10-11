@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { IoCheckmarkCircle } from "react-icons/io5";
-import * as Tabs from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Link, useNavigate } from "react-router-dom";
