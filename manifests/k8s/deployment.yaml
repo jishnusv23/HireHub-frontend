@@ -26,7 +26,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: hirehub-frontend-service
+  name: hirehub-frontend
 spec:
   selector:
     app: hirehub-frontend
