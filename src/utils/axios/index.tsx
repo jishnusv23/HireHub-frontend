@@ -18,14 +18,13 @@
 // );
 
 import axios from "axios";
-
 const isDevelopment =
   window.location.hostname === "localhost" ||
-  window.location.hostname === "4.188.113.7";
+  window.location.hostname === "4.188.113.7"; 
 
 export const BASE_URL = isDevelopment
-  ? "http://localhost:2001"
-  : "http://trend-vista.shop";
+  ? "http://localhost:2001" 
+  : "https://trend-vista.shop"; 
 
 console.log(BASE_URL, "hee");
 
