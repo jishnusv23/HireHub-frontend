@@ -18,7 +18,7 @@ const FeedBack = () => {
   })=>{
     const {content,rating}=formData
     console.log("🚀 ~ file: FeedBack.tsx:17 ~ FeedBack ~ content:", content,rating)
-     socket?.emit("feedback-submitted", { roomId, email });
+     socket?.emit("feedback-submitted", { roomId, email, rating });
 
     // console.log(values)
    }

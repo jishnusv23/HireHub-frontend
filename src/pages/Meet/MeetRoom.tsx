@@ -152,13 +152,18 @@ const MeetRoom = () => {
           setRoomLength(Roomlegnth);
         });
 
-        socket?.on("feedback-received", ({ email }) => {
-          console.log(
-            email,
-            "__________________________________________________"
-          );
-          toast.success(`New feedback received from ${email}`);
-          //  setLastFeedbackCheck(Date.now());
+        socket?.on("feedback-received", ({ email, rating }) => {
+           toast.success(
+             `🎉 Interviewee Response! 🎉\n\nFrom: ${email}\nRating: ${rating} ⭐`,
+             {
+               action: {
+                 label: "View Details",
+                 onClick: () =>
+                   console.log(`Feedback from ${email}: ${rating}`),
+               },
+             }
+           );
+         
         });
 
         //auto-open setup
@@ -173,14 +178,9 @@ const MeetRoom = () => {
           if (stream) {
             stream.getTracks().forEach((track) => track.stop());
           }
-          //  socket?.emit("leave-room", {
-          //    roomId,
-          //    peerId: peerInstance.current?.id,
-          //  });
+         
           dispatch(removeAllPeerStream());
-          //  socket?.on("user-disconnected", (peerId) => {
-          //    dispatch(removePeerStreamAction(peerId));
-          //  });
+         
           navigate(`/Feedback/${roomId}`, {
             state: { data: { roomId, email: userData.email } },
           });

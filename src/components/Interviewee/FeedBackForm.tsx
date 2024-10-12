@@ -32,6 +32,7 @@ const FeedBackForm:React.FC<FeedbackProps> = ({onSubmitfeedback,roomId}) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values, rating);
     onSubmitfeedback({content:values.content,rating:rating})
+    form.reset()
     
   };
 
