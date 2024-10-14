@@ -17,7 +17,7 @@ const FeedBack = () => {
     rating: number;
   }) => {
     const { content, rating } = formData;
-    // console.log("🚀 ~ file: FeedBack.tsx:17 ~ FeedBack ~ content:", content,rating)
+    console.log("🚀 ~ file: FeedBack.tsx:17 ~ FeedBack ~ content:", content)
     socket?.emit("feedback-submitted", { roomId, email, rating });
 
     toast.success("Thanks for you response!");
