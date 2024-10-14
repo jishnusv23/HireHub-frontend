@@ -318,16 +318,15 @@ const MeetRoom = () => {
        case 3:
          return "grid grid-cols-1 sm:grid-cols-2 gap-2";
        default:
-         return "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2";
+         return "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2";
      }
    };
 
-   const getItemClass = (index: number) => {
-     if (roomLength === 3 && index === 0) {
-       return "col-span-full sm:col-span-2 sm:row-span-2";
-     }
-     return "";
-   };
+  const getItemClass = (index:number, total:number) => {
+    if (total === 3 && index === 0)
+      return "col-span-full sm:col-span-2 sm:row-span-2";
+    return "";
+  };
   if (!data && !isFormSubmitted) {
     return <MeetValidation RoomID={roomId} onSubmit={handleFormSubmit} />;
   }
@@ -373,7 +372,7 @@ const MeetRoom = () => {
                 <VideoPlayer
                   stream={stream}
                   username={userData.username as string}
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full ${getItemClass(0, roomLength)}`}
                 />
               </div>
               {Object.entries(peers as PeerState).map(
@@ -381,9 +380,10 @@ const MeetRoom = () => {
                   userData.username !== peer.userName && (
                     <div
                       key={peerId}
-                      className={`${getItemClass(index)} ${
-                        isOpenTerminal ? "h-full" : "w-full h-full"
-                      }`}
+                      className={`w-full h-full ${getItemClass(
+                        index + 1,
+                        roomLength
+                      )}`}
                     >
                       <VideoPlayer
                         stream={peer.stream}

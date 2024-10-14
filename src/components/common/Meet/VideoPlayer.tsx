@@ -71,15 +71,12 @@ export const VideoPlayer: React.FC<{
   }, [stream]);
 
   return (
-    <div
-      className={`relative w-full h-full min-w-[250px] min-h-[200px] ${className}`}
-    >
+    <div className={`relative w-full h-full ${className}`}>
       <div className="absolute top-2 left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
         {username}
       </div>
       <video
-        data-testid="peer-video"
-        className="w-full h-full object-cover border border-white"
+        className="w-full h-full object-cover"
         ref={videoRef}
         autoPlay
         playsInline
