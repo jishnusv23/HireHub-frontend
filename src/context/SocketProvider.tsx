@@ -1,7 +1,3 @@
-
-
-
-
 import React, { createContext, useState } from "react";
 import io, { Socket } from "socket.io-client";
 
@@ -19,8 +15,9 @@ interface SocketContextType {
 }
 
 const SocketBackendURL = import.meta.env.VITE_SOCKET_BACKEND_URL;
+console.log("🚀 ~ file: SocketProvider.tsx:18 ~ SocketBackendURL:", SocketBackendURL)
 export const socket = io(SocketBackendURL, {
-  path: "/socket.io",
+  path: "/socket.io/",
   transports: ["websocket", "polling"],
 });
 
@@ -38,7 +35,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [currentRoom, setCurrentRoom] = useState<string>("");
 
-  
   const ContextValues: SocketContextType = {
     socket,
     onlineUsers,
@@ -46,7 +42,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     currentRoom,
     setCurrentRoom,
   };
-  
+
   return (
     <SocketContext.Provider value={ContextValues}>
       {children}
