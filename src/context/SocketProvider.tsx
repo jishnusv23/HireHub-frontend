@@ -20,7 +20,7 @@ interface SocketContextType {
 
 const SocketBackendURL = import.meta.env.VITE_SOCKET_BACKEND_URL;
 export const socket = io(SocketBackendURL, {
-  path: "/socket.io/",
+  path: "/socket.io",
   transports: ["websocket", "polling"],
 });
 
