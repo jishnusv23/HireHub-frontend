@@ -201,6 +201,7 @@ const MeetRoom = () => {
           socket?.off("user-disconnected");
           socket?.off("get-users");
           socket?.off("auto-openTerminal");
+          socket?.close()
           peer.destroy();
         };
       } catch (err) {
