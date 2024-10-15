@@ -196,6 +196,7 @@ const MeetRoom = () => {
 
         return () => {
           stream.getTracks().forEach((track) => track.stop());
+          socket?.off("meet-close");
           socket?.off("user-joined");
           socket?.off("user-disconnected");
           socket?.off("get-users");
