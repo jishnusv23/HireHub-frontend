@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import io, { Socket } from "socket.io-client";
 
 interface OnlineUser {
@@ -15,11 +15,6 @@ interface SocketContextType {
 }
 
 const SocketBackendURL = import.meta.env.VITE_SOCKET_BACKEND_URL;
-console.log("🚀 ~ file: SocketProvider.tsx:18 ~ SocketBackendURL:", SocketBackendURL)
-export const socket = io(SocketBackendURL, {
-  path: "/socket.io/",
-  transports: ["websocket", "polling"],
-});
 
 export const SocketContext = createContext<SocketContextType | undefined>(
   undefined
@@ -30,10 +25,24 @@ interface SocketProviderProps {
 }
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
-  // const { data } = useAppSelector((state: RooteState) => state.user);
-  // const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [currentRoom, setCurrentRoom] = useState<string>("");
+
+  useEffect(() => {
+    const newSocket = io(SocketBackendURL, {
+      path: "/socket.io/",
+      transports: ["websocket", "polling"],
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      if (newSocket) {
+        newSocket.disconnect();
+      }
+    };
+  }, []);
 
   const ContextValues: SocketContextType = {
     socket,
