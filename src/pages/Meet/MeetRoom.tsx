@@ -176,7 +176,7 @@ const MeetRoom = () => {
           if (stream) {
             stream.getTracks().forEach((track) => track.stop());
           }
-
+          setStream(null)
           dispatch(removeAllPeerStream());
 
           navigate(`/Feedback/${roomId}`, {
