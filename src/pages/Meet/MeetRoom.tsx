@@ -312,7 +312,10 @@ const MeetRoom = () => {
   }
   const handleConfirm = () => {
     setIsModalOpen(false);
-    socket?.emit("Interviewer-left", { roomId });
+    socket?.emit("Interviewer-left", {
+      roomId,
+      peerId: peerInstance.current?.id,
+    });
   };
   const handleCancel = () => {
     setIsModalOpen(false);
