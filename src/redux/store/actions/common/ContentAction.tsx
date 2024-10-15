@@ -32,7 +32,7 @@ export const ContentAction = createAsyncThunk(
         `${userService}/content-all${query}`,
         config
       );
-      console.log("🚀 ~ file: ContentAction.tsx:35 ~ response:", response)
+      // console.log("🚀 ~ file: ContentAction.tsx:35 ~ response:", response)
 
       if (response.data) {
         return response.data;

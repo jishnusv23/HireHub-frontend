@@ -13,10 +13,10 @@ export const Contentacceptance = createAsyncThunk(
               data,
               config
             );
-            console.log(
-              "🚀 ~ file: updateProfileAction.tsx:17 ~ response:",
-              response
-            );
+            // console.log(
+            //   "🚀 ~ file: updateProfileAction.tsx:17 ~ response:",
+            //   response
+            // );
             if (response.data.success) {
               return response.data;
             }

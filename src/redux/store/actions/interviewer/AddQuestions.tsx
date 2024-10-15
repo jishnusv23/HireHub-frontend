@@ -15,7 +15,7 @@ export const AddQuestionsActions = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    console.log("🚀 ~ file: AddQuestions.tsx:10 ~ async ~ data:", data);
+    // console.log("🚀 ~ file: AddQuestions.tsx:10 ~ async ~ data:", data);
 
     try {
       const response = await CLIENT_API.post(
@@ -23,10 +23,10 @@ export const AddQuestionsActions = createAsyncThunk(
         data,
         config
       );
-      console.log(
-        "🚀 ~ file: AddQuestions.tsx:13 ~ async ~ response:",
-        response
-      );
+      // console.log(
+      //   "🚀 ~ file: AddQuestions.tsx:13 ~ async ~ response:",
+      //   response
+      // );
       if (response.data.success) {
         return response.data;
       } else {

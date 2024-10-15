@@ -9,9 +9,9 @@ export const updateInterview=createAsyncThunk(
     'interviewer/updateInterviewer',
     async({data,id}:{data:any,id:string},{rejectWithValue})=>{
         try{
-            console.log(data,id)
+            // console.log(data,id)
             const response=await CLIENT_API.put(`${interviewService}updateInterview/${id}`,data,config)
-            console.log("🚀 ~ file: updateInterviewer.tsx:13 ~ async ~ response:", response)
+            // console.log("🚀 ~ file: updateInterviewer.tsx:13 ~ async ~ response:", response)
             if(response.data.success){
                return {
                  data: response.data,

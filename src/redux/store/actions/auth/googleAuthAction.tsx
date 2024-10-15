@@ -7,7 +7,7 @@ export const googleAuthAction = createAsyncThunk(
   "user/google-auth",
   async (credential: any, { rejectWithValue }) => {
     try {
-      console.log(credential, "google");
+      // console.log(credential, "google");
       const response = await CLIENT_API.post(
         "/api/auth/googleAuth",
         credential,

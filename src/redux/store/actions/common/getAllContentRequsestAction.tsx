@@ -26,7 +26,7 @@ export const getAllContentRequestAction=createAsyncThunk(
         `${userService}content-request${query}`,
         config
       );
-      console.log("🚀 ~ file: getAllInterviewee.tsx:22 ~ response:", response);
+      // console.log("🚀 ~ file: getAllInterviewee.tsx:22 ~ response:", response);
       if (response.data) {
         return response.data;
       }

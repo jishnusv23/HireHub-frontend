@@ -13,10 +13,10 @@ export const updatePasswordAction = createAsyncThunk(
         config
       );
 
-      console.log(
-        "🚀 ~ file: updatePasswordAction.tsx:13 ~ async ~ response:",
-        response
-      );
+      // console.log(
+      //   "🚀 ~ file: updatePasswordAction.tsx:13 ~ async ~ response:",
+      //   response
+      // );
       if (response.data.success) {
         return response.data;
       } else {

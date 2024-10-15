@@ -16,7 +16,7 @@ export const updateProfileImgAction = createAsyncThunk(
         config
       );
 
-      console.log("Response:", response);
+      // console.log("Response:", response);
 
       if (response.data.success) {
         return response.data;

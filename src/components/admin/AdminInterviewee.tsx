@@ -75,17 +75,17 @@ export const AdminInterviewee: React.FC = () => {
 
   const handleConfirm = async () => {
     if (selectedInterviewee) {
-      console.log(selectedInterviewee.isBlocked, "-------------------------");
+      // console.log(selectedInterviewee.isBlocked, "-------------------------");
       const response = await dispatch(
         updateProfileAction({
           id: selectedInterviewee.id,
           isBlocked: !selectedInterviewee.isBlocked,
         })
       );
-      console.log(
-        "🚀 ~ file: AdminInterviewee.tsx:70 ~ handleConfirm ~ response:",
-        response
-      );
+      // console.log(
+      //   "🚀 ~ file: AdminInterviewee.tsx:70 ~ handleConfirm ~ response:",
+      //   response
+      // );
       if (updateProfileAction.fulfilled.match(response)) {
         setInterviewees((prev) =>
           prev.map((viewee) =>

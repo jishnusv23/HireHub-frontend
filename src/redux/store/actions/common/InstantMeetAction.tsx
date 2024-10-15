@@ -17,7 +17,7 @@ export const InstantMeetAction = createAsyncThunk(
         data,
         config
       );
-      console.log("🚀 ~ file: InstantMeetAction.tsx:20 ~ response:", response)
+      // console.log("🚀 ~ file: InstantMeetAction.tsx:20 ~ response:", response)
       if (response.data) {
         return response.data;
       } else {

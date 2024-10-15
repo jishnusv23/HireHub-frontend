@@ -13,7 +13,7 @@ export const forgotMailAction = createAsyncThunk(
       { email },
       config
     );
-     console.log("🚀 ~ file: forgotMailAction.tsx:16 ~ response:", response)
+    //  console.log("🚀 ~ file: forgotMailAction.tsx:16 ~ response:", response)
 
       if (response.data.success) {
         return response.data;

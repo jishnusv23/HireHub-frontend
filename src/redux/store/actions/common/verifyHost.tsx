@@ -13,7 +13,7 @@ export const verifyIntervewe = createAsyncThunk(
         data,
         config
       );
-      console.log("🚀 ~ file: verifyHost.tsx:14 ~ async ~ response:", response);
+      // console.log("🚀 ~ file: verifyHost.tsx:14 ~ async ~ response:", response);
       if (response.data) {
         return response.data;
       } else {

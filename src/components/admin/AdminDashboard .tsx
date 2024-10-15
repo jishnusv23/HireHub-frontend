@@ -62,7 +62,7 @@ const AdminDashboard = () => {
     const response = await dispatch(
       AdminFetchAllUsersAction(data?._id as string)
     );
-    console.log("Fetched Users Response:", response);
+    // console.log("Fetched Users Response:", response);
 
     if (response.payload && response.payload.data) {
       const users = response.payload.data;

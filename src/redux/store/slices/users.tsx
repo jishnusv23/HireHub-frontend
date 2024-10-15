@@ -57,12 +57,12 @@ const userSlice = createSlice({
       .addCase(
         getUserData.fulfilled,
         (state: UserState, action: PayloadAction<SignupFormData>) => {
-          console.log("herer reached", action.payload);
+          // console.log("herer reached", action.payload);
 
           state.loading = false;
           state.data = action.payload;
           state.error = null;
-          console.log(action.payload, "-ioioioioi--");
+          // console.log(action.payload, "-ioioioioi--");
         }
       )
       .addCase(getUserData.rejected, (state, action) => {

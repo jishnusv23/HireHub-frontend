@@ -9,7 +9,7 @@ export const SubmissionAction=createAsyncThunk(
     async(data:{language:string,code:string},{rejectWithValue})=>{
         try{
             const response=await CLIENT_API.post(`${interviewService}code-submission`,data,config)
-            console.log("🚀 ~ file: SubmissionAction.tsx:13 ~ async ~ response:", response)
+            // console.log("🚀 ~ file: SubmissionAction.tsx:13 ~ async ~ response:", response)
             if(response.data.success){
                 return response.data
             }else{

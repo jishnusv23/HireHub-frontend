@@ -6,11 +6,11 @@ import { AxiosError } from "axios";
 export const sendVerificationMail = createAsyncThunk(
   "user/send-otp",
   async (email: string, { rejectWithValue }) => {
-    console.log(
-      "🚀 ~ file: sendVerificationMail.ts:8 ~ email:",
-      { email: email },
-      { withCredentials: true }
-    );
+    // console.log(
+    //   "🚀 ~ file: sendVerificationMail.ts:8 ~ email:",
+    //   { email: email },
+    //   { withCredentials: true }
+    // );
     try {
       const response = await CLIENT_API.post(`${authservice}oneTime-pass`, {
         email,

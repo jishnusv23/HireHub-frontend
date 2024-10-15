@@ -28,7 +28,7 @@ export const getAllInterviewer = createAsyncThunk(
         `${userService}get-all-interviewer${query}`,
         config
       );
-      console.log("🚀 ~ file: getAllInterviewee.tsx:22 ~ response:", response);
+      // console.log("🚀 ~ file: getAllInterviewee.tsx:22 ~ response:", response);
       if (response.data) {
         return response.data;
       }

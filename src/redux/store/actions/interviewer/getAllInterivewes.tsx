@@ -12,7 +12,7 @@ export const getAllInterviewsByIdAction = createAsyncThunk(
         `${interviewService}interviewsById/${id}`, 
         config
       );
-      console.log("🚀 ~ file: getAllInterivewes.tsx:15 ~ response:", response)
+      // console.log("🚀 ~ file: getAllInterivewes.tsx:15 ~ response:", response)
       if (response.data.success) {
         return response.data;
       } else {

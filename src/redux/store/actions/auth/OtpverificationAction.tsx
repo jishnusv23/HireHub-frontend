@@ -15,11 +15,11 @@ export const OtpverficationAction = createAsyncThunk(
         config
       );
       if (response.data.success) {
-        console.log(
-          "🚀 ~ file: OtpverificationAction.tsx:12 ~ 'user/otpverification',async ~ response.data:",
-          response.data
-        );
-        console.log(response.data.data)
+        // console.log(
+        //   "🚀 ~ file: OtpverificationAction.tsx:12 ~ 'user/otpverification',async ~ response.data:",
+        //   response.data
+        // );
+        // console.log(response.data.data)
 
         return response.data
       } else {

@@ -63,10 +63,10 @@ const AdminBlogs = () => {
           blogId,
         })
       );
-      console.log(
-        "🚀 ~ file: TipsContent.tsx:28 ~ handleReponse ~ response:",
-        response
-      );
+      // console.log(
+      //   "🚀 ~ file: TipsContent.tsx:28 ~ handleReponse ~ response:",
+      //   response
+      // );
 
       if (response.payload.success) {
         toast.success("Thanks for your support!");

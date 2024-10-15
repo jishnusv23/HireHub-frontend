@@ -12,10 +12,10 @@ export const cancelInterveiws = createAsyncThunk(
         data,
         config
       );
-      console.log(
-        "🚀 ~ file: cancelnterveiws.tsx:13 ~ async ~ response:",
-        response
-      );
+      // console.log(
+      //   "🚀 ~ file: cancelnterveiws.tsx:13 ~ async ~ response:",
+      //   response
+      // );
       if (response.data) {
         return response.data;
       } else {

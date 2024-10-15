@@ -7,7 +7,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 export const ChangeUsernameAction=createAsyncThunk(
     'user/username-change',
     async(name:string,{rejectWithValue}) => {
-        console.log("🚀 ~ file: changeUsernameAction.tsx:10 ~ async ~ name:", name)
+        // console.log("🚀 ~ file: changeUsernameAction.tsx:10 ~ async ~ name:", name)
       
         try{
             const response=await CLIENT_API.put(`${userService}user-name-change`,{name},config)
