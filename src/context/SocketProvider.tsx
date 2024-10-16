@@ -9,6 +9,8 @@ interface OnlineUser {
 interface SocketContextType {
   socket: Socket | null;
   onlineUsers: OnlineUser[];
+  isConnected: boolean;
+  setIsConnected: (isConnect: boolean) => void;
   setOnlineUsers: (users: OnlineUser[]) => void;
   currentRoom: string;
   setCurrentRoom: (room: string) => void;
@@ -27,6 +29,7 @@ interface SocketProviderProps {
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
   const [currentRoom, setCurrentRoom] = useState<string>("");
 
   useEffect(() => {
@@ -35,18 +38,42 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       transports: ["websocket", "polling"],
     });
 
+    const handleConnect = () => {
+      console.log("Socket connected");
+      setIsConnected(true);
+    };
+
+    const handleDisconnect = () => {
+      console.log("Socket disconnected");
+      setIsConnected(false);
+    };
+
+    const handleConnectError = (error: Error) => {
+      console.error("Connection error:", error);
+      setIsConnected(false);
+    };
+
+    newSocket.on("connect", handleConnect);
+    newSocket.on("disconnect", handleDisconnect);
+    newSocket.on("connect_error", handleConnectError);
+
+    newSocket.connect();
+
     setSocket(newSocket);
 
     return () => {
-      if (newSocket) {
-        newSocket.disconnect();
-      }
+      newSocket.off("connect", handleConnect);
+      newSocket.off("disconnect", handleDisconnect);
+      newSocket.off("connect_error", handleConnectError);
+      newSocket.disconnect();
     };
-  }, []);
+  }, [isConnected]);
 
   const ContextValues: SocketContextType = {
     socket,
     onlineUsers,
+    isConnected,
+    setIsConnected,
     setOnlineUsers,
     currentRoom,
     setCurrentRoom,

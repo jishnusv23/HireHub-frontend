@@ -1,10 +1,4 @@
-import  {
-  useContext,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import Peer from "peerjs";
@@ -56,7 +50,8 @@ const MeetRoom = () => {
   const roomId = uniqueId || "";
   const navigate = useNavigate();
   const appDispatch = useAppDispatch();
-  const { socket } = useContext(SocketContext) || {};
+  const { socket, setIsConnected } =
+    useContext(SocketContext) || {};
   const { data } = useAppSelector((state: RooteState) => state.user);
   const [userData, setUserData] = useState<{
     username: string;
@@ -176,15 +171,19 @@ const MeetRoom = () => {
           if (stream) {
             stream.getTracks().forEach((track) => track.stop());
           }
-          setStream(null)
+          if (peerInstance.current) {
+            peerInstance.current.destroy();
+          }
           dispatch(removeAllPeerStream());
+          setStream(null);
+          setIsFormSubmitted(false);
+          setInterviewerJoined(false);
+          setIsConnected?.(false)
 
           navigate(`/Feedback/${roomId}`, {
             state: { data: { roomId, email: userData.email } },
           });
           localStorage.clear();
-        
-        
         });
 
         socket?.on("user-disconnected", (peerId) => {
@@ -199,11 +198,16 @@ const MeetRoom = () => {
           stream.getTracks().forEach((track) => track.stop());
           socket?.off("meet-close");
           socket?.off("user-joined");
+           socket?.off("connect");
+           socket?.off("disconnect");
           socket?.off("user-disconnected");
           socket?.off("get-users");
           socket?.off("auto-openTerminal");
-          socket?.close()
+
           peer.destroy();
+          if (peerInstance.current) {
+            peerInstance.current.destroy();
+          }
         };
       } catch (err) {
         console.error("Failed to get media devices.", err);
@@ -306,8 +310,6 @@ const MeetRoom = () => {
     checkInterviewerStatus();
   }, [roomId, appDispatch, data]);
 
-  
-   
   if (!data && !isFormSubmitted) {
     return <MeetValidation RoomID={roomId} onSubmit={handleFormSubmit} />;
   }
@@ -322,103 +324,111 @@ const MeetRoom = () => {
     setIsModalOpen(false);
   };
 
-   return (
-     <>
-       {isModalOpen && (
-         <ConfirmModal
-           message={`leave this meet`}
-           onConfirm={handleConfirm}
-           onCancel={handleCancel}
-         />
-       )}
-       <div className="relative h-screen w-full bg-black">
-         <div
-           className={`absolute inset-0 flex ${
-             isOpenTerminal ? "flex-row" : "items-center justify-center"
-           }`}
-         >
-           {isOpenTerminal && (
-             <div className="w-[70%] h-full border-r-2 border-gray-600">
-               <CodeEditor roomId={roomId} setIsOpenTerminal={setIsOpenTerminal} />
-             </div>
-           )}
-           <div
-             className={`${isOpenTerminal ? "w-[30%]" : "w-full"} h-full p-4`}
-           >
-             <div
-               className={`grid gap-4 h-full ${
-                 isOpenTerminal
-                   ? "grid-cols-1 sm:grid-cols-2"
-                   : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
-               }`}
-             >
-               <div className="relative">
-                 <VideoPlayer stream={stream} username={userData.username as string} muted />
-                
-               </div>
-               {Object.entries(peers as PeerState).map(([peerId, peer]) => {
-                 if (userData.username !== peer.userName) {
-                   return (
-                     <div key={peerId} className="">
-                       <VideoPlayer stream={peer.stream} username={peer.userName as string} />
-                       
-                     </div>
-                   );
-                 }
-                 return null;
-               })}
-             </div>
-           </div>
-         </div>
-         <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center py-4 bg-gray-900 bg-opacity-75">
-           <button
-             className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
-             onClick={OpenTerminal}
-           >
-             <TerminalIcon />
-           </button>
-           <button
-             className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
-             onClick={toggleVideo}
-           >
-             {videoEnabled ? (
-               <IoVideocamOutline size={24} />
-             ) : (
-               <IoVideocamOffOutline size={24} />
-             )}
-           </button>
-           <button
-             className="text-white mx-4 p-3 rounded-full bg-green-600 hover:bg-green-500 transition-colors"
-             onClick={toggleAudio}
-           >
-             {audioEnabled ? (
-               <IoMicOutline size={24} />
-             ) : (
-               <IoMicOffOutline size={24} />
-             )}
-           </button>
-           <button className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
-             <MdOutlineMoreVert />
-           </button>
-           {data?.role === "interviewer" || data?.role === "pending" ? (
-             <button
-               className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
-               onClick={handleLeaveInterivewer}
-             >
-               <MdCallEnd size={24} />
-             </button>
-           ) : (
-             <button
-               className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
-               onClick={leaveRoom}
-             >
-               <MdCallEnd size={24} />
-             </button>
-           )}
-         </div>
-       </div>
-     </>
-   );
+  return (
+    <>
+      {isModalOpen && (
+        <ConfirmModal
+          message={`leave this meet`}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+      )}
+      <div className="relative h-screen w-full bg-black">
+        <div
+          className={`absolute inset-0 flex ${
+            isOpenTerminal ? "flex-row" : "items-center justify-center"
+          }`}
+        >
+          {isOpenTerminal && (
+            <div className="w-[70%] h-full border-r-2 border-gray-600">
+              <CodeEditor
+                roomId={roomId}
+                setIsOpenTerminal={setIsOpenTerminal}
+              />
+            </div>
+          )}
+          <div
+            className={`${isOpenTerminal ? "w-[30%]" : "w-full"} h-full p-4`}
+          >
+            <div
+              className={`grid gap-4 h-full ${
+                isOpenTerminal
+                  ? "grid-cols-1 sm:grid-cols-2"
+                  : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+              }`}
+            >
+              <div className="relative">
+                <VideoPlayer
+                  stream={stream}
+                  username={userData.username as string}
+                  muted
+                />
+              </div>
+              {Object.entries(peers as PeerState).map(([peerId, peer]) => {
+                if (userData.username !== peer.userName) {
+                  return (
+                    <div key={peerId} className="">
+                      <VideoPlayer
+                        stream={peer.stream}
+                        username={peer.userName as string}
+                      />
+                    </div>
+                  );
+                }
+                return null;
+              })}
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center py-4 bg-gray-900 bg-opacity-75">
+          <button
+            className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
+            onClick={OpenTerminal}
+          >
+            <TerminalIcon />
+          </button>
+          <button
+            className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
+            onClick={toggleVideo}
+          >
+            {videoEnabled ? (
+              <IoVideocamOutline size={24} />
+            ) : (
+              <IoVideocamOffOutline size={24} />
+            )}
+          </button>
+          <button
+            className="text-white mx-4 p-3 rounded-full bg-green-600 hover:bg-green-500 transition-colors"
+            onClick={toggleAudio}
+          >
+            {audioEnabled ? (
+              <IoMicOutline size={24} />
+            ) : (
+              <IoMicOffOutline size={24} />
+            )}
+          </button>
+          <button className="text-white mx-4 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
+            <MdOutlineMoreVert />
+          </button>
+          {data?.role === "interviewer" || data?.role === "pending" ? (
+            <button
+              className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
+              onClick={handleLeaveInterivewer}
+            >
+              <MdCallEnd size={24} />
+            </button>
+          ) : (
+            <button
+              className="text-white mx-4 p-3 rounded-full bg-red-600 hover:bg-red-500 transition-colors"
+              onClick={leaveRoom}
+            >
+              <MdCallEnd size={24} />
+            </button>
+          )}
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default MeetRoom;
