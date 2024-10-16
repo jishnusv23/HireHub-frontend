@@ -73,8 +73,8 @@ export const Plan = () => {
                   "Basic Coding Collaboration",
                   "Core Assessment Features",
                   "Basic Experience",
-                ].map((item) => (
-                  <div className="flex gap-2 items-center">
+                ].map((item,index) => (
+                  <div className="flex gap-2 items-center" key={index}>
                     <IoCheckmarkCircle className="text-primary text-2xl mr-2" />
                     <span>{item}</span>
                   </div>
