@@ -57,30 +57,35 @@ const InterviewerQuestions = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      {isLoading && <Loading />}
-      <div className="flex-grow">
-        <div className="flex justify-end pr-5 mb-4">
-          <Button onClick={handleOpenModal}>Add</Button>
+    <>
+      <div className="flex flex-col min-h-screen bg-background">
+        {isLoading && <Loading />}
+        <div className="flex-grow">
+          <div className="flex justify-end pr-5 mb-4">
+            <Button onClick={handleOpenModal}>Add</Button>
+          </div>
+          <TechQuestion
+            questions={questions}
+            handleOpenModal={handleOpenModal}
+          />
         </div>
-        <TechQuestion questions={questions} handleOpenModal={handleOpenModal} />
-        <CustomModal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          title="Add Question"
-        >
-          <AddQuestions setIsModalOpen={setIsModalOpen} />
-        </CustomModal>
+        <div className="flex justify-center bg-background">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+        {/* <div className="mt-auto py-4 bg-backgroundAccent"></div> */}
       </div>
-      <div className="flex justify-center bg-background">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </div>
-      {/* <div className="mt-auto py-4 bg-backgroundAccent"></div> */}
-    </div>
+      <CustomModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title="Add Question"
+      >
+        <AddQuestions setIsModalOpen={setIsModalOpen} />
+      </CustomModal>
+    </>
   );
 };
 
