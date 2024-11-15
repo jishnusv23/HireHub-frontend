@@ -7,8 +7,8 @@ import { SingleInterviewDetails } from "@/components/common/Interviewer/SingleIn
 import InterviewerQuestions from "@/components/interviewer/InterviewerQuestions";
 
 import Blogs from "@/components/customs/Blogs";
-import FeedBack from "@/pages/Interviewee/FeedBack";
-import { divide } from "lodash";
+// import FeedBack from "@/pages/Interviewee/FeedBack";
+// import { divide } from "lodash";
 
 export const InterViewerRoutes = () => {
   return (
