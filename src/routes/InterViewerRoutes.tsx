@@ -7,6 +7,8 @@ import { SingleInterviewDetails } from "@/components/common/Interviewer/SingleIn
 import InterviewerQuestions from "@/components/interviewer/InterviewerQuestions";
 
 import Blogs from "@/components/customs/Blogs";
+import FeedBack from "@/pages/Interviewee/FeedBack";
+import { divide } from "lodash";
 
 export const InterViewerRoutes = () => {
   return (
@@ -22,6 +24,7 @@ export const InterViewerRoutes = () => {
           path="MyInterviews/singleDetails"
           element={<SingleInterviewDetails />}
         />
+        <Route path="MyInterviews/feedback" element={<div>hey</div>} />
       </Route>
     </Routes>
   );

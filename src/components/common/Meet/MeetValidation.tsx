@@ -7,6 +7,7 @@ import { FiUser, FiMail, FiKey } from "react-icons/fi";
 import FormInputWithIcon from "../FormInuprWithIcon";
 import { Button, CircularProgress } from "@mui/material";
 import Header from "../users/Header";
+// import GoogleAuth from "../GoogleAuth";
 
 // Form validation schema using Zod
 const formSchema = z.object({
@@ -68,6 +69,7 @@ export const MeetValidation: React.FC<MeetValidationProps> = ({
               onSubmit={form.handleSubmit(handleSubmit)}
               className="space-y-4"
             >
+              {/* <GoogleAuth /> */}
               <FormField
                 control={form.control}
                 name="username"

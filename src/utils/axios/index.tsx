@@ -20,7 +20,7 @@
 import axios from "axios";
 const isDevelopment =
   window.location.hostname === "localhost" ||
-  window.location.hostname === "4.188.113.7"; 
+  window.location.hostname === "34.131.26.27"; 
 
 export const BASE_URL = isDevelopment
   ? "http://localhost:2001" 

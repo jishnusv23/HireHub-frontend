@@ -70,7 +70,7 @@ export const VideoPlayer: React.FC<{
   }, [stream]);
 
   return (
-    <div className={`relative min-w-[150px] min-h-[100px] ${className}`}>
+    <div className={`relative min-w-[150px] min-h-[100px] ${className} border border-white`}>
       <div className="absolute top-2 left-2 text-white bg-black bg-opacity-50 px-2 py-1 rounded">
         {username}
       </div>

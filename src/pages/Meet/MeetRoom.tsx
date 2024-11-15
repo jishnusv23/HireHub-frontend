@@ -247,7 +247,7 @@ const MeetRoom = () => {
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
     }
-    socket?.emit("leave-room", { roomId, peerId: peerInstance.current?.id });
+    socket?.emit("leave-room", { roomId, peerId: peerInstance.current?.id ,email:userData.email});
     socket?.on("user-disconnected", (peerId) => {
       dispatch(removePeerStreamAction(peerId));
     });
