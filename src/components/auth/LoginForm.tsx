@@ -36,7 +36,7 @@ export const LoginForm = () => {
   const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,7 +59,7 @@ export const LoginForm = () => {
       toast.error(
         response?.payload?.message || "The server might be down for maintenance"
       );
-      setError('Something wrong')
+      // setError('Something wrong')
     } else {
       // console.log(response.payload.data.email, "lololololo");
 
@@ -104,7 +104,7 @@ export const LoginForm = () => {
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? "Loading" : "Login"}
         </Button>
-        {error && <p className="text-sm text-red-500">{error}</p>}
+      
       </form>
     </Form>
   );
