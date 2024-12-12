@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import TipsContent from "../User/TipsContent";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
@@ -11,9 +11,12 @@ import { updateHandClappAction } from "@/redux/store/actions/common/updateHandCl
 import Header from "../common/users/Header";
 import Footer from "../common/Footer";
 import BlogSkeletonLoader from "../common/skeleton/BlogSkeletonLoader";
+import { CustomModal } from "./CustomModal";
+import ContentAdd from "../common/ContentAdd";
 
 const Blogs = () => {
   const { data } = useAppSelector((state: RooteState) => state.user);
+  console.log("🚀 ~ file: Blogs.tsx:17 ~ Blogs ~ data:", data);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -24,9 +27,9 @@ const Blogs = () => {
   // const navigate = useNavigate();
   const contentPerPage = 8;
 
-  // const closeModal = async () => {
-  //   setIsModalOpen(false);
-  // };
+  const closeModal = async () => {
+    setIsModalOpen(false);
+  };
   const handleAddBlog = () => {
     setIsModalOpen(true);
   };
@@ -85,7 +88,7 @@ const Blogs = () => {
   };
   return (
     <>
-      {(!data ||data.role=='pending' )&&  <Header />}
+      {(!data || data.role == "pending") && <Header />}
       {isLoading ? (
         <BlogSkeletonLoader />
       ) : (
@@ -109,6 +112,9 @@ const Blogs = () => {
           </div>
         </div>
       )}
+      <CustomModal isOpen={isModalOpen} onClose={closeModal} title="Add Blog">
+        <ContentAdd setIsModalOpen={setIsModalOpen} />
+      </CustomModal>
       {!data && <Footer />}
     </>
   );
